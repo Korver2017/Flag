@@ -11,6 +11,10 @@
     <li v-for="issue in issues" :key="issue">
       Issue： {{ issue }} --- <button @click="editContent" class="btn btn-warning">編輯內容</button>
 
+      <p class="issueContent mx-auto my-3 col-6" v-if="showEditForm !== true">
+        {{ issueContent !== '' ? issueContent : '目前尚無內容' }}
+      </p>
+
       <form v-if="showEditForm === true">
         <div class="form-group col-6 mx-auto">
           <label for="exampleFormControlTextarea1">編輯內容</label>
@@ -18,16 +22,33 @@
           <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
 
-
         <template>
           <button class="btn btn-outline-success mr-3" @click.prevent="finishEdit">完成編輯</button>
           <button class="btn btn-outline-danger" @click.prevent="cancelEdit">取消編輯</button>
         </template>
       </form>
 
-      <p v-if="showEditForm !== true">
-        {{ issueContent !== '' ? issueContent : '目前尚無內容' }}
-      </p>
+      <!-- <template v-if="showEditForm !== true"> -->
+      <template>
+        <p v-for="comment in comments" class="issueContent mx-auto my-3 col-6" :key="comment">
+          {{ comment }}
+        </p>
+
+        <form v-if="showEditForm !== true">
+          <div class="form-group col-6 mx-auto">
+            <label for="exampleFormControlTextarea1">Comment</label>
+            
+            <textarea v-model="stashCommentInfo" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+
+          <!-- <template>
+            <button class="btn btn-outline-success mr-3">完成編輯</button>
+            <button class="btn btn-outline-danger">取消編輯</button>
+          </template> -->
+        </form>
+
+        <button class="btn btn-secondary" @click="addComment">Add comment</button>
+      </template>
 
     </li>
 
@@ -35,6 +56,11 @@
 </template>
 
 <style lang="scss">
+.issueContent {
+  border: 1px solid #000;
+  padding: 100px 0;
+}
+
 </style>
 
 <script>
@@ -50,8 +76,11 @@
         // edit: false,
         showEditForm: false,
         finished: false,
-        issueContent: '',
+        issueContent: 'Fake content',
         stashIssueContent: '',
+        comments: [],
+        commentInfo: '',
+        stashCommentInfo: '',
       }
     },
 
@@ -74,7 +103,7 @@
 
       finishEdit () {
         this.finished = true;
-        this.showEditForm = false;
+        // this.showEditForm = false;
         this.issueContent = this.stashIssueContent;
       },
 
@@ -83,6 +112,12 @@
         this.finished = true;
         this.showEditForm = false;
 
+      },
+
+
+      addComment () {
+        this.commentInfo = this.stashCommentInfo;
+        this.comments.push (this.commentInfo);
       },
     },
   }
