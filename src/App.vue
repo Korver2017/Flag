@@ -4,7 +4,20 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <button @click="addProject" class="btn btn-outline-success">Click me!</button>
+
+    <div class="col-3 input-group mb-3">
+      <input v-model.trim="projectName" type="text" class="form-control" placeholder="Project name" aria-label="Project name" aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button @click="addProject()" class="btn btn-outline-success" type="button" id="button-addon2">Add project</button>
+      </div>
+      <div>{{ projectName }}</div>
+    </div>
+    
+    <li v-for="project in projects" :key="project">
+      {{ project }}
+    </li>
+
+    <br />
     <router-view/>
   </div>
 </template>
@@ -33,14 +46,19 @@
   export default {
     data () {
       return {
-        title: 'Hello, flag!'
+        title: 'Hello, flag!',
+        projectName: '',
+        projects: [],
       }
     },
 
     
     methods: {
       addProject () {
-        alert ('Hello, flag!');
+        if (this.projectName === '') return;
+
+        this.projects.push (this.projectName);
+        this.projectName = '';
       }
     },
   }
