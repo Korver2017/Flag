@@ -9,18 +9,26 @@
     </div>
       
     <li v-for="issue in issues" :key="issue">
-      Issue： {{ issue }} --- <button @click="editContent = !editContent" class="btn btn-warning">編輯內容</button>
+      Issue： {{ issue }} --- <button @click="editContent" class="btn btn-warning">編輯內容</button>
 
-      <form v-if="editContent">
+      <form v-if="showEditForm === true">
         <div class="form-group col-6 mx-auto">
           <label for="exampleFormControlTextarea1">編輯內容</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          
+          <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
-        <button class="btn btn-outline-success mr-3" @click="editContent = !editContent">完成編輯</button>
-        <button class="btn btn-outline-danger" @click="editContent = !editContent">取消編輯</button>
+
+
+        <template>
+          <button class="btn btn-outline-success mr-3" @click.prevent="finishEdit">完成編輯</button>
+          <button class="btn btn-outline-danger" @click.prevent="cancelEdit">取消編輯</button>
+        </template>
       </form>
 
-       <!-- - <router-link to="/">Home</router-link> -->
+      <p v-if="showEditForm !== true">
+        {{ issueContent !== '' ? issueContent : '目前尚無內容' }}
+      </p>
+
     </li>
 
   </div>
@@ -39,7 +47,11 @@
       return {
         issues: ['落實半夜 3 點 call 起來尿尿'],
         issue: '',
-        editContent: false,
+        // edit: false,
+        showEditForm: false,
+        finished: false,
+        issueContent: '',
+        stashIssueContent: '',
       }
     },
 
@@ -51,7 +63,27 @@
         this.issues.push (this.issue);
         this.issue = '';
       },
+
+
+      editContent () {
+        this.showEditForm = true;
+        this.finished = false;
+        this.stashIssueContent = this.issueContent;
+      },
       
+
+      finishEdit () {
+        this.finished = true;
+        this.showEditForm = false;
+        this.issueContent = this.stashIssueContent;
+      },
+
+
+      cancelEdit () {
+        this.finished = true;
+        this.showEditForm = false;
+
+      },
     },
   }
 </script>
