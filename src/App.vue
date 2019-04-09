@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
+    <button @click="addProject" class="btn btn-outline-success">Click me!</button>
     <router-view/>
   </div>
 </template>
@@ -27,3 +28,20 @@
   }
 }
 </style>
+
+<script>
+  export default {
+    data () {
+      return {
+        title: 'Hello, flag!'
+      }
+    },
+
+    
+    methods: {
+      addProject () {
+        alert ('Hello, flag!');
+      }
+    },
+  }
+</script>
