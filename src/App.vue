@@ -5,20 +5,19 @@
       <router-link to="/about">About</router-link>
     </div>
 
-    <div class="col-3 input-group mb-3">
+    <div class="col-3 input-group mb-3 mx-auto">
       <input v-model.trim="projectName" type="text" class="form-control" placeholder="Project name" aria-label="Project name" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button @click="addProject()" class="btn btn-outline-success" type="button" id="button-addon2">Add project</button>
       </div>
-      <div>{{ projectName }}</div>
     </div>
     
     <li v-for="project in projects" :key="project">
-      {{ project }}
+      Project： {{ project }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
     </li>
 
-    <br />
-    <router-view/>
+    <router-view />
+    
   </div>
 </template>
 
@@ -43,12 +42,15 @@
 </style>
 
 <script>
+  import issues from "@/views/issues.vue";
+
   export default {
     data () {
       return {
         title: 'Hello, flag!',
+        // projectName: '',
         projectName: '',
-        projects: [],
+        projects: ['跟 Wake 請安問好'],
       }
     },
 
