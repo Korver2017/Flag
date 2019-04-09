@@ -9,7 +9,18 @@
     </div>
       
     <li v-for="issue in issues" :key="issue">
-      issue: {{ issue }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
+      Issue： {{ issue }} --- <button @click="editContent = !editContent" class="btn btn-warning">編輯內容</button>
+
+      <form v-if="editContent">
+        <div class="form-group col-6 mx-auto">
+          <label for="exampleFormControlTextarea1">編輯內容</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <button class="btn btn-outline-success mr-3" @click="editContent = !editContent">完成編輯</button>
+        <button class="btn btn-outline-danger" @click="editContent = !editContent">取消編輯</button>
+      </form>
+
+       <!-- - <router-link to="/">Home</router-link> -->
     </li>
 
   </div>
@@ -26,8 +37,9 @@
 
     data () {
       return {
-        issues: [],
+        issues: ['落實半夜 3 點 call 起來尿尿'],
         issue: '',
+        editContent: false,
       }
     },
 
@@ -38,7 +50,8 @@
 
         this.issues.push (this.issue);
         this.issue = '';
-      }
+      },
+      
     },
   }
 </script>
