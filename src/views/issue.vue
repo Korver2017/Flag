@@ -51,21 +51,22 @@
           </div>
         </div>
 
-        <form v-if="showEditForm !== true">
-          <div class="form-group col-6 mx-auto">
-            <label for="exampleFormControlTextarea1">Comment here</label>
-            
-            <textarea v-model.trim="stashCommentInfo" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-          </div>
-
           <!-- <template>
             <button class="btn btn-outline-success mr-3">完成編輯</button>
             <button class="btn btn-outline-danger">取消編輯</button>
           </template> -->
-        </form>
-
-        <button :disabled="stashCommentInfo === ''" class="btn btn-secondary" @click="addComment">Add a comment</button>
+        
       </template>
+
+      <form v-if="showEditForm !== true">
+        <div class="form-group col-6 mx-auto">
+          <label for="exampleFormControlTextarea1">Comment here</label>
+          
+          <textarea v-model.trim="stashCommentInfo" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+      </form>
+
+      <button :disabled="stashCommentInfo === ''" class="btn btn-secondary" @click="addComment">Add a comment</button>
 
     </li>
 

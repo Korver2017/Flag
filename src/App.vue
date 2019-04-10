@@ -8,7 +8,9 @@
       </div>
     </div>
 
-    <project :projects="projects" />
+    <template >
+      <project :projects="projects" />
+    </template>
     
     <!-- <li v-for="project in projects" :key="project">
       Project： {{ project }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
@@ -41,9 +43,11 @@
 
 <script>
   import Project from '@/views/project.vue';
-  // import Issues from "@/views/issues.vue";
 
   export default {
+
+
+    name: 'Home',
 
 
     /**
@@ -59,9 +63,8 @@
     data () {
       return {
         title: 'Hello, flag!',
-        // projectName: '',
         projectName: '',
-        projects: ['跟 Wake 請安問好'],
+        projects: ['跟 Wake 請安問好', '看 Wake 有沒有洗手'],
       }
     },
 
