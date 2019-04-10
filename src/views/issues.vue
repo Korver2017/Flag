@@ -11,9 +11,10 @@
     <li v-for="issue in issues" :key="issue">
       Issue： {{ issue }} --- <button @click="editContent" class="btn btn-warning">編輯內容</button>
 
-      <p class="issueContent mx-auto my-3 col-6" v-if="showEditForm !== true">
+      <div class="issueContent mx-auto my-3 col-6" v-if="showEditForm !== true">
+        <h3>This is issue content</h3>
         {{ issueContent !== '' ? issueContent : '目前尚無內容' }}
-      </p>
+      </div>
 
       <form v-if="showEditForm === true">
         <div class="form-group col-6 mx-auto">
@@ -30,15 +31,21 @@
 
       <!-- <template v-if="showEditForm !== true"> -->
       <template>
-        <p v-for="comment in comments" class="issueContent mx-auto my-3 col-6" :key="comment">
-          {{ comment }}
-        </p>
+        <div v-for="(list, index) in comments" class="issueContent mx-auto my-3 col-6">
+          <h3>This is comment area under an issue</h3>
+          {{ list.comment }}
+          <br />
+          <template>
+            <button @click="editComment (index)" class="btn btn-outline-primary">編輯評論</button>
+            <button @click="editComment (index)" class="btn btn-outline-primary">刪除評論</button>
+          </template>
+        </div>
 
         <form v-if="showEditForm !== true">
           <div class="form-group col-6 mx-auto">
-            <label for="exampleFormControlTextarea1">Comment</label>
+            <label for="exampleFormControlTextarea1">Comment here</label>
             
-            <textarea v-model="stashCommentInfo" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <textarea v-model.trim="stashCommentInfo" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
           </div>
 
           <!-- <template>
@@ -47,7 +54,7 @@
           </template> -->
         </form>
 
-        <button class="btn btn-secondary" @click="addComment">Add comment</button>
+        <button :disabled="stashCommentInfo === ''" class="btn btn-outline-secondary" @click="addComment">Add a comment</button>
       </template>
 
     </li>
@@ -78,11 +85,25 @@
         finished: false,
         issueContent: 'Fake content',
         stashIssueContent: '',
-        comments: [],
+        comments: [{comment: 'Wake 起床尿尿了'}],
+        // comment: '',
+        // getComment: '',
         commentInfo: '',
         stashCommentInfo: '',
       }
     },
+
+
+    // computed: {
+    //   getComment: {
+    //     get () {
+    //       console.log('computed getter');
+    //     },
+    //     set (value) {
+    //       console.log(value);
+    //     }
+    //   }
+    // },
 
     
     methods: {
@@ -117,8 +138,13 @@
 
       addComment () {
         this.commentInfo = this.stashCommentInfo;
-        this.comments.push (this.commentInfo);
+        this.comments.push ({comment: this.commentInfo});
+        this.stashCommentInfo = '';
       },
+
+      editComment (index) {
+        this.$set (this.comments[index], 'comment', 'qq');
+      }
     },
   }
 </script>
