@@ -39,10 +39,6 @@
         </template>
       </form>
 
-      <!-- <template v-for="comment in comments">
-        <comment :comment="comment" />
-      </template> -->
-
       <!-- <template v-if="showEditForm !== true"> -->
       <template v-for="(comment, c) in issue.comment">
         <div class="bg-secondary text-white issueContent mx-auto my-3 py-5 col-6">
@@ -80,8 +76,6 @@
 </style>
 
 <script>
-  import Comment from "@/views/comment.vue";
-
   export default {
 
 
