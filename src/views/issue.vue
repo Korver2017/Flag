@@ -16,13 +16,13 @@
     
 
 
-    <li class="mt-5 py-5 bg-info text-white list-group-item" v-for="issue in issueGroup">
+    <li class="mt-5 py-5 bg-info text-white list-group-item" v-for="(issue, i) in issueGroup">
       <h3>Issue： {{ issue.title }}</h3><button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button>
 
       <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true">
         <h3>Issue content</h3>
-        <p v-if="issueContent === '' ? issueContent = '無 Issue 內容描述' : issueContent">
-          {{ issueContent }}
+        <p v-if="issue.issueContent === '' ? issue.issueContent = '無 Issue 內容描述' : issue.issueContent">
+          {{ issue.issueContent }}
         </p>
       </div>
 
@@ -34,7 +34,7 @@
         </div>
 
         <template>
-          <button class="btn btn-success mr-3" @click.prevent="finishEdit">完成編輯</button>
+          <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
           <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
         </template>
       </form>
@@ -154,10 +154,11 @@
       },
       
 
-      finishEdit () {
+      finishEdit (i) {
         this.finished = true;
         this.showEditForm = false;
         this.issueContent = this.stashIssueContent;
+        this.$emit ('changeIssueContent', this.issueContent, i);
       },
 
 
