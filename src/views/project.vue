@@ -1,17 +1,21 @@
 <template>
   <div>
-    <h1>{{ title }}</h1>
-    <li v-for="project in projects" :key="project">
-      Project： {{ project }} - <router-link to="/issues">Issues</router-link>
-    </li>
 
-    <issues />
+    <li class="list-group-item list-group-item-primary mt-5" v-for="project in projects" :key="project">
+
+      <h3>Project： {{ project }}</h3>
+      <router-link to="/issues">Issues</router-link>
+      
+      <!-- <issue :issues="issues" /> -->
+      <issue />
+
+    </li>
 
   </div>
 </template>
 
 <script>
-  import Issues from "@/components/issues.vue";
+  import Issue from "@/components/issue.vue";
 
   export default {
     
@@ -30,12 +34,13 @@
      *
      */
     components: {
-      Issues,
+      Issue,
     },
+
 
     data () {
       return {
-        title: 'Project Component!'
+        issues: ['落實半夜 3 點 call 起來尿尿'],
       }
     },
 

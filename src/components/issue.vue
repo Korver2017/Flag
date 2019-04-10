@@ -8,12 +8,14 @@
       <br />
     </div>
       
-    <li v-for="issue in issues" :key="issue">
+    <li class="mt-5 py-5 bg-info text-white" v-for="issue in issues" :key="issue">
       Issue： {{ issue }} --- <button @click="editContent" class="btn btn-warning">編輯內容</button>
 
-      <div class="issueContent mx-auto my-3 col-6" v-if="showEditForm !== true">
-        <h3>This is issue content</h3>
-        {{ issueContent !== '' ? issueContent : '目前尚無內容' }}
+      <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true">
+        <h3>Issue</h3>
+        <p v-if="issueContent === ''">
+          目前尚無內容
+        </p>
       </div>
 
       <form v-if="showEditForm === true">
@@ -31,14 +33,14 @@
 
       <!-- <template v-if="showEditForm !== true"> -->
       <template>
-        <div v-for="(list, index) in comments" class="issueContent mx-auto my-3 col-6">
-          <h3>This is comment area under an issue</h3>
+        <div v-for="(list, index) in comments" class="bg-secondary text-white issueContent mx-auto my-3 py-5 col-6">
+          <h3>Comment</h3>
           {{ list.comment }}
           <br />
-          <template>
-            <button @click="editComment (index)" class="btn btn-outline-primary">編輯評論</button>
-            <button @click="editComment (index)" class="btn btn-outline-primary">刪除評論</button>
-          </template>
+          <div class="mt-5">
+            <button @click="editComment (index)" class="mx-1 btn btn-primary">編輯評論</button>
+            <button @click="editComment (index)" class="mx-1 btn btn-primary">刪除評論</button>
+          </div>
         </div>
 
         <form v-if="showEditForm !== true">
@@ -54,7 +56,7 @@
           </template> -->
         </form>
 
-        <button :disabled="stashCommentInfo === ''" class="btn btn-outline-secondary" @click="addComment">Add a comment</button>
+        <button :disabled="stashCommentInfo === ''" class="btn btn-secondary" @click="addComment">Add a comment</button>
       </template>
 
     </li>
@@ -63,11 +65,6 @@
 </template>
 
 <style lang="scss">
-.issueContent {
-  border: 1px solid #000;
-  padding: 100px 0;
-}
-
 </style>
 
 <script>
@@ -80,7 +77,10 @@
      * Component name
      *
      */
-    name: 'issues',
+    name: 'issue',
+
+
+    // props: ['issues'],
 
 
     data () {
@@ -90,7 +90,8 @@
         // edit: false,
         showEditForm: false,
         finished: false,
-        issueContent: 'Fake content',
+        // issueContent: 'Fake content',
+        issueContent: '',
         stashIssueContent: '',
         comments: [{comment: 'Wake 起床尿尿了'}],
         // comment: '',
