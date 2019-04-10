@@ -73,6 +73,13 @@
 <script>
 
   export default {
+
+
+    /**
+     *
+     * Component name
+     *
+     */
     name: 'issues',
 
 

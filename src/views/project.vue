@@ -2,12 +2,17 @@
   <div>
     <h1>{{ title }}</h1>
     <li v-for="project in projects" :key="project">
-      Project： {{ project }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
+      Project： {{ project }} - <router-link to="/issues">Issues</router-link>
     </li>
+
+    <issues />
+
   </div>
 </template>
 
 <script>
+  import Issues from "@/components/issues.vue";
+
   export default {
     
 
@@ -18,6 +23,15 @@
      */
     name: 'project',
 
+
+    /**
+     *
+     * Inner components
+     *
+     */
+    components: {
+      Issues,
+    },
 
     data () {
       return {
