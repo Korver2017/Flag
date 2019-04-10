@@ -6,8 +6,8 @@
       <h3>Project： {{ project }}</h3>
       <router-link to="/issues">Issues</router-link>
       
-      <template v-for="issues in issueGroup">
-        <issue :issues="issues"  />
+      <template>
+        <issue :issueGroup="issueGroup"  />
         <!-- <issue /> -->
       </template>
 
@@ -40,14 +40,24 @@
     },
 
 
+    props: ['projects'],
+
+
     data () {
       return {
-        issueGroup: [['落實半夜 3 點 call 起來尿尿', 'i2'], ['i2.1', 'i2.2']],
+        issueGroup: [
+          {
+            title: 'Call Wake 起床尿尿',
+            comment: ['qq'],
+          },
+          {
+            title: 'i2', comment: ['n', 'z'],
+          },
+        ],
       }
     },
 
 
-    props: ['projects'],
   }
 </script>
 
