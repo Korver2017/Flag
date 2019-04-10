@@ -1,18 +1,14 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-
-    <project />
+  <div id="app" class="mt-5">
 
     <div class="col-3 input-group mb-3 mx-auto">
       <input v-model.trim="projectName" type="text" class="form-control" placeholder="Project name" aria-label="Project name" aria-describedby="button-addon2">
       <div class="input-group-append">
-        <button @click="addProject()" class="btn btn-outline-success" type="button" id="button-addon2">Add project</button>
+        <button @click="addProject ()" class="btn btn-outline-success" type="button" id="button-addon2">Add project</button>
       </div>
     </div>
+
+    <project :projects="projects" />
     
     <!-- <li v-for="project in projects" :key="project">
       Project： {{ project }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
