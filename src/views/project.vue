@@ -6,8 +6,10 @@
       <h3>Project： {{ project }}</h3>
       <router-link to="/issues">Issues</router-link>
       
-      <!-- <issue :issues="issues" /> -->
-      <issue />
+      <template v-for="issues in issueGroup">
+        <issue :issues="issues"  />
+        <!-- <issue /> -->
+      </template>
 
     </li>
 
@@ -15,7 +17,7 @@
 </template>
 
 <script>
-  import Issue from "@/components/issue.vue";
+  import Issue from "@/views/issue.vue";
 
   export default {
     
@@ -40,7 +42,7 @@
 
     data () {
       return {
-        issues: ['落實半夜 3 點 call 起來尿尿'],
+        issueGroup: [['落實半夜 3 點 call 起來尿尿', 'i2'], ['i2.1', 'i2.2']],
       }
     },
 
