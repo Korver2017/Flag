@@ -5,7 +5,7 @@
 
       <h3>Project： {{ project }}</h3>
       
-      <issue :issueGroup="issueGroup" @changeIssueContent="editContent" />
+      <issue :issueGroup="issueGroup" @changeIssueContent="editContent" @editComment="changeComment" />
 
     </li>
 
@@ -45,12 +45,12 @@
           {
             title: 'Call Wake 起床尿尿',
             issueContent: '',
-            comment: ['qq'],
+            comment: ['c1'],
           },
           {
             title: 'i2',
             issueContent: '',
-            comment: ['n', 'z'],
+            comment: ['c2', 'c3'],
           },
         ],
       }
@@ -60,6 +60,10 @@
     methods: {
       editContent (val, i) {
         this.issueGroup[i].issueContent = val;
+      },
+      changeComment (val, i, c) {
+        console.log (val, i, c);
+        this.issueGroup[i].comment.splice (c, 1, val);
       }
     },
 

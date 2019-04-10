@@ -44,14 +44,14 @@
       </template> -->
 
       <!-- <template v-if="showEditForm !== true"> -->
-      <template v-for="comment in issue.comment">
+      <template v-for="(comment, c) in issue.comment">
         <div class="bg-secondary text-white issueContent mx-auto my-3 py-5 col-6">
           <h3>Comment</h3>
           {{ comment }}
           <br />
           <div class="mt-5">
-            <button @click="editComment (index)" class="mx-1 btn btn-primary">編輯評論</button>
-            <button @click="editComment (index)" class="mx-1 btn btn-primary">刪除評論</button>
+            <button @click="editComment (i, c)" class="mx-1 btn btn-primary">編輯評論</button>
+            <!-- <button @click="editComment (index)" class="mx-1 btn btn-primary">刪除評論</button> -->
           </div>
         </div>
 
@@ -175,8 +175,8 @@
         this.stashCommentInfo = '';
       },
 
-      editComment (index) {
-        this.$set (this.comments[index], 'comment', 'qq');
+      editComment (i, c) {
+        this.$emit ('editComment', 'edited', i, c);
       }
     },
   }
