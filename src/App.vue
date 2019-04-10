@@ -5,6 +5,8 @@
       <router-link to="/about">About</router-link>
     </div>
 
+    <project />
+
     <div class="col-3 input-group mb-3 mx-auto">
       <input v-model.trim="projectName" type="text" class="form-control" placeholder="Project name" aria-label="Project name" aria-describedby="button-addon2">
       <div class="input-group-append">
@@ -12,11 +14,11 @@
       </div>
     </div>
     
-    <li v-for="project in projects" :key="project">
+    <!-- <li v-for="project in projects" :key="project">
       Project： {{ project }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
-    </li>
+    </li> -->
 
-    <router-view />
+    <!-- <router-view /> -->
     
   </div>
 </template>
@@ -42,9 +44,22 @@
 </style>
 
 <script>
-  import issues from "@/views/issues.vue";
+  import Project from '@/views/project.vue';
+  // import Issues from "@/views/issues.vue";
 
   export default {
+
+
+    /**
+     *
+     * Inner components
+     *
+     */
+    components: {
+      Project,
+    },
+
+
     data () {
       return {
         title: 'Hello, flag!',
