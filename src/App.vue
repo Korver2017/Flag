@@ -8,15 +8,8 @@
       </div>
     </div>
 
-    <template>
-      <project :projects="projects" />
-    </template>
-    
-    <!-- <li v-for="project in projects" :key="project">
-      Project： {{ project }} - <router-link to="/issues">Issues</router-link> - <router-link to="/">Home</router-link>
-    </li> -->
+    <project :projects="projects" />
 
-    <!-- <router-view /> -->
     
   </div>
 </template>
@@ -66,13 +59,13 @@
         stashProjectName: '叫 Wake 起床尿尿',
         data: {
           projectName: '',
-            issueGroup: [
-              {
-                title: 'Issue title',
-                issueContent: 'Issue content',
-                comments: ['Comment 1'],
-              },
-            ],
+          issueGroup: [
+            {
+              title: '#1 Issue-1',
+              issueContent: 'Issue-content',
+              comments: ['Comment-1'],
+            },
+          ],
         },
         // projects: [
         //   {
