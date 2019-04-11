@@ -37,6 +37,10 @@
 <script>
   import Project from '@/views/project.vue';
 
+
+  import { eventBus } from "@/main.js";
+
+
   export default {
 
 
@@ -53,11 +57,26 @@
     },
 
 
+    created () {
+      let $vmc = this;
+
+      eventBus.$on ('newIssue', issue => {
+        console.log (issue);
+
+        $vmc.projectData.issueGroup.splice (0, 0, {
+          title: issue,
+          issueContent: '',
+          comments: [],
+        });
+      });
+    },
+
+
     data () {
       return {
         projects: [],
         stashProjectName: '叫 Wake 起床尿尿',
-        data: {
+        projectData: {
           projectName: '',
           issueGroup: [
             {
@@ -67,43 +86,17 @@
             },
           ],
         },
-        // projects: [
-        //   {
-        //     projectsName: '',
-        //     issueGroup: [
-        //       {
-        //         title: '',
-        //         issueContent: '',
-        //         comments: [],
-        //       },
-        //     ],
-        //   }
-        // ],
-        // issueGroupEmpty: [
-        //   {
-        //     title: '',
-        //     issueContent: '',
-        //     comments: [],
-        //   },
-        // ],
-        // issueGroup: [
-        //   {
-        //     title: 'Call Wake 起床尿尿',
-        //     issueContent: '',
-        //     comments: ['Wake 該起床尿尿了'],
-        //   },
-        // ],
       }
     },
 
     
     methods: {
       addProject () {
-        if (this.data.stashProjectName === '') return;
+        if (this.stashProjectName === '') return;
 
-        this.data.projectName = this.stashProjectName;
+        this.projectData.projectName = this.stashProjectName;
 
-        this.projects.push (this.data);
+        this.projects.push (this.projectData);
 
       }
     },

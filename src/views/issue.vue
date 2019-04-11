@@ -1,12 +1,6 @@
 <template>
   <div class="container mt-5">
-    <div class="col-6 input-group mb-3 mx-auto">
-      <input v-model.trim="issue" type="text" class="form-control" placeholder="New issue" aria-label="New issue" aria-describedby="button-addon2">
-      <div class="input-group-append">
-        <button @click="addIssue ()" class="btn btn-outline-success" type="button" id="button-addon2">Add issue</button>
-      </div>
-      <br />
-    </div>
+    
 
 
 
@@ -17,30 +11,45 @@
 
 
     <li class="mt-5 py-5 bg-info text-white list-group-item" v-for="(data, i) in issuesData">
-      <h3>Issue： {{ data.title }}</h3><button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button>
-
-      <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true">
-        <h3>Issue content</h3>
-        <p v-if="data.issueContent === '' ? data.issueContent = '無 Issue 內容描述' : data.issueContent">
-          {{ data.issueContent }}
-        </p>
-      </div>
-
-      <form v-if="showEditForm === true">
-        <div class="form-group col-6 mx-auto">
-          <label for="exampleFormControlTextarea1">編輯 Issue</label>
-          
-          <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+      <div class="col-6 input-group mb-3 mx-auto">
+        <input v-model.trim="issue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button @click="addIssue ()" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
         </div>
+        <br />
+      </div>
+      
+      <!-- <template v-for="title in data.title"> -->
+        <h3>Issue： {{ data.title }}</h3>
+        
+        <!-- <button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button> -->
+        <button class="btn btn-warning">編輯 Issue 內容</button>
 
-        <template>
-          <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
-          <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
-        </template>
-      </form>
+        <!-- <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true"> -->
+        <div class="bg-primary text-white py-5 mx-auto my-3 col-6">
+          <h3>Issue content</h3>
+          <p v-if="data.issueContent === '' ? data.issueContent = '無 Issue 內容描述' : data.issueContent">
+            {{ data.issueContent }}
+          </p>
+        </div> 
 
-      <comment :comments="data.comments" />
+        <!-- <form v-if="showEditForm === true"> -->
+        <form>
+          <div class="form-group col-6 mx-auto">
+            <label for="exampleFormControlTextarea1">編輯 Issue</label>
+            
+            <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
 
+          <template>
+            <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
+            <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
+          </template>
+        </form>
+
+
+        <!-- <comment :comments="data.comments" /> -->
+      
     </li>
 
   </div>
@@ -51,6 +60,10 @@
 
 <script>
   import Comment from "@/views/comment.vue";
+
+
+  import { eventBus } from "@/main.js";
+
 
   export default {
 
@@ -79,20 +92,8 @@
 
     data () {
       return {
-        // issues: ['落實半夜 3 點 call 起來尿尿'],
-        // issue: '',
-        // edit: false,
-        // groupValue: '',
-        // showEditForm: false,
-        // finished: false,
-        // issueContent: 'Fake content',
-        // issueContent: '',
-        // stashIssueContent: '',
-        // comments: ['Wake 起床尿尿了'],
-        // comment: '',
-        // getComment: '',
-        // commentInfo: '',
-        // stashCommentInfo: '',
+        issue: '',
+        stashIssueContent: '',
       }
     },
 
@@ -107,43 +108,44 @@
     methods: {
       addIssue () {
         if (this.issue === '') return;
-
-        this.issues.push (this.issue);
-        this.issue = '';
+        
+        eventBus.$emit ('newIssue', (this.issue));
       },
 
 
-      editContent () {
-        this.showEditForm = true;
-        this.finished = false;
-        this.stashIssueContent = this.issueContent;
-      },
+      // editContent () {
+      //   this.showEditForm = true;
+      //   this.finished = false;
+      //   this.stashIssueContent = this.issueContent;
+      // },
       
 
-      finishEdit (i) {
-        this.finished = true;
-        this.showEditForm = false;
-        this.issueContent = this.stashIssueContent;
-        this.$emit ('changeIssueContent', this.issueContent, i);
-      },
+      // finishEdit (i) {
+      //   this.finished = true;
+      //   this.showEditForm = false;
+      //   this.issueContent = this.stashIssueContent;
+      //   this.$emit ('changeIssueContent', this.issueContent, i);
+      // },
 
 
-      cancelEdit () {
-        this.finished = true;
-        this.showEditForm = false;
+      // cancelEdit () {
+      //   this.finished = true;
+      //   this.showEditForm = false;
 
-      },
+      // },
 
 
-      addComment () {
-        this.commentInfo = this.stashCommentInfo;
-        this.comments.push (this.commentInfo);
-        this.stashCommentInfo = '';
-      },
+      // addComment () {
+      //   this.commentInfo = this.stashCommentInfo;
+      //   this.comments.push (this.commentInfo);
+      //   this.stashCommentInfo = '';
+      // },
 
-      editComment (i, c) {
-        this.$emit ('editComment', 'edited', i, c);
-      }
+      // editComment (i, c) {
+      //   this.$emit ('editComment', 'edited', i, c);
+      // }
     },
+
+
   }
 </script>
