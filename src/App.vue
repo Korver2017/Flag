@@ -64,7 +64,7 @@
       return {
         title: 'Hello, flag!',
         projectName: '',
-        projects: ['跟 Wake 請安問好', '看 Wake 有沒有洗手'],
+        projects: ['跟 Wake 請安問好'],
       }
     },
 

@@ -1,16 +1,14 @@
 <template>
   <div>
+    <template >
+      <li class="list-group-item list-group-item-primary mt-5" v-for="project in projects">
 
-    <!-- <li class="list-group-item list-group-item-primary mt-5" v-for="project in projects" :key="project">
+        <h3>Project： {{ project }}</h3>
+        
+        <issue :issuesData="issuesData" @changeIssueContent="editContent" @editComment="changeComment" />
 
-      <h3>Project： {{ project }}</h3>
-      
-      <issue :issueGroup="issueGroup" @changeIssueContent="editContent" @editComment="changeComment" />
-
-    </li> -->
-
-    {{ matrix }}
-
+      </li>
+    </template>
   </div>
 </template>
 
@@ -43,41 +41,33 @@
 
     data () {
       return {
-        matrix: {},
+        matrix: [],
 
-        issueGroupEmpty: [
-          {
-            title: '',
-            issueContent: '',
-            comment: [],
-          },
-        ],
+        issueGroupEmpty: {
+          title: '',
+          issueContent: '',
+          comment: [],
+        },
 
         issueGroup: [
           {
             title: 'Call Wake 起床尿尿',
             issueContent: '',
-            comment: ['Wake 該起床尿尿了'],
+            comments: ['Wake 該起床尿尿了'],
           },
-          {
-            title: 'I2',
-            issueContent: '',
-            comment: ['c2', 'c3'],
-          },
+          // {
+          //   title: 'I2',
+          //   issueContent: '',
+          //   comments: ['c2', 'c3'],
+          // },
         ],
       }
     },
 
 
     computed: {
-      project () {
-        let len = this.projects.length;
-
-        for (let i = 0; i < len; i ++) {
-          console.log (this.matrix);
-          this.matrix[this.projects[i]] = this.issueGroupEmpty;
-        }
-        // return this.matrix[this.projects[0]] = this.issueGroup[0];
+      issuesData () {
+        return this.issueGroup;
       }
     },
 
