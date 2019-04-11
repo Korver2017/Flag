@@ -39,7 +39,7 @@
         </template>
       </form>
 
-      <comment :comments="data.comment" />
+      <comment :comments="data.comments" />
 
     </li>
 

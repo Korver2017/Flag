@@ -9,11 +9,6 @@
             <button @click="editComment (i, c)" class="mx-1 btn btn-primary">編輯評論</button>
           </div>
         </div> 
-
-           <template>
-            <button class="btn btn-outline-success mr-3">完成編輯</button>
-            <button class="btn btn-outline-danger">取消編輯</button>
-          </template> 
         
        </template> 
 

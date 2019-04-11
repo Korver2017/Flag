@@ -2,13 +2,13 @@
   <div id="app" class="mt-5">
 
     <div class="col-3 input-group mb-3 mx-auto">
-      <input v-model.trim="projectName" type="text" class="form-control" placeholder="Project name" aria-label="Project name" aria-describedby="button-addon2">
+      <input v-model.trim="stashProjectName" type="text" class="form-control" placeholder="" aria-label="Project name" aria-describedby="button-addon2">
       <div class="input-group-append">
         <button @click="addProject ()" class="btn btn-outline-success" type="button" id="button-addon2">Add project</button>
       </div>
     </div>
 
-    <template >
+    <template>
       <project :projects="projects" />
     </template>
     
@@ -62,19 +62,56 @@
 
     data () {
       return {
-        title: 'Hello, flag!',
-        projectName: '',
-        projects: ['跟 Wake 請安問好'],
+        projects: [],
+        stashProjectName: '叫 Wake 起床尿尿',
+        data: {
+          projectName: '',
+            issueGroup: [
+              {
+                title: 'Issue title',
+                issueContent: 'Issue content',
+                comments: ['Comment 1'],
+              },
+            ],
+        },
+        // projects: [
+        //   {
+        //     projectsName: '',
+        //     issueGroup: [
+        //       {
+        //         title: '',
+        //         issueContent: '',
+        //         comments: [],
+        //       },
+        //     ],
+        //   }
+        // ],
+        // issueGroupEmpty: [
+        //   {
+        //     title: '',
+        //     issueContent: '',
+        //     comments: [],
+        //   },
+        // ],
+        // issueGroup: [
+        //   {
+        //     title: 'Call Wake 起床尿尿',
+        //     issueContent: '',
+        //     comments: ['Wake 該起床尿尿了'],
+        //   },
+        // ],
       }
     },
 
     
     methods: {
       addProject () {
-        if (this.projectName === '') return;
+        if (this.data.stashProjectName === '') return;
 
-        this.projects.push (this.projectName);
-        this.projectName = '';
+        this.data.projectName = this.stashProjectName;
+
+        this.projects.push (this.data);
+
       }
     },
   }
