@@ -10,16 +10,35 @@
 
     <!-- <project :projects="projects" /> -->
 
-    <template>
-      <li class="list-group-item list-group-item-primary mt-5" v-for="(project, i) in projects">
+      <!-- <template v-for="(name, i) in project">
+        <h1>{{ name }}</h1> -->
+        <!-- <h1>{{ project[i] }}</h1> -->
+      <!-- <template v-for="name in project">
+        {{ name }}
+      </template> -->
+      
+      <template v-for="project in projects">
+        <li class="list-group-item list-group-item-primary mt-5" v-for="(name, i) in project.projectName">
 
-        <h3>Project： {{ project.projectName[i] }}</h3>
-        <button class="mt-3 btn btn-warning" @click="editProjectName (i)">Edit Project Name</button>
-        
-        <issue :issuesData="project.issueGroup" />
+          <!-- {{ project.issueGroup[0] }} -->
+          <!-- <h1>{{ name }}</h1> -->
 
-      </li>
-    </template>
+          <h3>Project： {{ name }}</h3>
+          <button class="mt-3 btn btn-warning" @click="editProjectName (i)">Edit Project Name</button>
+
+          <div class="col-6 input-group my-5 mx-auto">
+            <input v-model.trim="newIssue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button @click="addIssue (i)" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
+            </div>
+            <br />
+          </div>
+          
+          <issue :issuesData="project.issueGroup[i]" :position="i" />
+          
+        </li>
+      </template>
+      <!-- </template> -->
 
     
   </div>
@@ -73,11 +92,27 @@
 
       eventBus.$on ('newIssue', (issue, i) => {
         // console.log (issue);
-        this.projectData.issueGroup.push ({
-          title: issue,
-          issueContent: '#2',
-          comments: ['#2'],
-        });
+        let $vmc = this;
+
+        if (typeof $vmc.projectData.issueGroup[i] == 'undefined') {
+          let arr = [];
+          console.log (i);
+          console.log (arr);
+          arr.push ({
+            title: issue,
+            issueContent: '#2',
+            comments: ['#2'],
+          });
+          console.log (arr);
+
+          $vmc.$set ($vmc.projectData.issueGroup, i, arr);
+        } else {
+          $vmc.projectData.issueGroup[i].push ({
+            title: issue,
+            issueContent: '#2',
+            comments: ['#2'],
+          });
+        }
       });
     },
 
@@ -100,16 +135,27 @@
           //   ],
           // }
         ],
-        stashProjectName: 'Project-1',
+        stashProjectName: 'kk',
         projectData: {
-          projectName: [],
-          issueGroup: [
+          projectName: ['Project-1', 'Project-2'],
+          issueGroup: [[
             {
               title: '#1 Issue-1',
               issueContent: 'Issue-content',
               comments: ['Comment-1'],
             },
-          ],
+            {
+              title: '#1.1',
+              issueContent: 'Issue-content',
+              comments: ['Comment-1'],
+            },
+          ], [
+            {
+              title: '#2',
+              issueContent: '66-content',
+              comments: ['66-1'],
+            },
+          ]],
         },
         projectDataEmpty: {
           // projectName: '',
@@ -121,6 +167,7 @@
             },
           ],
         },
+        newIssue: '',
       }
     },
 
@@ -131,7 +178,8 @@
         if (this.stashProjectName === '') return;
 
         this.projectData.projectName.push (this.stashProjectName);
-        this.projects.splice (0, 0, this.projectData);
+        // this.projects.splice (0, 0, this.projectData);
+        this.projects.push (0, 0, this.projectData);
 
         // let name = this.stashProjectName;
         // let obj = {};
@@ -150,9 +198,23 @@
         let $vmc = this;
 
         console.log ($vmc.projects[i]);
-        console.log ($vmc.projects[i].projectName);
+        console.log ($vmc.projectData.projectName[i]);
 
-        $vmc.projects[i].projectName.splice (i, 1, 'qq');
+        $vmc.projectData.projectName.splice (i, 1, 'qq');
+      },
+
+      addIssue (i) {
+        let $vmc = this;
+        
+        console.log ('qq');
+
+        $vmc.projectData.issueGroup[i].push ({
+          title: $vmc.newIssue,
+          issueContent: '',
+          comments: [],
+        });
+        
+
       }
     },
 

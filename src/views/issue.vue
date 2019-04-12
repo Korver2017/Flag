@@ -8,51 +8,67 @@
     <!-- issue list -->
 
     
-
-    <li class="mt-5 py-5 bg-info text-white list-group-item">
-      <template v-for="(data, i) in issuesData">
-        <div class="col-6 input-group mb-3 mx-auto">
-          <input v-model.trim="issue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
-          <div class="input-group-append">
-            <button @click="addIssue (i)" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
-          </div>
-          <br />
-        </div>
+    <!-- <template v-for="issueData in issuesData"> -->
+      <!-- <ul v-for="(data, i) in issueData" class="mt-5 py-5 bg-info text-white list-group-item"> -->
+        <!-- <h1>{{ issuesData }}</h1> -->
         
-        <template v-if="data.title !== ''">
-          <h3>Issue： {{ data.title }}</h3>
+          <!-- <li>{{ issue.title }}</li> -->
           
-          <!-- <button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button> -->
-          <button class="btn btn-warning">編輯 Issue 內容</button>
+          <!-- <ul v-if="issueData.title !== ''"> -->
+            <li template v-for="issueData in issuesData" class="mt-5 py-5 bg-info text-white list-group-item">
+              <h1>
+                Issue： {{ issueData.title }}
+              </h1>
+              <!-- <button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button> -->
+              <button class="btn btn-warning">編輯 Issue 內容</button>
 
-          <!-- <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true"> -->
-          <div class="bg-primary text-white py-5 mx-auto my-3 col-6">
-            <h3>Issue content</h3>
-            <p v-if="data.issueContent === '' ? data.issueContent = '無 Issue 內容描述' : data.issueContent">
-              {{ data.issueContent }}
-            </p>
-          </div> 
+              <!-- <div class="col-6 input-group my-5 mx-auto">
+                <input v-model.trim="issue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button @click="addIssue (position)" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
+                </div>
+                <br />
+              </div> -->
 
-          <!-- <form v-if="showEditForm === true"> -->
-          <form>
-            <div class="form-group col-6 mx-auto">
-              <label for="exampleFormControlTextarea1">編輯 Issue</label>
-              
-              <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
+              <div class="bg-primary text-white py-5 mx-auto my-3 col-6">
+                <h3>Issue content</h3>
+                <p v-if="issueData.issueContent === '' ? issueData.issueContent = '無 Issue 內容描述' : issueData.issueContent">
+                  {{ issueData.issueContent }}
+                </p>
+              </div>
 
-            <template>
-              <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
-              <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
-            </template>
-          </form>
-        </template>
+              <form>
+                <div class="form-group col-6 mx-auto">
+                  <label for="exampleFormControlTextarea1">編輯 Issue</label>
+                  
+                  <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
 
+                <template>
+                  <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
+                  <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
+                </template>
+              </form>
 
-          <!-- <comment :comments="data.comments" /> -->
+            </li>
+          <!-- </ul> -->
+
+             <!-- <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true"> -->
+            
+
+            <!-- <form v-if="showEditForm === true"> -->
+
+            <!-- <comment :comments="data.comments" /> -->
         
-      </template>
-    </li>
+          <!-- <div class="col-6 input-group mb-3 mx-auto">
+            <input v-model.trim="issue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button @click="addIssue (position)" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
+            </div>
+            <br />
+          </div> -->
+      <!-- </li> -->
+    <!-- </template> -->
 
   </div>
 </template>
@@ -89,7 +105,7 @@
 
 
     // props: ['issues'],
-    props: ['issuesData'],
+    props: ['issuesData', 'position'],
 
 
     data () {
@@ -108,11 +124,11 @@
 
     
     methods: {
-      addIssue (i) {
-        if (this.issue === '') return;
+      // addIssue () {
+      //   if (this.issue === '') return;
         
-        eventBus.$emit ('newIssue', this.issue, i);
-      },
+      //   eventBus.$emit ('newIssue', this.issue, this.position);
+      // },
 
 
       // editContent () {
