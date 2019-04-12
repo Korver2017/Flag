@@ -9,47 +9,49 @@
 
     
 
-
-    <li class="mt-5 py-5 bg-info text-white list-group-item" v-for="(data, i) in issuesData">
-      <div class="col-6 input-group mb-3 mx-auto">
-        <input v-model.trim="issue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
-        <div class="input-group-append">
-          <button @click="addIssue ()" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
-        </div>
-        <br />
-      </div>
-      
-      <!-- <template v-for="title in data.title"> -->
-        <h3>Issue： {{ data.title }}</h3>
-        
-        <!-- <button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button> -->
-        <button class="btn btn-warning">編輯 Issue 內容</button>
-
-        <!-- <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true"> -->
-        <div class="bg-primary text-white py-5 mx-auto my-3 col-6">
-          <h3>Issue content</h3>
-          <p v-if="data.issueContent === '' ? data.issueContent = '無 Issue 內容描述' : data.issueContent">
-            {{ data.issueContent }}
-          </p>
-        </div> 
-
-        <!-- <form v-if="showEditForm === true"> -->
-        <form>
-          <div class="form-group col-6 mx-auto">
-            <label for="exampleFormControlTextarea1">編輯 Issue</label>
-            
-            <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <li class="mt-5 py-5 bg-info text-white list-group-item">
+      <template v-for="(data, i) in issuesData">
+        <div class="col-6 input-group mb-3 mx-auto">
+          <input v-model.trim="issue" type="text" class="form-control" placeholder="" aria-label="" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button @click="addIssue (i)" class="btn btn-primary" type="button" id="button-addon2">Add issue</button>
           </div>
+          <br />
+        </div>
+        
+        <template v-if="data.title !== ''">
+          <h3>Issue： {{ data.title }}</h3>
+          
+          <!-- <button @click="editContent" class="btn btn-warning">編輯 Issue 內容</button> -->
+          <button class="btn btn-warning">編輯 Issue 內容</button>
 
-          <template>
-            <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
-            <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
-          </template>
-        </form>
+          <!-- <div class="bg-primary text-white py-5 mx-auto my-3 col-6" v-if="showEditForm !== true"> -->
+          <div class="bg-primary text-white py-5 mx-auto my-3 col-6">
+            <h3>Issue content</h3>
+            <p v-if="data.issueContent === '' ? data.issueContent = '無 Issue 內容描述' : data.issueContent">
+              {{ data.issueContent }}
+            </p>
+          </div> 
+
+          <!-- <form v-if="showEditForm === true"> -->
+          <form>
+            <div class="form-group col-6 mx-auto">
+              <label for="exampleFormControlTextarea1">編輯 Issue</label>
+              
+              <textarea v-model="stashIssueContent" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+
+            <template>
+              <button class="btn btn-success mr-3" @click.prevent="finishEdit (i)">完成編輯</button>
+              <button class="btn btn-danger" @click.prevent="cancelEdit">取消編輯</button>
+            </template>
+          </form>
+        </template>
 
 
-        <!-- <comment :comments="data.comments" /> -->
-      
+          <!-- <comment :comments="data.comments" /> -->
+        
+      </template>
     </li>
 
   </div>
@@ -106,10 +108,10 @@
 
     
     methods: {
-      addIssue () {
+      addIssue (i) {
         if (this.issue === '') return;
         
-        eventBus.$emit ('newIssue', (this.issue));
+        eventBus.$emit ('newIssue', this.issue, i);
       },
 
 

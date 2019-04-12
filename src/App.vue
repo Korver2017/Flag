@@ -8,7 +8,18 @@
       </div>
     </div>
 
-    <project :projects="projects" />
+    <!-- <project :projects="projects" /> -->
+
+    <template>
+      <li class="list-group-item list-group-item-primary mt-5" v-for="(project, i) in projects">
+
+        <h3>Project： {{ project.projectName[i] }}</h3>
+        <button class="mt-3 btn btn-warning" @click="editProjectName (i)">Edit Project Name</button>
+        
+        <issue :issuesData="project.issueGroup" />
+
+      </li>
+    </template>
 
     
   </div>
@@ -35,7 +46,7 @@
 </style>
 
 <script>
-  import Project from '@/views/project.vue';
+  import Issue from '@/views/issue.vue';
 
 
   import { eventBus } from "@/main.js";
@@ -53,20 +64,19 @@
      *
      */
     components: {
-      Project,
+      Issue,
     },
 
 
     created () {
       let $vmc = this;
 
-      eventBus.$on ('newIssue', issue => {
-        console.log (issue);
-
-        $vmc.projectData.issueGroup.splice (0, 0, {
+      eventBus.$on ('newIssue', (issue, i) => {
+        // console.log (issue);
+        this.projectData.issueGroup.push ({
           title: issue,
-          issueContent: '',
-          comments: [],
+          issueContent: '#2',
+          comments: ['#2'],
         });
       });
     },
@@ -74,15 +84,40 @@
 
     data () {
       return {
-        projects: [],
-        stashProjectName: '叫 Wake 起床尿尿',
+        projects: [
+          // {
+          //   title: '#1 Issue-1',
+          //   issueContent: 'Issue-content',
+          //   comments: ['Comment-1'],
+          // },
+          // {
+          //   '#2': [
+          //     {
+          //       title: '#2',
+          //       issueContent: '#2',
+          //       comments: ['#2'],
+          //     },
+          //   ],
+          // }
+        ],
+        stashProjectName: 'Project-1',
         projectData: {
-          projectName: '',
+          projectName: [],
           issueGroup: [
             {
               title: '#1 Issue-1',
               issueContent: 'Issue-content',
               comments: ['Comment-1'],
+            },
+          ],
+        },
+        projectDataEmpty: {
+          // projectName: '',
+          issueGroup: [
+            {
+              title: '',
+              issueContent: '',
+              comments: [],
             },
           ],
         },
@@ -92,13 +127,35 @@
     
     methods: {
       addProject () {
+
         if (this.stashProjectName === '') return;
 
-        this.projectData.projectName = this.stashProjectName;
+        this.projectData.projectName.push (this.stashProjectName);
+        this.projects.splice (0, 0, this.projectData);
 
-        this.projects.push (this.projectData);
+        // let name = this.stashProjectName;
+        // let obj = {};
+        // obj[this.stashProjectName] = [{
+        //         title: '',
+        //         issueContent: '',
+        //         comments: [],
+        //       }];
 
+        // this.projects.splice (0, 0, obj)
+
+        this.stashProjectName = '';
+      },
+
+      editProjectName (i) {
+        let $vmc = this;
+
+        console.log ($vmc.projects[i]);
+        console.log ($vmc.projects[i].projectName);
+
+        $vmc.projects[i].projectName.splice (i, 1, 'qq');
       }
     },
+
+
   }
 </script>
