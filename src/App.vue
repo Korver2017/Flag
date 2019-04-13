@@ -1,6 +1,8 @@
 <template>
   <div id="app" class="mt-5">
     <h1>Home Component</h1>
+
+    <IssueList />
   </div>
 </template>
 
@@ -26,6 +28,8 @@
 
 <script>
 
+  import IssueList from "@/views/issue-list.vue";
+
 
   export default {
 
@@ -39,15 +43,13 @@
      *
      */
     components: {
-    },
-
-
-    created () {
+      IssueList,
     },
 
 
     data () {
       return {
+        
       }
     },
   }
