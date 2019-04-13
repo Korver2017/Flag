@@ -1,7 +1,13 @@
 <template>
-  <div>
-    <h1>{{ title }}</h1>
-    
+  <div class="container my-4">
+    <h1 class="my-4">{{ title }}</h1>
+
+    <div v-for="issueTitle in issuesTitle" class="list-group">
+      <button type="button" class="list-group-item list-group-item-action">
+        {{ issueTitle }}
+      </button>
+    </div>
+
   </div>
 </template>
 
@@ -15,29 +21,9 @@
     data () {
       return {
         title: 'Issue-List Component',
-        projectData: {
-          projectName: ['Project-1', 'Project-2'],
-          issuesInfo: [[
-            {
-              title: '#1 Issue-1',
-              issueContent: 'Issue-content',
-              comments: ['Comment-1'],
-            },
-            {
-              title: '#1.1',
-              issueContent: 'Issue-content',
-              comments: ['Comment-1'],
-            },
-          ], [
-            {
-              title: '#2',
-              issueContent: '66-content',
-              comments: ['66-1'],
-            },
-          ]],
-        },
+        issuesTitle: ['Issue 1.1', 'Issue 1.2', 'Issue 1.2.1']
       }
-    },
+    }
   }
 </script>
 
