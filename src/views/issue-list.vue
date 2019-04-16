@@ -12,15 +12,18 @@
     <div class="list-group">
       <template v-for="(issueData, index) in issuesData">
 
-        <a @click="changeStatus(index)" class="list-group-item list-group-item-action text-left bg-dark text-white">
+        <a @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
           {{ issueData.title }}
         </a>
 
-        <div class="mb-5" v-if="issueData.showContent">
-          <div class="text-left border border-primary">
+        <a class="list-group-item list-group-item-action" v-if="issueData.showContent">
+          <div>
 
-            <template v-for="content in issueData.contents">
-              {{ content }}
+            {{ issueData.content }}
+            <button v-if="editing === false" class="btn btn-warning" @click="editing = !editing">Edit</button>
+            <template v-else>
+              <input v-model="stashContent" type="text" />
+              <button class="btn btn-success" @click="updateContent(index)">Update content</button>
             </template>
 
             <template>
@@ -43,7 +46,7 @@
             </template>
           </div>
 
-        </div>
+        </a>
 
       </template>
 
@@ -68,16 +71,18 @@
           {
             title: '#1',
             showContent: false,
-            contents: ['content-1 description'],
+            content: 'content-1 description',
             labels: {feature: false, bug: false},
           }, {
             title: '#2',
             showContent: false,
-            contents: ['content-2 description'],
+            content: 'content-2 description',
             labels: {feature: false, bug: false},
           }
         ],
         newIssue: '',
+        stashContent: '',
+        editing: false,
       }
     },
 
@@ -96,7 +101,7 @@
         this.issuesData.push ({
           title: this.newIssue,
           showContent: false,
-          contents: ['content-2 description'],
+          content: '尚無資訊',
           labels: {feature: false, bug: false},
         });
 
@@ -107,6 +112,13 @@
 
       changeLabelState (index, key) {
         this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
+      },
+
+
+      updateContent (index) {
+        this.issuesData[index].content = this.stashContent;
+        this.stashContent = '';
+        this.editing = false;
       }
 
     },
