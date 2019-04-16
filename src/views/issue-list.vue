@@ -1,45 +1,60 @@
 <template>
   <div class="container my-4">
-    <h1 class="my-4">{{ title }}</h1>
+    <h3>Issue-List</h3>
 
-        <div class="list-group">
-          <a @click="showContent = !showContent" class="list-group-item list-group-item-action text-left">{{ issueTitle }}
-            <span v-if="feature === true" class="badge badge-success text-right">
-              Feature
-            </span>
-            <span v-if="bug === true" class="badge badge-danger text-right">
-              bug
-            </span>
-          </a>
+    <div class="input-group my-3 col-6 mx-auto">
+      <input @keyup.enter="addIssue" v-model="newIssue" type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+      <div class="input-group-append">
+        <button @click="addIssue" class="btn btn-outline-secondary" type="button" id="button-addon2">Add issue</button>
+      </div>
+    </div>
 
-          <template v-if="showContent">
-          <div class="text-left my-5 border border-primary">
-            1. 新增 Issue <br />
-            2. 新增 label
-            <span v-if="feature === true" class="badge badge-success text-right">
-              Feature
-            </span>
-            <span v-if="bug === true" class="badge badge-danger text-right">
-              bug
-            </span>
+    <div class="list-group">
+      <template v-for="(issueData, index) in issuesData">
+
+        <a @click="changeStatus(index)" class="list-group-item list-group-item-action text-left bg-dark text-white">
+          {{ issueData.title }}
+        </a>
+
+        <div class="mb-5" v-if="issueData.showContent">
+          <div class="text-left border border-primary">
+
+            <template v-for="content in issueData.contents">
+              {{ content }}
+            </template>
+
+            <template>
+
+              <span v-if="issueData.labels.feature === true" class="badge badge-success text-right">
+                feature
+              </span>
+
+              <span v-if="issueData.labels.bug === true" class="badge badge-danger text-right">
+                Bug
+              </span>
+
+            </template>
+            
           </div>
 
           <div>
-            <button @click="feature = !feature" class="btn btn-success">Feature</button>
-            <button @click="bug = !bug" class="btn btn-danger">Bug</button>
+            <template v-for="(label, key) in issueData.labels">
+              <button @click="changeLabelState(index, key)" class="btn btn-outline-primary">{{ key }}</button>
+            </template>
           </div>
-
-          </template>
 
         </div>
 
-      </div>
+      </template>
+
+    </div>
+
+  </div>
     
 
 </template>
 
 <script>
-  import Issue from "@/views/issue.vue";
 
   export default {
     
@@ -47,23 +62,53 @@
     name: 'issue-list',
 
 
-    components: {
-      Issue,
-    },
-
-
     data () {
       return {
-        title: 'Issue-List Component',
-        issueTitle: '#1-Issue',
-        showContent: false,
-        feature: false,
-        bug: false,
+        issuesData: [
+          {
+            title: '#1',
+            showContent: false,
+            contents: ['content-1 description'],
+            labels: {feature: false, bug: false},
+          }, {
+            title: '#2',
+            showContent: false,
+            contents: ['content-2 description'],
+            labels: {feature: false, bug: false},
+          }
+        ],
+        newIssue: '',
       }
     },
 
 
     methods: {
+
+
+      changeStatus (index) {
+        this.issuesData[index].showContent = !this.issuesData[index].showContent
+      },
+
+
+      addIssue () {
+        // let issueTitle = this.newIssue;
+
+        this.issuesData.push ({
+          title: this.newIssue,
+          showContent: false,
+          contents: ['content-2 description'],
+          labels: {feature: false, bug: false},
+        });
+
+        this.newIssue = '';
+
+      },
+
+
+      changeLabelState (index, key) {
+        this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
+      }
+
     },
   }
 </script>

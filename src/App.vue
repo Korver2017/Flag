@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="mt-5">
-    <h1>Home Component</h1>
+    <h1>Flag Project</h1>
 
     <IssueList />
   </div>
