@@ -14,11 +14,14 @@
       <div class="list-group">
       
 
-        <a @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
+        <button :disabled="issueData.issueOpened === false" @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
           {{ issueData.title }}
-        </a>
+          <span v-if="issueData.issueOpened === false"> (Closed)</span>
+        </button>
+        <button v-if="issueData.issueOpened === true" class="btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
+        <button v-else class="btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
 
-        <a class="list-group-item list-group-item-action" v-if="issueData.showContent">
+        <button :disabled="issueData.issueOpened === false" class="list-group-item list-group-item-action" v-if="issueData.showContent">
           <div>
 
             {{ issueData.content }}
@@ -56,7 +59,8 @@
             
           </div>
 
-        </a>
+
+        </button>
 
 
       </div>
@@ -90,12 +94,14 @@
             content: 'content-1 description',
             issueLabels: {},
             // labels: {feature: false, bug: false},
+            issueOpened: true,
           }, {
             title: '#2',
             showContent: false,
             content: 'content-2 description',
             issueLabels: {},
             // labels: {feature: false, bug: false},
+            issueOpened: true,
           }
         ],
         labels: {feature: false, bug: false},
@@ -122,6 +128,7 @@
           showContent: false,
           content: '尚無資訊',
           labels: {feature: false, bug: false},
+          issueOpened: true,
         });
 
         this.newIssue = '';
