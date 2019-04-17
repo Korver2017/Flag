@@ -34,15 +34,23 @@
 
             </template>
 
-            <template>
+            <template :labels="issueData.issueLabels">
 
-              <span v-if="issueData.labels.feature === true" class="badge badge-success text-right">
+              <template v-for="labels in issueData.issueLabels">
+                {{ labels }}
+                <!-- <span v-if="label === true" class="badge badge-success text-right">
+                  {{ label }}
+                </span> -->
+              </template>
+
+
+              <!-- <span v-if="issueData.labels.feature === true" class="badge badge-success text-right">
                 feature
               </span>
 
               <span v-if="issueData.labels.bug === true" class="badge badge-danger text-right">
                 Bug
-              </span>
+              </span> -->
 
             </template>
             
@@ -53,16 +61,12 @@
 
       </div>
 
-      <template v-if="issueData.showContent" v-for="(label, key) in issueData.labels">
+      <template v-if="issueData.showContent" v-for="(label, key) in labels">
         <button @click="changeLabelState(index, key)" class="mt-3 btn btn-outline-primary">{{ key }}</button>
       </template>
 
     </template>
 
-    <!-- <template v-for="(issueData, index) in issuesData">
-      <template v-for="(label, key) in issueData.labels">
-      </template>
-    </template> -->
 
   </div>
     
@@ -84,14 +88,17 @@
             title: '#1',
             showContent: false,
             content: 'content-1 description',
-            labels: {feature: false, bug: false},
+            issueLabels: {},
+            // labels: {feature: false, bug: false},
           }, {
             title: '#2',
             showContent: false,
             content: 'content-2 description',
-            labels: {feature: false, bug: false},
+            issueLabels: {},
+            // labels: {feature: false, bug: false},
           }
         ],
+        labels: {feature: false, bug: false},
         newIssue: '',
         stashContent: '',
         editing: false,
@@ -123,7 +130,7 @@
 
 
       changeLabelState (index, key) {
-        this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
+        this.labels[key] = !this.labels[key];
       },
 
 
