@@ -159,7 +159,7 @@
           titleEditing: false,
           showContent: false,
           content: '尚無資訊',
-          labels: {feature: false, bug: false},
+          labels: {feature: false, bug: false, hotfix: false},
           issueOpened: true,
           stashContent: '',
           contentEditing: false,
@@ -187,6 +187,13 @@
         this.issuesData[index].stashTitle = '';
         this.issuesData[index].titleEditing = false;
 
+      },
+
+
+      check (label, key, l, index) {
+        console.log (label, key, l, index);
+        console.log (this.issuesData[index].labels[key]);
+        this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
       }
 
     },
