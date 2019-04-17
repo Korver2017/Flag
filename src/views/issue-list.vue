@@ -9,8 +9,10 @@
       </div>
     </div>
 
-    <div class="list-group">
-      <template v-for="(issueData, index) in issuesData">
+    <template v-for="(issueData, index) in issuesData">
+
+      <div class="list-group">
+      
 
         <a @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
           {{ issueData.title }}
@@ -22,8 +24,14 @@
             {{ issueData.content }}
             <button v-if="editing === false" class="btn btn-warning" @click="editing = !editing">Edit</button>
             <template v-else>
-              <input v-model="stashContent" type="text" />
-              <button class="btn btn-success" @click="updateContent(index)">Update content</button>
+
+              <div class="input-group mb-3">
+                <input @keyup.enter="updateContent(index)" v-model="stashContent" type="text" class="form-control" placeholder="New content" aria-describedby="button-addon2">
+                <div class="input-group-append">
+                  <button @click="updateContent(index)" class="btn btn-outline-secondary" type="button" id="button-addon2">Update content</button>
+                </div>
+              </div>
+
             </template>
 
             <template>
@@ -40,17 +48,21 @@
             
           </div>
 
-          <div>
-            <template v-for="(label, key) in issueData.labels">
-              <button @click="changeLabelState(index, key)" class="btn btn-outline-primary">{{ key }}</button>
-            </template>
-          </div>
-
         </a>
 
+
+      </div>
+
+      <template v-if="issueData.showContent" v-for="(label, key) in issueData.labels">
+        <button @click="changeLabelState(index, key)" class="mt-3 btn btn-outline-primary">{{ key }}</button>
       </template>
 
-    </div>
+    </template>
+
+    <!-- <template v-for="(issueData, index) in issuesData">
+      <template v-for="(label, key) in issueData.labels">
+      </template>
+    </template> -->
 
   </div>
     
