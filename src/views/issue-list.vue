@@ -16,6 +16,11 @@
 
           <button :disabled="issueData.issueOpened === false" @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
             {{ issueData.title }}
+
+            <template v-for="(label, key) in issueData.labels">
+              <span v-if="label === true" class="mx-1 badge badge-light">{{ key }}</span>
+            </template>
+
             <span v-if="issueData.issueOpened === false"> (Closed)</span>
           </button>
 
@@ -41,41 +46,6 @@
                 <button class="mx-2 btn btn-warning" @click="issueData.contentEditing = !issueData.contentEditing">Edit content</button>
                 <button class="mx-2 btn btn-warning" @click="issueData.titleEditing = !issueData.titleEditing">Edit title</button>
               </template>
-
-              <!-- <div v-if="contentEditing === true" class="input-group mb-3">
-                <input @keyup.enter="updateContent(index)" v-model="stashContent" type="text" class="form-control" placeholder="New content" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                  <button @click="updateContent(index)" class="btn btn-outline-secondary" type="button" id="button-addon2">Update content</button>
-                </div>
-              </div>
-
-              <div v-if="issueData.titleEditing === true" class="input-group mb-3">
-                <input @keyup.enter="updateTitle(index)" v-model="issueData.stashTitle" type="text" class="form-control" placeholder="New title" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                  <button @click="updateTitle(index)" class="btn btn-outline-secondary" type="button" id="button-addon2">Update title</button>
-                </div>
-              </div> -->
-            
-
-              <!-- <template :labels="issueData.issueLabels">
-
-                <template v-for="labels in issueData.issueLabels">
-                  {{ labels }}
-                   <span v-if="label === true" class="badge badge-success text-right">
-                    {{ label }}
-                  </span> 
-                </template>
-
-
-                 <span v-if="issueData.labels.feature === true" class="badge badge-success text-right">
-                  feature
-                </span>
-
-                <span v-if="issueData.labels.bug === true" class="badge badge-danger text-right">
-                  Bug
-                </span> 
-
-              </template> -->
               
             </div>
 
@@ -86,14 +56,13 @@
         </div>
 
         <div class="mt-3">
-        <button v-if="issueData.issueOpened === true" class="btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
-        <button v-else class="btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
+          <button v-if="issueData.issueOpened === true" class="btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
+          <button v-else class="btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
+
+          <button @click="checkLabel(key, label, l, index)" class="btn btn-outline-primary" v-for="(key, label, l) in issueData.labels">
+            {{ label }}
+          </button>
         </div>
-
-        <!-- <button :disabled="issueData.issueOpened === false" class="list-group-item list-group-item-action" v-if="issueData.showContent">
-        </button> -->
-
-      <!-- </div> -->
 
 
     </div>
@@ -121,7 +90,7 @@
             showContent: false,
             content: '#1 - Lorem...',
             issueLabels: {},
-            labels: {feature: false, bug: false},
+            labels: {feature: false, bug: false, hotfix: false},
             issueOpened: true,
             stashTitle: '',
             stashContent: '',
@@ -132,7 +101,7 @@
             showContent: false,
             content: '#2 - Lorem...',
             issueLabels: {},
-            labels: {feature: false, bug: false},
+            labels: {feature: false, bug: false, hotfix: false},
             issueOpened: true,
             stashContent: '',
             contentEditing: false,
@@ -190,7 +159,7 @@
       },
 
 
-      check (label, key, l, index) {
+      checkLabel (label, key, l, index) {
         console.log (label, key, l, index);
         console.log (this.issuesData[index].labels[key]);
         this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
