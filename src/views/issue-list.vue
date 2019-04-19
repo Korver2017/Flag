@@ -2,10 +2,19 @@
   <div class="container my-4">
     <h3>Issue-List</h3>
 
-    <div class="input-group my-3 col-6 mx-auto">
-      <input @keyup.enter="addIssue" v-model="newIssue" type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
-      <div class="input-group-append">
-        <button @click="addIssue" class="btn btn-outline-secondary" type="button" id="button-addon2">Add issue</button>
+    <div class="row">
+      <div class="input-group my-3 col-6">
+        <input @keyup.enter="addIssue" v-model="newIssue" type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button @click="addIssue" class="btn btn-outline-secondary" type="button" id="button-addon2">Add issue</button>
+        </div>
+      </div>
+
+      <div class="input-group my-3 col-6">
+        <input @keyup.enter="addLabel" v-model="newLabel" type="text" class="form-control" placeholder="New label" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button @click="addLabel" class="btn btn-outline-secondary" type="button" id="button-addon2">Add label</button>
+        </div>
       </div>
     </div>
 
@@ -56,14 +65,14 @@
         </div>
 
         <div class="mt-3">
-          <button v-if="issueData.issueOpened === true" class="btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
-          <button v-else class="btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
+          <button v-if="issueData.issueOpened === true" class="mr-3 btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
+          <button v-else class="mr-3 btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
 
           <button @click="checkLabel(key, label, l, index)" class="btn btn-outline-primary" v-for="(key, label, l) in issueData.labels">
             {{ label }}
           </button>
-        </div>
 
+        </div>
 
     </div>
 
@@ -107,8 +116,9 @@
             contentEditing: false,
           }
         ],
-        // labels: {feature: false, bug: false},
+        labels: {feature: false, bug: false, hotfix: false},
         newIssue: '',
+        newLabel: '',
       }
     },
 
@@ -128,7 +138,8 @@
           titleEditing: false,
           showContent: false,
           content: '尚無資訊',
-          labels: {feature: false, bug: false, hotfix: false},
+          // labels: {feature: false, bug: false, hotfix: false},
+          labels: this.labels,
           issueOpened: true,
           stashContent: '',
           contentEditing: false,
@@ -136,6 +147,12 @@
 
         this.newIssue = '';
 
+      },
+
+
+      addLabel () {
+        this.$set (this.labels, this.newLabel, false);
+        console.log (this.labels);
       },
 
 
