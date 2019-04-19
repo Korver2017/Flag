@@ -18,6 +18,10 @@
       </div>
     </div>
 
+    <div class="row">
+      <button class="btn btn-outline-success" v-for="(label, key, i) in labels" @click="editLabel(label, key, i)">{{ key }}</button>
+    </div>
+
     <div v-for="(issueData, index) in issuesData">
       <!-- <div> -->
 
@@ -152,7 +156,10 @@
 
       addLabel () {
         this.$set (this.labels, this.newLabel, false);
-        console.log (this.labels);
+      },
+
+
+      editLabel (label, key, index) {
       },
 
 
@@ -180,7 +187,7 @@
         console.log (label, key, l, index);
         console.log (this.issuesData[index].labels[key]);
         this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
-      }
+      },
 
     },
   }
