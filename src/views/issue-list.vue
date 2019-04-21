@@ -18,36 +18,23 @@
       </div>
     </div>
 
-    <div class="row">
-      <template v-for="(label, l) in labels">
-          <button @click="checkEditLabel(l)" class="btn btn-outline-success">
-            {{ Object.keys (label)[0] }}
-          </button>
+      <h5 class="text-left">Please select a label to edit name</h5> <br />
+      <div class="row" v-for="(label, l) in labels">
+        <button @click="checkEditLabel(l)" class="btn btn-outline-success">
+          {{ Object.keys (label)[0] }}
+        </button>
 
-           <!-- <template v-for="resp in Object.keys (label)[0]"> -->
-          <input v-model="labels[l].editedLabel" v-if="labels[l].labelEditing === true" type="text">
-          <button @click="updateLabel (Object.keys (label)[0], l)">Update label</button>
-           <!-- </template> -->
-
-
-            <!-- <h5>{{ label }}</h5> <br>
-
-            <template v-for="(v, k) in label">
-              <h5>{{ k }}</h5> <br>
-            </template> -->
-
-            
-          <!-- <button class="btn btn-outline-success" v-for="(val, key) in detailKey" @click="checkEditLabel(l)">{{  }}</button> -->
-          <!-- <input v-model="labels[l].editedLabel" v-if="labels[l].labelEditing === true" type="text">
-          <button @click="updateLabel(l)">Update label</button> -->
-      </template>
-    </div>
+        <template v-if="labels[l].labelEditing === true">
+          <input @keyup.enter="updateLabel (Object.keys (label)[0], l)" v-model.trim="labels[l].editedLabel" type="text" class="form-control col-3" placeholder="Edit label" aria-describedby="button-addon2">
+          <button class="btn btn-outline-warning" @click="updateLabel (Object.keys (label)[0], l)">Update label</button>
+        </template>
+      </div>
 
     <div v-for="(issueData, index) in issuesData">
 
         <div class="list-group text-white">
 
-          <button :disabled="issueData.issueOpened === false" @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
+          <button :disabled="issueData.issueOpened === false" @click="changeStatus (index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
             {{ issueData.title }}
 
             <template v-for="label in issueData.labels">
@@ -164,9 +151,13 @@
           }
         ],
         newIssue: '',
-        newLabel: 'kk',
+        newLabel: '',
         labelEditing: false,
       }
+    },
+
+
+    created () {
     },
 
 
@@ -202,6 +193,15 @@
       },
 
 
+      checkLabel (name, index, l) {
+        console.log (index, l);
+
+        console.log (this.issuesData[index].labels[l]);
+
+        this.issuesData[index].labels[l][name] = !this.issuesData[index].labels[l][name];
+      },
+
+
       checkEditLabel (index) {
         this.labels[index].labelEditing = true;
 
@@ -226,11 +226,6 @@
       },
 
 
-      changeLabelState (index, key) {
-        this.labels[key] = !this.labels[key];
-      },
-
-
       updateContent (index) {
         this.issuesData[index].content = this.issuesData[index].stashContent;
         this.issuesData[index].stashContent = '';
@@ -243,11 +238,6 @@
         this.issuesData[index].stashTitle = '';
         this.issuesData[index].titleEditing = false;
 
-      },
-
-
-      checkLabel (key, index, l) {
-        this.issuesData[index].labels[l][key] = !this.issuesData[index].labels[l][key];
       },
 
     },
