@@ -19,19 +19,42 @@
     </div>
 
     <div class="row">
-      <button class="btn btn-outline-success" v-for="(label, key, i) in labels" @click="editLabel(label, key, i)">{{ key }}</button>
+      <template v-for="(label, l) in labels">
+          <button @click="checkEditLabel(l)" class="btn btn-outline-success">
+            {{ Object.keys (label)[0] }}
+          </button>
+
+           <!-- <template v-for="resp in Object.keys (label)[0]"> -->
+          <input v-model="labels[l].editedLabel" v-if="labels[l].labelEditing === true" type="text">
+          <button @click="updateLabel (Object.keys (label)[0], l)">Update label</button>
+           <!-- </template> -->
+
+
+            <!-- <h5>{{ label }}</h5> <br>
+
+            <template v-for="(v, k) in label">
+              <h5>{{ k }}</h5> <br>
+            </template> -->
+
+            
+          <!-- <button class="btn btn-outline-success" v-for="(val, key) in detailKey" @click="checkEditLabel(l)">{{  }}</button> -->
+          <!-- <input v-model="labels[l].editedLabel" v-if="labels[l].labelEditing === true" type="text">
+          <button @click="updateLabel(l)">Update label</button> -->
+      </template>
     </div>
 
     <div v-for="(issueData, index) in issuesData">
-      <!-- <div> -->
 
         <div class="list-group text-white">
 
           <button :disabled="issueData.issueOpened === false" @click="changeStatus(index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
             {{ issueData.title }}
 
-            <template v-for="(label, key) in issueData.labels">
-              <span v-if="label === true" class="mx-1 badge badge-light">{{ key }}</span>
+            <template v-for="label in issueData.labels">
+              <!-- <template v-for="(val, key) in label"> -->
+                <!-- {{ Object.keys (label)[0] }} -->
+                <span v-if="Object.values (label)[0] === true" class="mx-1 badge badge-light">{{ Object.keys (label)[0] }}</span>
+              <!-- </template> -->
             </template>
 
             <span v-if="issueData.issueOpened === false"> (Closed)</span>
@@ -72,9 +95,10 @@
           <button v-if="issueData.issueOpened === true" class="mr-3 btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
           <button v-else class="mr-3 btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
 
-          <button @click="checkLabel(key, label, l, index)" class="btn btn-outline-primary" v-for="(key, label, l) in issueData.labels">
-            {{ label }}
-          </button>
+          <template v-for="(label, l) in issueData.labels">
+            <!-- <template v-for="(v, k) in label"> -->
+              <button class="btn btn-outline-primary" @click="checkLabel (Object.keys (label)[0], index, l)">{{ Object.keys (label)[0] }}</button>
+          </template>
 
         </div>
 
@@ -103,7 +127,8 @@
             showContent: false,
             content: '#1 - Lorem...',
             issueLabels: {},
-            labels: {feature: false, bug: false, hotfix: false},
+            // labels: {feature: false, bug: false, hotfix: false},
+            labels: [{feature: false},{bug: false},{hotfix: false}],
             issueOpened: true,
             stashTitle: '',
             stashContent: '',
@@ -114,15 +139,33 @@
             showContent: false,
             content: '#2 - Lorem...',
             issueLabels: {},
-            labels: {feature: false, bug: false, hotfix: false},
+            // labels: {feature: false, bug: false, hotfix: false},
+            labels: [{feature: false},{bug: false},{hotfix: false}],
             issueOpened: true,
             stashContent: '',
             contentEditing: false,
           }
         ],
-        labels: {feature: false, bug: false, hotfix: false},
+        labels: [
+          {
+            feature: false,
+            labelEditing: false,
+            editedLabel: '',
+          },
+          {
+            bug: false,
+            labelEditing: false,
+            editedLabel: '',
+          },
+          {
+            hotfix: false,
+            labelEditing: false,
+            editedLabel: '',
+          }
+        ],
         newIssue: '',
-        newLabel: '',
+        newLabel: 'kk',
+        labelEditing: false,
       }
     },
 
@@ -159,7 +202,27 @@
       },
 
 
-      editLabel (label, key, index) {
+      checkEditLabel (index) {
+        this.labels[index].labelEditing = true;
+
+        // obj[this.newLabel] = true;
+        // this.$set (this.labels, index, obj);
+        // console.log (this.labels);
+      },
+
+
+      updateLabel (key, index) {
+        let obj = {};
+
+        if (this.labels[index][key] === true)
+          obj[this.labels[index].editedLabel] = true;
+        else
+          obj[this.labels[index].editedLabel] = false;
+        
+        obj.labelEditing = false;
+        obj.editedLabel = '',
+
+        this.$set (this.labels, index, obj);
       },
 
 
@@ -183,10 +246,8 @@
       },
 
 
-      checkLabel (label, key, l, index) {
-        console.log (label, key, l, index);
-        console.log (this.issuesData[index].labels[key]);
-        this.issuesData[index].labels[key] = !this.issuesData[index].labels[key];
+      checkLabel (key, index, l) {
+        this.issuesData[index].labels[l][key] = !this.issuesData[index].labels[l][key];
       },
 
     },
