@@ -1,8 +1,12 @@
 <template>
   <div id="app" class="mt-5">
-    <h1>Flag Project</h1>
+    <h1>Protype</h1>
 
-    <IssueList />
+    <router-link to="dashboard" tag="li" active-class="active">
+      <a>Dashboard</a>
+    </router-link>
+
+    <router-view />
   </div>
 </template>
 
@@ -28,7 +32,8 @@
 
 <script>
 
-  import IssueList from "@/views/issue-list.vue";
+  // import IssueList from "@/views/issue-list.vue";
+  import Dashboard from "@/views/dashboard.vue";
 
 
   export default {
@@ -43,7 +48,8 @@
      *
      */
     components: {
-      IssueList,
+      // IssueList,
+      Dashboard,
     },
 
 
