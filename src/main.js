@@ -6,7 +6,10 @@ import store from './store'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-Vue.config.productionTip = false
+import parse from "@/vendors/parse/main.js";
+
+Vue.config.productionTip = false;
+Vue.prototype.$api = parse;
 
 export const eventBus = new Vue ();
 

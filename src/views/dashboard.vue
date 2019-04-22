@@ -20,6 +20,8 @@
 </template>
 
 <script>
+  import Parse from "parse";
+
   export default {
     
 
@@ -30,8 +32,23 @@
       return {
         title: 'Dashboard',
         projectName: '',
-        projects: ['Flag', '#2-Project'],
+        projects: [],
+        // projects: ['Flag', '#2-Project'],
       }
+    },
+
+
+    created () {
+      var Project = Parse.Object.extend ("Project");
+      var query = new Parse.Query (Project);
+      
+      query.get ("mAaLOhSiXm")
+        .then (resp => {
+          let projects = resp.get ('projects');
+          this.projects = projects;
+        }, (error) => {
+          console.log (error);
+        });
     },
 
 
@@ -39,9 +56,18 @@
 
 
       newProject () {
+        
         this.projects.push (this.projectName);
+
+        this.$api.set (this.projects);
+
         this.projectName = '';
       },
+
+
+      setScore () {
+        this.$api.set ();
+      }
 
     },
   }

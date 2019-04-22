@@ -35,6 +35,39 @@
   // import IssueList from "@/views/issue-list.vue";
   import Dashboard from "@/views/dashboard.vue";
 
+  // var GameScore = Parse.Object.extend ("GameScore");
+  // var query = new Parse.Query (GameScore);
+  // query.get ("EhMhOsEc1g")
+  // .then ((gameScore) => {
+    
+    
+  //   var score = gameScore.get ("score");
+
+  //   console.log (score);
+  //   // The object was retrieved successfully.
+  //   console.log ('123');
+  // }, (error) => {
+  //   // The object was not retrieved successfully.
+  //   // error is a Parse.Error with an error code and message.
+  //   console.log (error);
+  // });
+
+  // var GameScore = Parse.Object.extend("GameScore");
+  // var gameScore = new GameScore ();
+
+  // gameScore.save({
+  //   score: 1337,
+  //   playerName: "Allen Iverson",
+  //   cheatMode: false
+  // })
+  // .then((gameScore) => {
+  //   // The object was saved successfully.
+  //   console.log (gameScore);
+  // }, (error) => {
+  //   // The save failed.
+  //   // error is a Parse.Error with an error code and message.
+  // });
+
 
   export default {
 
@@ -56,6 +89,13 @@
     data () {
       return {
         
+      }
+    },
+
+
+    methods: {
+      d () {
+        this.$api.delete ();
       }
     },
   }
