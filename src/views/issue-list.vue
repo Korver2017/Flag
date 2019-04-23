@@ -63,30 +63,30 @@
     data () {
       return {
         issuesData: [
-          {
-            title: '#1',
-            titleEditing: false,
-            showContent: false,
-            content: '#1 - Lorem...',
-            issueLabels: {},
-            // labels: {feature: false, bug: false, hotfix: false},
-            labels: [{feature: false},{bug: false},{hotfix: false}],
-            issueOpened: true,
-            stashTitle: '',
-            stashContent: '',
-            contentEditing: false,
-          }, {
-            title: '#2',
-            titleEditing: false,
-            showContent: false,
-            content: '#2 - Lorem...',
-            issueLabels: {},
-            // labels: {feature: false, bug: false, hotfix: false},
-            labels: [{feature: false},{bug: false},{hotfix: false}],
-            issueOpened: true,
-            stashContent: '',
-            contentEditing: false,
-          }
+          // {
+          //   title: '#1',
+          //   titleEditing: false,
+          //   showContent: false,
+          //   content: '#1 - Lorem...',
+          //   issueLabels: {},
+          //   // labels: {feature: false, bug: false, hotfix: false},
+          //   labels: [{feature: false},{bug: false},{hotfix: false}],
+          //   issueOpened: true,
+          //   stashTitle: '',
+          //   stashContent: '',
+          //   contentEditing: false,
+          // }, {
+          //   title: '#2',
+          //   titleEditing: false,
+          //   showContent: false,
+          //   content: '#2 - Lorem...',
+          //   issueLabels: {},
+          //   // labels: {feature: false, bug: false, hotfix: false},
+          //   labels: [{feature: false},{bug: false},{hotfix: false}],
+          //   issueOpened: true,
+          //   stashContent: '',
+          //   contentEditing: false,
+          // }
         ],
         labels: [
           {
@@ -112,47 +112,21 @@
     },
 
 
-    // created () {
-    //   const Project = Parse.Object.extend ("Project");
-    //   const project = new Project ();
+    created () {
+      
+      var Project = Parse.Object.extend ("Project");
+      var query = new Parse.Query (Project);
 
-    //   project.set ("issuesData", [
-    //       {
-    //         title: '#1',
-    //         titleEditing: false,
-    //         showContent: false,
-    //         content: '#1 - Lorem...',
-    //         issueLabels: {},
-    //         // labels: {feature: false, bug: false, hotfix: false},
-    //         labels: [{feature: false},{bug: false},{hotfix: false}],
-    //         issueOpened: true,
-    //         stashTitle: '',
-    //         stashContent: '',
-    //         contentEditing: false,
-    //       }, {
-    //         title: '#2',
-    //         titleEditing: false,
-    //         showContent: false,
-    //         content: '#2 - Lorem...',
-    //         issueLabels: {},
-    //         // labels: {feature: false, bug: false, hotfix: false},
-    //         labels: [{feature: false},{bug: false},{hotfix: false}],
-    //         issueOpened: true,
-    //         stashContent: '',
-    //         contentEditing: false,
-    //       }
-    //     ]);
-
-    //   project.save ()
-    //   .then ((project) => {
-    //     // Execute any logic that should take place after the object is saved.
-    //     alert('New object created with objectId: ' + project.id);
-    //   }, (error) => {
-    //     // Execute any logic that should take place if the save fails.
-    //     // error is a Parse.Error with an error code and message.
-    //     alert('Failed to create new object, with error code: ' + error.message);
-    //   });
-    // },
+      query.get ("ISC7GQpkqC")
+        .then (resp => {
+          let data = resp.get ('issuesData');
+          this.issuesData = data;
+          console.log (data);
+          console.log (this.issuesData);
+        }, (error) => {
+          console.log (error);
+        });
+    },
 
 
     methods: {
@@ -170,18 +144,34 @@
 
 
       addIssue () {
-
         this.issuesData.push ({
           title: this.newIssue,
           titleEditing: false,
           showContent: false,
           content: '尚無資訊',
-          // labels: {feature: false, bug: false, hotfix: false},
-          labels: this.labels,
+          // labels: [{feature: false, bug: false, hotfix: false}],
+          labels: [],
           issueOpened: true,
           stashContent: '',
           contentEditing: false,
         });
+
+        const Project = Parse.Object.extend ("Project");
+        const project = new Project ();
+
+        project.id = 'ISC7GQpkqC';
+
+        project.save ().then ((resp) => {
+          resp.set ('issuesData', this.issuesData);
+          console.log (this.issuesData);
+          alert ('New object created with objectId: ' + project.id);
+        }, (error) => {
+          alert('Failed to create new object, with error code: ' + error.message);
+        });
+
+        this.projectName = '';
+
+        
 
         this.newIssue = '';
 
