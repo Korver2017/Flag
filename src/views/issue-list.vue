@@ -1,6 +1,6 @@
 <template>
   <div class="container my-4">
-    <h3>Issue-List</h3>
+    <h3>Flag</h3>
 
     <div class="row">
       <div class="input-group my-3 col-6">
@@ -22,29 +22,18 @@
 
         <div class="mx-auto col-8 list-group text-white">
 
-
-
-
-
-
-          <router-link class="d-block" :to="'issue/' + (index + 1)" tag="li" active-class="active">
+          <router-link class="d-block" :to="'issue/' + issueData.issueTag" tag="li" active-class="active">
           <!-- <router-link class="d-block" to="issue/2" tag="li" active-class="active"> -->
-            <button :disabled="issueData.issueOpened === false" @click="changeStatus (index)" class="py-3 list-group-item list-group-item-action text-left">
+            <button :disabled="issueData.issueOpened === false" @click="changeStatus (index)" class="list-group-item list-group-item-action">
               <!-- {{ issueData.title }} -->
-                {{ issueData.title }}
+              <span>Issue </span>
+              <span class="font-italic text-right">#{{ issueData.issueTag }}</span>
             </button>
           </router-link>
 
 
-
-
-
-          
         </div>
     </div>
-
-    <!-- <router-view></router-view> -->
-
 
   </div>
     
@@ -62,6 +51,7 @@
 
     data () {
       return {
+        tagNum: 0,
         issuesData: [
           // {
           //   title: '#1',
@@ -121,7 +111,11 @@
         .then (resp => {
           let data = resp.get ('issuesData');
           this.issuesData = data;
-          console.log (data);
+          let len = data.length;
+          console.log (len);
+          this.tagNum = len;
+
+          // console.log (data);
           console.log (this.issuesData);
         }, (error) => {
           console.log (error);
@@ -142,19 +136,24 @@
         this.issuesData[index].showContent = !this.issuesData[index].showContent
       },
 
-
+      
       addIssue () {
+        this.tagNum += 1;
+
         this.issuesData.push ({
-          title: this.newIssue,
-          titleEditing: false,
-          showContent: false,
-          content: '尚無資訊',
-          // labels: [{feature: false, bug: false, hotfix: false}],
-          labels: [],
-          issueOpened: true,
-          stashContent: '',
-          contentEditing: false,
+          issueTag: this.tagNum,
+          // title: this.newIssue,
+          // titleEditing: false,
+          // showContent: false,
+          // content: '尚無資訊',
+          // // labels: [{feature: false, bug: false, hotfix: false}],
+          // labels: [],
+          // issueOpened: true,
+          // stashContent: '',
+          // contentEditing: false,
         });
+
+        console.log (this.tagNum);
 
         const Project = Parse.Object.extend ("Project");
         const project = new Project ();
@@ -163,7 +162,8 @@
 
         project.save ().then ((resp) => {
           resp.set ('issuesData', this.issuesData);
-          console.log (this.issuesData);
+
+          // console.log (this.issuesData);
           alert ('New object created with objectId: ' + project.id);
         }, (error) => {
           alert('Failed to create new object, with error code: ' + error.message);

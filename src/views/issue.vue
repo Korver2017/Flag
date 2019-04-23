@@ -1,71 +1,10 @@
 <template>
   <div class="container my-4">
     <h3>Issue Component</h3>
+    <h4>{{ id }}</h4>
+    <h5>{{ issuesData[id - 1] }}</h5>
 
-    <div v-for="(issueData, index) in issuesData">
-
-        <div class="list-group text-white">
-
-          <button :disabled="issueData.issueOpened === false" @click="changeStatus (index)" class="mt-3 list-group-item list-group-item-action text-left bg-dark text-white">
-            <!-- {{ issueData.title }} -->
-
-            <router-link to="/issue" tag="li" active-class="active">
-              <a>{{ issueData.title }}</a>
-            </router-link>
-
-            <template v-for="label in issueData.labels">
-              <!-- <template v-for="(val, key) in label"> -->
-                <!-- {{ Object.keys (label)[0] }} -->
-                <span v-if="Object.values (label)[0] === true" class="mx-1 badge badge-light">{{ Object.keys (label)[0] }}</span>
-              <!-- </template> -->
-            </template>
-
-            <span v-if="issueData.issueOpened === false"> (Closed)</span>
-          </button>
-
-          <li :class="{ 'disabled': issueData.issueOpened === false }" class="list-group-item list-group-item-action bg-secondary" v-if="issueData.showContent">
-            <div>
-              <p class="text-left text-white">{{ issueData.content }}</p>
-
-              <div v-if="issueData.contentEditing === true" class="col-6 mx-auto input-group mb-3">
-                <input @keyup.enter="updateContent(index)" v-model="issueData.stashContent" type="text" class="form-control" placeholder="New content" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                  <button @click="updateContent(index)" class="btn btn-warning" type="button" id="button-addon2">Update content</button>
-                </div>
-              </div>
-
-              <div v-if="issueData.titleEditing === true" class="col-6 mx-auto input-group mb-3">
-                <input @keyup.enter="updateTitle(index)" v-model="issueData.stashTitle" type="text" class="form-control" placeholder="New title" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                  <button @click="updateTitle(index)" class="btn btn-warning" type="button" id="button-addon2">Update title</button>
-                </div>
-              </div>
-
-              <template>
-                <button class="mx-2 btn btn-warning" @click="issueData.contentEditing = !issueData.contentEditing">Edit content</button>
-                <button class="mx-2 btn btn-warning" @click="issueData.titleEditing = !issueData.titleEditing">Edit title</button>
-              </template>
-              
-            </div>
-
-
-          </li>
-
-
-        </div>
-
-        <div class="mt-3">
-          <button v-if="issueData.issueOpened === true" class="mr-3 btn btn-danger" @click="issueData.issueOpened = !issueData.issueOpened">Close issue</button>
-          <button v-else class="mr-3 btn btn-success" @click="issueData.issueOpened = !issueData.issueOpened">Open issue</button>
-
-          <template v-for="(label, l) in issueData.labels">
-            <!-- <template v-for="(v, k) in label"> -->
-              <button class="btn btn-outline-primary" @click="checkLabel (Object.keys (label)[0], index, l)">{{ Object.keys (label)[0] }}</button>
-          </template>
-
-        </div>
-
-    </div>
+    <hr />
 
 
   </div>
@@ -74,6 +13,8 @@
 </template>
 
 <script>
+  import Parse from "parse";
+
 
   export default {
     
@@ -84,34 +25,22 @@
     data () {
       return {
         id: this.$route.params.id,
-        issuesData: [
-          {
-            title: this.$route.params.id,
-            titleEditing: false,
-            showContent: true,
-            content: 'Content',
-            issueLabels: {},
-            // labels: {feature: false, bug: false, hotfix: false},
-            labels: [{feature: false},{bug: false},{hotfix: false}],
-            issueOpened: true,
-            stashTitle: '',
-            stashContent: '',
-            contentEditing: false,
-          },
-          // {
-          //   title: '#2',
-          //   titleEditing: false,
-          //   showContent: true,
-          //   content: '#2',
-          //   issueLabels: {},
-          //   // labels: {feature: false, bug: false, hotfix: false},
-          //   labels: [{feature: false},{bug: false},{hotfix: false}],
-          //   issueOpened: true,
-          //   stashTitle: '',
-          //   stashContent: '',
-          //   contentEditing: false,
-          // }
-        ],
+        issuesData: [],
+        // issuesData: [
+        //   {
+        //     title: this.$route.params.id,
+        //     titleEditing: false,
+        //     showContent: true,
+        //     content: '尚無內容',
+        //     issueLabels: {},
+        //     // labels: {feature: false, bug: false, hotfix: false},
+        //     labels: [{feature: false},{bug: false},{hotfix: false}],
+        //     issueOpened: true,
+        //     stashTitle: '',
+        //     stashContent: '',
+        //     contentEditing: false,
+        //   },
+        // ],
         labels: [
           {
             feature: false,
@@ -137,7 +66,18 @@
 
 
     created () {
-      console.log (this.id);
+      var Project = Parse.Object.extend ("Project");
+      var query = new Parse.Query (Project);
+
+      query.get ("ISC7GQpkqC")
+        .then (resp => {
+          let data = resp.get ('issuesData');
+          this.issuesData = data;
+
+          console.log (this.issuesData);
+        }, (error) => {
+          console.log (error);
+        });
     },
 
 
