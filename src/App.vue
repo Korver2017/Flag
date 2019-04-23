@@ -96,23 +96,6 @@
 
 
     created () {
-      var Post = Parse.Object.extend("Post");
-      var Comment = Parse.Object.extend("Comment");
-
-      // Create the post
-      var myPost = new Post();
-      myPost.set("title", "I'm Hungry");
-      myPost.set("content", "Where should we go for lunch?");
-
-      // Create the comment
-      var myComment = new Comment();
-      myComment.set("content", "Let's do Sushirrito.");
-
-      // Add the post as a value in the comment
-      myComment.set("parent", myPost);
-
-      // This will save both myPost and myComment
-      myComment.save();
     },
 
 
