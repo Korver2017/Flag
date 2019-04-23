@@ -15,7 +15,7 @@ export default new Router ({
       component: () => import ('./views/dashboard.vue')
     },
     {
-      path: '/flag',
+      path: '/:id',
       name: 'issue-list',
       component: () => import ('./views/issue-list.vue'),
     },

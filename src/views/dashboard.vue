@@ -8,10 +8,10 @@
     </div>
 
     <div class="row">
-      <div class="projectItem col-4 border border-danger mt-3 py-5" v-for="project in projects">
-        <router-link class="d-block" to="/flag" tag="li" active-class="active">
+      <div v-for="project in projects" class="projectItem col-4 border border-danger mt-3 py-5">
+        <router-link class="d-block" :to="'/'" tag="li" active-class="active">
           <a>
-            <h4>{{ project }}</h4>
+            <h4>{{ project.name }}</h4>
           </a>
         </router-link>
       </div>
@@ -33,7 +33,42 @@
       return {
         title: 'Dashboard',
         projectName: '',
-        projects: [],
+        projects: [
+          {
+            name: 'Flag',
+            issuesData: [
+              // {
+              //   title: 'title',
+              //   titleEditing: false,
+              //   showContent: false,
+              //   content: '#1 - Lorem...',
+              //   issueLabels: {},
+              //   // labels: {feature: false, bug: false, hotfix: false},
+              //   labels: [{feature: false},{bug: false},{hotfix: false}],
+              //   issueOpened: true,
+              //   stashTitle: '',
+              //   stashContent: '',
+              //   contentEditing: false,
+              // }
+            ]
+          }
+        ]
+        // issuesData: [],
+        // issueData: {
+        //   project: '',
+        //   title: 'title',
+        //   titleEditing: false,
+        //   showContent: false,
+        //   content: '#1 - Lorem...',
+        //   issueLabels: {},
+        //   // labels: {feature: false, bug: false, hotfix: false},
+        //   labels: [{feature: false},{bug: false},{hotfix: false}],
+        //   issueOpened: true,
+        //   stashTitle: '',
+        //   stashContent: '',
+        //   contentEditing: false,
+        // },
+        // issuesData: [],
       }
     },
 
@@ -41,12 +76,14 @@
     created () {
       let Project = Parse.Object.extend ("Project");
       let query = new Parse.Query (Project);
+      let $vmc = this;
 
-      query.get ("mAaLOhSiXm")
+      query.get ("h7SfW3cnpH")
         .then (resp => {
+          console.log (resp);
           let data = resp.get ('projects');
 
-          this.projects = data;
+          $vmc.projects = data;
         }, (error) => {
           console.log (error);
         });
@@ -55,17 +92,25 @@
 
     methods: {
       newProject () {
-        this.projects.push (this.projectName);
+        let $vmc = this;
+        $vmc.projects.push ({name: $vmc.projectName});
 
         const Project = Parse.Object.extend("Project");
         const project = new Project();
 
-        project.id = 'mAaLOhSiXm';
-        project.save ().then ((project) => {
-          project.set ('projects', this.projects);
+        project.id = 'h7SfW3cnpH'
 
-          console.log (this.projects);
+        project.save()
+        .then((project) => {
+
+          project.set ("projects", $vmc.projects);
+
+          // Execute any logic that should take place after the object is saved.
+          alert('New object created with objectId: ' + project.id);
+          return project.save ();
         }, (error) => {
+          // Execute any logic that should take place if the save fails.
+          // error is a Parse.Error with an error code and message.
           alert('Failed to create new object, with error code: ' + error.message);
         });
 
