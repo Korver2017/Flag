@@ -1,9 +1,10 @@
 <template>
-  <div class="wrap">
+  <div class="container">
+    <hr />
     <h1>{{ title }}</h1>
-    <div class="row col-6 mx-auto">
-      <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-10" placeholder="New project" aria-describedby="button-addon2">
-      <button class="btn btn-success col-2" @click="newProject">New project</button>
+    <div class="row col-6 mx-auto my-4">
+      <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New project" aria-describedby="button-addon2">
+      <button class="btn btn-success col-4" @click="newProject">New project</button>
     </div>
 
     <div class="row">
@@ -33,19 +34,19 @@
         title: 'Dashboard',
         projectName: '',
         projects: [],
-        // projects: ['Flag', '#2-Project'],
       }
     },
 
 
     created () {
-      var Project = Parse.Object.extend ("Project");
-      var query = new Parse.Query (Project);
+      let Project = Parse.Object.extend ("Project");
+      let query = new Parse.Query (Project);
 
       query.get ("mAaLOhSiXm")
         .then (resp => {
-          let projects = resp.get ('projects');
-          this.projects = projects;
+          let data = resp.get ('projects');
+
+          this.projects = data;
         }, (error) => {
           console.log (error);
         });
@@ -53,8 +54,6 @@
 
 
     methods: {
-
-
       newProject () {
         this.projects.push (this.projectName);
 
@@ -62,9 +61,8 @@
         const project = new Project();
 
         project.id = 'mAaLOhSiXm';
-
         project.save ().then ((project) => {
-          project.set ('projects', [this.projects]);
+          project.set ('projects', this.projects);
 
           console.log (this.projects);
         }, (error) => {

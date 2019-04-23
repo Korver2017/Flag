@@ -24,7 +24,7 @@
 
           <router-link class="d-block" :to="'issue/' + issueData.issueTag" tag="li" active-class="active">
           <!-- <router-link class="d-block" to="issue/2" tag="li" active-class="active"> -->
-            <button :disabled="issueData.issueOpened === false" @click="changeStatus (index)" class="list-group-item list-group-item-action">
+            <button class="list-group-item list-group-item-action">
               <!-- {{ issueData.title }} -->
               <span>Issue </span>
               <span class="font-italic text-right">#{{ issueData.issueTag }}</span>
@@ -52,32 +52,7 @@
     data () {
       return {
         tagNum: 0,
-        issuesData: [
-          // {
-          //   title: '#1',
-          //   titleEditing: false,
-          //   showContent: false,
-          //   content: '#1 - Lorem...',
-          //   issueLabels: {},
-          //   // labels: {feature: false, bug: false, hotfix: false},
-          //   labels: [{feature: false},{bug: false},{hotfix: false}],
-          //   issueOpened: true,
-          //   stashTitle: '',
-          //   stashContent: '',
-          //   contentEditing: false,
-          // }, {
-          //   title: '#2',
-          //   titleEditing: false,
-          //   showContent: false,
-          //   content: '#2 - Lorem...',
-          //   issueLabels: {},
-          //   // labels: {feature: false, bug: false, hotfix: false},
-          //   labels: [{feature: false},{bug: false},{hotfix: false}],
-          //   issueOpened: true,
-          //   stashContent: '',
-          //   contentEditing: false,
-          // }
-        ],
+        issuesData: [],
         labels: [
           {
             feature: false,
@@ -124,12 +99,6 @@
 
 
     methods: {
-      // goIssue () {
-      //   this.$router.push({
-      //     name: "issue" + isseuId,
-      //     params: { issueId: this.issuesData[0].title }
-      //   });
-      // },
 
 
       changeStatus (index) {
