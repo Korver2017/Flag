@@ -1,6 +1,6 @@
 <template>
   <div class="container my-4">
-    <h3>Flag</h3>
+    <h3>{{ title }}</h3>
 
     <div class="row">
       <div class="input-group my-3 col-6">
@@ -51,6 +51,7 @@
 
     data () {
       return {
+        title: this.$route.params.id,
         tagNum: 0,
         issuesData: [],
         labels: [
@@ -77,25 +78,25 @@
     },
 
 
-    created () {
+    // created () {
       
-      var Project = Parse.Object.extend ("Project");
-      var query = new Parse.Query (Project);
+    //   var Project = Parse.Object.extend ("Project");
+    //   var query = new Parse.Query (Project);
 
-      query.get ("ISC7GQpkqC")
-        .then (resp => {
-          let data = resp.get ('issuesData');
-          this.issuesData = data;
-          let len = data.length;
-          console.log (len);
-          this.tagNum = len;
+    //   query.get ("h7SfW3cnpH")
+    //     .then (resp => {
+    //       let data = resp.get ('issuesData');
+    //       this.issuesData = data;
+    //       let len = data.length;
+    //       console.log (len);
+    //       this.tagNum = len;
 
-          // console.log (data);
-          console.log (this.issuesData);
-        }, (error) => {
-          console.log (error);
-        });
-    },
+    //       // console.log (data);
+    //       console.log (this.issuesData);
+    //     }, (error) => {
+    //       console.log (error);
+    //     });
+    // },
 
 
     methods: {
@@ -127,10 +128,10 @@
         const Project = Parse.Object.extend ("Project");
         const project = new Project ();
 
-        project.id = 'ISC7GQpkqC';
+        project.id = 'h7SfW3cnpH';
 
         project.save ().then ((resp) => {
-          resp.set ('issuesData', this.issuesData);
+          resp.set ('pj', this.issuesData);
 
           // console.log (this.issuesData);
           alert ('New object created with objectId: ' + project.id);

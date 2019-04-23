@@ -8,10 +8,10 @@
     </div>
 
     <div class="row">
-      <div v-for="project in projects" class="projectItem col-4 border border-danger mt-3 py-5">
-        <router-link class="d-block" :to="'/'" tag="li" active-class="active">
+      <div v-for="(v, k) in projects" class="projectItem col-4 border border-danger mt-3 py-5">
+        <router-link class="d-block" :to="'/' + k" tag="li" active-class="active">
           <a>
-            <h4>{{ project.name }}</h4>
+            <h4>{{ k }}</h4>
           </a>
         </router-link>
       </div>
@@ -33,10 +33,15 @@
       return {
         title: 'Dashboard',
         projectName: '',
-        projects: [
-          {
-            name: 'Flag',
-            issuesData: [
+        projects: {
+          name: {
+            issuesData: []
+          }
+        },
+        // projects: [
+        //   {
+        //     name: '',
+        //     issuesData: [
               // {
               //   title: 'title',
               //   titleEditing: false,
@@ -50,9 +55,9 @@
               //   stashContent: '',
               //   contentEditing: false,
               // }
-            ]
-          }
-        ]
+        //     ]
+        //   }
+        // ]
         // issuesData: [],
         // issueData: {
         //   project: '',
@@ -74,14 +79,15 @@
 
 
     created () {
+
+
       let Project = Parse.Object.extend ("Project");
       let query = new Parse.Query (Project);
       let $vmc = this;
 
       query.get ("h7SfW3cnpH")
         .then (resp => {
-          console.log (resp);
-          let data = resp.get ('projects');
+          let data = resp.get ('pj');
 
           $vmc.projects = data;
         }, (error) => {
@@ -93,7 +99,7 @@
     methods: {
       newProject () {
         let $vmc = this;
-        $vmc.projects.push ({name: $vmc.projectName});
+        $vmc.projects[$vmc.projectName] = {issuesData: []}
 
         const Project = Parse.Object.extend("Project");
         const project = new Project();
@@ -103,7 +109,7 @@
         project.save()
         .then((project) => {
 
-          project.set ("projects", $vmc.projects);
+          project.set ("pj", $vmc.projects);
 
           // Execute any logic that should take place after the object is saved.
           alert('New object created with objectId: ' + project.id);
@@ -115,6 +121,9 @@
         });
 
         this.projectName = '';
+
+        
+      
       },
 
     },
