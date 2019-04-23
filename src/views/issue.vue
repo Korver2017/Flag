@@ -83,12 +83,13 @@
 
     data () {
       return {
+        id: this.$route.params.id,
         issuesData: [
           {
             title: this.$route.params.id,
             titleEditing: false,
             showContent: true,
-            content: '#1',
+            content: 'Content',
             issueLabels: {},
             // labels: {feature: false, bug: false, hotfix: false},
             labels: [{feature: false},{bug: false},{hotfix: false}],
@@ -97,19 +98,19 @@
             stashContent: '',
             contentEditing: false,
           },
-          {
-            title: '#2',
-            titleEditing: false,
-            showContent: true,
-            content: '#2',
-            issueLabels: {},
-            // labels: {feature: false, bug: false, hotfix: false},
-            labels: [{feature: false},{bug: false},{hotfix: false}],
-            issueOpened: true,
-            stashTitle: '',
-            stashContent: '',
-            contentEditing: false,
-          }
+          // {
+          //   title: '#2',
+          //   titleEditing: false,
+          //   showContent: true,
+          //   content: '#2',
+          //   issueLabels: {},
+          //   // labels: {feature: false, bug: false, hotfix: false},
+          //   labels: [{feature: false},{bug: false},{hotfix: false}],
+          //   issueOpened: true,
+          //   stashTitle: '',
+          //   stashContent: '',
+          //   contentEditing: false,
+          // }
         ],
         labels: [
           {
@@ -136,6 +137,7 @@
 
 
     created () {
+      console.log (this.id);
     },
 
 

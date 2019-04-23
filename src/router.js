@@ -20,8 +20,7 @@ export default new Router ({
       component: () => import ('./views/issue-list.vue'),
     },
     {
-      path: '/flag/:id',
-      name: 'issue',
+      path: '/issue/:id',
       component: () => import ('./views/issue.vue'),
     },
   ]

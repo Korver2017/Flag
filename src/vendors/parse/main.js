@@ -23,32 +23,6 @@ export default (() => {
       });
   }
 
-  parse.set = (projects) => {
-    var Project = Parse.Object.extend ("Project");
-    var project = new Project ();
-
-    project.save ().then((projects) => {
-      project.set ('projects', 'test')
-    }, (error) => {
-      // The save failed.
-      // error is a Parse.Error with an error code and message.
-    });
-  }
-
-
-  // gameScore.set("score", 1337);
-  // gameScore.set("playerName", "Sean Plott");
-  // gameScore.set("cheatMode", false);
-  // gameScore.set("skills", ["pwnage", "flying"]);
-
-  // gameScore.save().then((gameScore) => {
-  //   // Now let's update it with some new data. In this case, only cheatMode and score
-  //   // will get sent to the cloud. playerName hasn't changed.
-  //   gameScore.set("cheatMode", true);
-  //   gameScore.set("score", 1338);
-  //   return gameScore.save();
-  // });
-
 
   parse.delete = () => {
     var GameScore = Parse.Object.extend("GameScore");
