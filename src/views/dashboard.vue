@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <hr />
-    <h1>{{ title }}</h1>
+    <h1>Dashboard</h1>
     <div class="row col-6 mx-auto my-4">
       <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New project" aria-describedby="button-addon2">
       <button class="btn btn-success col-4" @click="newProject">New project</button>
@@ -31,7 +31,6 @@
 
     data () {
       return {
-        title: 'Dashboard',
         projectName: '',
         projects: {
           name: {
