@@ -23,5 +23,9 @@ export default new Router ({
       path: '/issue/:id',
       component: () => import ('./views/issue.vue'),
     },
+    {
+      path: '/issue/:id',
+      component: () => import('./views/issue.vue'),
+    },
   ]
 });
