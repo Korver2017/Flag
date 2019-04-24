@@ -31,7 +31,6 @@
             </button>
           </router-link>
 
-
         </div>
     </div>
 
@@ -102,103 +101,88 @@
     methods: {
 
 
-      changeStatus (index) {
-        this.issuesData[index].showContent = !this.issuesData[index].showContent
-      },
+      // changeStatus (index) {
+      //   this.issuesData[index].showContent = !this.issuesData[index].showContent
+      // },
 
       
-      addIssue () {
-        this.tagNum += 1;
+      // addIssue () {
+      //   this.tagNum += 1;
 
-        this.issuesData.push ({
-          issueTag: this.tagNum,
-          // title: this.newIssue,
-          // titleEditing: false,
-          // showContent: false,
-          // content: '尚無資訊',
-          // // labels: [{feature: false, bug: false, hotfix: false}],
-          // labels: [],
-          // issueOpened: true,
-          // stashContent: '',
-          // contentEditing: false,
-        });
+      //   this.issuesData.push ({
+      //     issueTag: this.tagNum,
+      //   });
 
-        console.log (this.tagNum);
+      //   const Project = Parse.Object.extend ("Project");
+      //   const project = new Project ();
 
-        const Project = Parse.Object.extend ("Project");
-        const project = new Project ();
+      //   project.id = 'h7SfW3cnpH';
 
-        project.id = 'h7SfW3cnpH';
+      //   project.save ().then ((resp) => {
+      //     resp.set ('pj', this.issuesData);
 
-        project.save ().then ((resp) => {
-          resp.set ('pj', this.issuesData);
+      //     // console.log (this.issuesData);
+      //     alert ('New object created with objectId: ' + project.id);
+      //   }, (error) => {
+      //     alert('Failed to create new object, with error code: ' + error.message);
+      //   });
 
-          // console.log (this.issuesData);
-          alert ('New object created with objectId: ' + project.id);
-        }, (error) => {
-          alert('Failed to create new object, with error code: ' + error.message);
-        });
-
-        this.projectName = '';
+      //   this.projectName = '';
 
         
 
-        this.newIssue = '';
+      //   this.newIssue = '';
 
-      },
-
-
-      addLabel () {
-        this.$set (this.labels, this.newLabel, false);
-      },
+      // },
 
 
-      checkLabel (name, index, l) {
-        console.log (index, l);
-
-        console.log (this.issuesData[index].labels[l]);
-
-        this.issuesData[index].labels[l][name] = !this.issuesData[index].labels[l][name];
-      },
+      // addLabel () {
+      //   this.$set (this.labels, this.newLabel, false);
+      // },
 
 
-      checkEditLabel (index) {
-        this.labels[index].labelEditing = true;
+      // checkLabel (name, index, l) {
+      //   console.log (index, l);
 
-        // obj[this.newLabel] = true;
-        // this.$set (this.labels, index, obj);
-        // console.log (this.labels);
-      },
+      //   console.log (this.issuesData[index].labels[l]);
+
+      //   this.issuesData[index].labels[l][name] = !this.issuesData[index].labels[l][name];
+      // },
 
 
-      updateLabel (key, index) {
-        let obj = {};
+      // checkEditLabel (index) {
+      //   this.labels[index].labelEditing = true;
+      // },
 
-        if (this.labels[index][key] === true)
-          obj[this.labels[index].editedLabel] = true;
-        else
-          obj[this.labels[index].editedLabel] = false;
+
+      // updateLabel (key, index) {
+      //   let obj = {};
+
+      //   if (this.labels[index][key] === true)
+      //     obj[this.labels[index].editedLabel] = true;
+      //   else
+      //     obj[this.labels[index].editedLabel] = false;
         
-        obj.labelEditing = false;
-        obj.editedLabel = '',
+      //   obj.labelEditing = false;
+      //   obj.editedLabel = '',
 
-        this.$set (this.labels, index, obj);
-      },
-
-
-      updateContent (index) {
-        this.issuesData[index].content = this.issuesData[index].stashContent;
-        this.issuesData[index].stashContent = '';
-        this.issuesData[index].contentEditing = false;
-      },
+      //   this.$set (this.labels, index, obj);
+      // },
 
 
-      updateTitle (index) {
-        this.issuesData[index].title = this.issuesData[index].stashTitle;
-        this.issuesData[index].stashTitle = '';
-        this.issuesData[index].titleEditing = false;
+      // updateContent (index) {
+      //   this.issuesData[index].content = this.issuesData[index].stashContent;
+      //   this.issuesData[index].stashContent = '';
+      //   this.issuesData[index].contentEditing = false;
+      // },
 
-      },
+
+      // updateTitle (index) {
+      //   this.issuesData[index].title = this.issuesData[index].stashTitle;
+      //   this.issuesData[index].stashTitle = '';
+      //   this.issuesData[index].titleEditing = false;
+
+      // },
 
     },
   }

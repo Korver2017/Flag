@@ -38,49 +38,26 @@
             issuesData: []
           }
         },
-        // projects: [
-        //   {
-        //     name: '',
-        //     issuesData: [
-              // {
-              //   title: 'title',
-              //   titleEditing: false,
-              //   showContent: false,
-              //   content: '#1 - Lorem...',
-              //   issueLabels: {},
-              //   // labels: {feature: false, bug: false, hotfix: false},
-              //   labels: [{feature: false},{bug: false},{hotfix: false}],
-              //   issueOpened: true,
-              //   stashTitle: '',
-              //   stashContent: '',
-              //   contentEditing: false,
-              // }
-        //     ]
-        //   }
+        // issuesData: [
+          // {
+          //   title: 'title',
+          //   titleEditing: false,
+          //   showContent: false,
+          //   content: '#1 - Lorem...',
+          //   issueLabels: {},
+          //   // labels: {feature: false, bug: false, hotfix: false},
+          //   labels: [{feature: false},{bug: false},{hotfix: false}],
+          //   issueOpened: true,
+          //   stashTitle: '',
+          //   stashContent: '',
+          //   contentEditing: false,
+          // }
         // ]
-        // issuesData: [],
-        // issueData: {
-        //   project: '',
-        //   title: 'title',
-        //   titleEditing: false,
-        //   showContent: false,
-        //   content: '#1 - Lorem...',
-        //   issueLabels: {},
-        //   // labels: {feature: false, bug: false, hotfix: false},
-        //   labels: [{feature: false},{bug: false},{hotfix: false}],
-        //   issueOpened: true,
-        //   stashTitle: '',
-        //   stashContent: '',
-        //   contentEditing: false,
-        // },
-        // issuesData: [],
       }
     },
 
 
     created () {
-
-
       let Project = Parse.Object.extend ("Project");
       let query = new Parse.Query (Project);
       let $vmc = this;
@@ -121,9 +98,6 @@
         });
 
         this.projectName = '';
-
-        
-      
       },
 
     },

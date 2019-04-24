@@ -6,10 +6,12 @@ import store from './store'
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import parse from "@/vendors/parse/main.js";
+import Parse from "parse";
+
+Parse.initialize ("Ox33tQSpiscXrVvf4HKXsduw2ProZNCysXXGY5zT");
+Parse.serverURL = 'https://parse.protype.tw/flag';
 
 Vue.config.productionTip = false;
-Vue.prototype.$api = parse;
 
 export const eventBus = new Vue ();
 
