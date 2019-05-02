@@ -35,6 +35,7 @@ export default {
     input: {
       email: 'korver@protype.tw',
       password: '123456',
+      userId: '',
     }
   },
 
@@ -53,7 +54,6 @@ export default {
      *
      */
     authed (state) {
-
       let Account = Parse.Object.extend ("Account");
       let query = new Parse.Query (Account);
       
@@ -71,12 +71,15 @@ export default {
           query.find()
             .then (resp => {
 
+
               if (resp.length < 1) {
                 alert ('密碼錯誤');
                 return;
               }
 
               state.authed = true;
+
+              state.input.userId = resp[0].id;
 
               alert (`${state.input.email} authed success!`);
             });
