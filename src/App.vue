@@ -1,10 +1,13 @@
 <template>
   <div id="app" class="mt-5">
-    <h1>{{ user }}</h1>
     <h1 class="my-5">Flag</h1>
+    <h1 class="my-5" v-if="user.authed">Signin success!</h1>
       
-    <router-link to="/signin" tag="button" active-class="active" class="btn btn-success">
+    <router-link to="/signin" tag="button" class="btn btn-success">
       Sign in
+    </router-link>
+    <router-link to="/" tag="button" class="btn btn-success">
+      Home
     </router-link>
 
     <h3 class="text-left container">Organization：</h3>
@@ -79,9 +82,9 @@
       // let Account = Parse.Object.extend ("Account");
       // let account = new Account ();
 
-      // account.set ('username', 'Korver');
-      // account.set ('password', '123456');
-      // account.set ('email', 'korver@protype.tw');
+      // account.set ('username', 'k');
+      // account.set ('password', 'k123456');
+      // account.set ('email', 'k@protype.tw');
 
       // account.save()
       //   .then((account) => {
@@ -104,7 +107,7 @@
       user () {
         return {
           authed: this.$store.state.user.authed,
-          account: this.$store.state.user.account
+          email: this.$store.state.user.input.email
         }
       },
     },

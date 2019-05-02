@@ -33,7 +33,7 @@ export default {
   state: {
     authed: false,
     input: {
-      email: 'korver@protype',
+      email: 'korver@protype.tw',
       password: '123456',
     }
   },
@@ -63,26 +63,22 @@ export default {
         .then (resp => {
 
           if (resp.length < 1) {
-            alert ('qq in email');
+            alert ('Email 錯誤');
             return;
           }
 
-          else alert ('success in email!');
-
           query.equalTo ("password", state.input.password);
           query.find()
-            .then ((resp) => {
+            .then (resp => {
 
               if (resp.length < 1) {
-                alert ('qq in password');
+                alert ('密碼錯誤');
                 return;
               }
 
-              else alert ('success in password!');
-
               state.authed = true;
 
-              alert ('authed success!');
+              alert (`${state.input.email} authed success!`);
             });
         })
 

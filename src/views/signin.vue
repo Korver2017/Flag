@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="mt-5">
     <h1>Sign in component!</h1>
 
     <div class="container row mx-auto my-4">
 
-      <input @keyup.enter="signin" v-model="email"  type="text" class="form-control col-5" placeholder="User name" aria-describedby="button-addon2" autofocus>
+      <input @keyup.enter="signin" v-model="email" type="text" class="form-control col-5" placeholder="User name" aria-describedby="button-addon2" autofocus>
       <input @keyup.enter="signin" v-model="password" type="text" class="form-control col-5" placeholder="Password" aria-describedby="button-addon2">
 
       <button @click="signin" class="btn btn-success col-2">Sign in</button>
