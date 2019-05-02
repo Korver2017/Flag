@@ -1,12 +1,19 @@
 <template>
   <div id="app" class="mt-5">
+    <h1>{{ user }}</h1>
     <h1 class="my-5">Flag</h1>
+      
+    <router-link to="/signin" tag="button" active-class="active" class="btn btn-success">
+      Sign in
+    </router-link>
 
     <h3 class="text-left container">Organization：</h3>
     <div class="row container mx-auto">
+
       <router-link v-for="org in orgs" :key="org" :to="org" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
         {{ org }}
       </router-link>
+
     </div>
 
     <router-view />
@@ -25,6 +32,9 @@
 </style>
 
 <script>
+
+
+  // Import
   import Parse from "parse";
 
 
@@ -51,6 +61,8 @@
 
 
     created () {
+
+
       // let $vmc = this;
 
       // const User = Parse.Object.extend ("User");
@@ -64,22 +76,37 @@
 
       // Add user
 
-      // let User = Parse.Object.extend ("User");
-      // let user = new User ();
+      // let Account = Parse.Object.extend ("Account");
+      // let account = new Account ();
 
-      // user.set ('username', 'Korver');
-      // user.set ('password', '123456');
-      // user.set ('email', 'korver@protype.tw');
+      // account.set ('username', 'Korver');
+      // account.set ('password', '123456');
+      // account.set ('email', 'korver@protype.tw');
 
-      // user.save()
-      //   .then((user) => {
-      //     alert('New object created with objectId: ' + user.id);
+      // account.save()
+      //   .then((account) => {
+      //     alert('New object created with objectId: ' + account.id);
       //   }, (error) => {
       //     // Execute any logic that should take place if the save fails.
       //     // error is a Parse.Error with an error code and message.
       //     alert('Failed to create new object, with error code: ' + error.message);
       //   });
 
+    },
+
+
+     /**
+     *
+     * Computed
+     *
+     */
+    computed: {
+      user () {
+        return {
+          authed: this.$store.state.user.authed,
+          account: this.$store.state.user.account
+        }
+      },
     },
 
 

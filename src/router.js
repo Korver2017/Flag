@@ -8,11 +8,14 @@ export default new Router ({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
+    // {
+    //   path: '/:orgId', component: () => import ('./views/organization.vue'),
+    // },
+    // {
+    //   path: '/:orgId/:proId', component: () => import ('./views/project.vue'),
+    // },
     {
-      path: '/:orgId', component: () => import ('./views/organization.vue'),
-    },
-    {
-      path: '/:orgId/:proId', component: () => import ('./views/project.vue'),
+      path: '/signin', component: () => import('./views/signin.vue'),
     },
     {
       path: '/issue/:id',
