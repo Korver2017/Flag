@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from "./app.vue";
-// import IssueList from "./views/issue-list.vue";
 
 Vue.use (Router)
 

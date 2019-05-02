@@ -1,12 +1,13 @@
 <template>
+
   <div class="container">
     <hr />
     <h1>Organization</h1>
     <h1>Organization: {{ orgId }}</h1>
+
     <div class="row col-6 mx-auto my-4">
       <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New project" aria-describedby="button-addon2">
       <button class="btn btn-success col-4" @click="newProject">New project</button>
-      <!-- <button class="btn btn-success col-4" @click="addOrg">addOrg</button> -->
     </div>
 
     <div class="row">
@@ -20,6 +21,7 @@
     </div>
 
   </div>
+
 </template>
 
 <script>
@@ -47,25 +49,6 @@
     
 
     created () {
-
-      // Add user
-
-      // let User = Parse.Object.extend("User");
-      // var user = new User ();
-
-      // user.set ('username', 'Korver');
-      // user.set ('password', '123456');
-      // user.set ('email', 'korver@protype.tw');
-
-      // user.save()
-      // .then((user) => {
-      //   alert('New object created with objectId: ' + user.id);
-      // }, (error) => {
-      //   // Execute any logic that should take place if the save fails.
-      //   // error is a Parse.Error with an error code and message.
-      //   alert('Failed to create new object, with error code: ' + error.message);
-      // });
-
     },
 
 
@@ -99,7 +82,7 @@
 
             ary.push (data);
 
-            console.log (ary);
+            // console.log (ary);
           }
           
           $vmc.projects = ary;
