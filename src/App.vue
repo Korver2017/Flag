@@ -1,12 +1,15 @@
 <template>
   <div id="app" class="mt-5">
-    <h1>Protype</h1>
+    <h1>Flag</h1>
 
-    <router-link to="dashboard" tag="li" active-class="active">
-      <a>Dashboard</a>
-    </router-link>
+      <div class="row mt-5">
+        <router-link v-for="org in orgs" :key="org" :to="org" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
+          {{ org }}
+        </router-link>
+      </div>
 
     <router-view />
+
   </div>
 </template>
 
@@ -34,43 +37,6 @@
   import Parse from "parse";
 
 
-  // import IssueList from "@/views/issue-list.vue";
-  import Dashboard from "@/views/dashboard.vue";
-
-  // var GameScore = Parse.Object.extend ("GameScore");
-  // var query = new Parse.Query (GameScore);
-  // query.get ("EhMhOsEc1g")
-  // .then ((gameScore) => {
-    
-    
-  //   var score = gameScore.get ("score");
-
-  //   console.log (score);
-  //   // The object was retrieved successfully.
-  //   console.log ('123');
-  // }, (error) => {
-  //   // The object was not retrieved successfully.
-  //   // error is a Parse.Error with an error code and message.
-  //   console.log (error);
-  // });
-
-  // var GameScore = Parse.Object.extend("GameScore");
-  // var gameScore = new GameScore ();
-
-  // gameScore.save({
-  //   score: 1337,
-  //   playerName: "Allen Iverson",
-  //   cheatMode: false
-  // })
-  // .then((gameScore) => {
-  //   // The object was saved successfully.
-  //   console.log (gameScore);
-  // }, (error) => {
-  //   // The save failed.
-  //   // error is a Parse.Error with an error code and message.
-  // });
-
-
   export default {
 
 
@@ -83,26 +49,28 @@
      *
      */
     components: {
-      // IssueList,
-      Dashboard,
     },
 
 
     data () {
       return {
-        
+        orgs: []
       }
     },
 
 
     created () {
+      let $vmc = this;
+
+      const User = Parse.Object.extend ("User");
+      let query = new Parse.Query (User);
+      query.get ("gmiikxCF1c").then (resp => {
+        $vmc.orgs = resp.get ('organization');
+      })
     },
 
 
     methods: {
-      d () {
-        this.$api.delete ();
-      }
     },
   }
 </script>

@@ -9,14 +9,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Parse from "parse";
 
 Parse.initialize ("Ox33tQSpiscXrVvf4HKXsduw2ProZNCysXXGY5zT");
-Parse.serverURL = 'https://parse.protype.tw/flag';
+Parse.serverURL = 'https://parse.protype.tw/parse';
 
 Vue.config.productionTip = false;
 
-export const eventBus = new Vue ();
-
-new Vue({
+new Vue ({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: h => h (App)
+}).$mount ('#app')

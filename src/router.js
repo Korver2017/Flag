@@ -10,14 +10,10 @@ export default new Router ({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      component: () => import ('./views/dashboard.vue')
+      path: '/:orgId', component: () => import ('./views/organization.vue'),
     },
     {
-      path: '/:id',
-      name: 'issue-list',
-      component: () => import ('./views/issue-list.vue'),
+      path: '/:orgId/:proId', component: () => import ('./views/project.vue'),
     },
     {
       path: '/issue/:id',
@@ -25,7 +21,7 @@ export default new Router ({
     },
     {
       path: '/issue/:id',
-      component: () => import('./views/issue.vue'),
+      component: () => import ('./views/issue.vue'),
     },
   ]
 });
