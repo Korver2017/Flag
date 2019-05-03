@@ -84,9 +84,14 @@ export default {
               alert (`${state.input.email} authed success!`);
             });
         })
+    },
 
-      
 
+    logOut (state) {
+      state.authed = false;
+      state.input.email = '';
+      state.input.password = '';
+      state.input.userId = '';
     },
 
 
@@ -120,5 +125,13 @@ export default {
     },
 
     
+    /**
+     *
+     * User logOut
+     *
+     */
+    logOut: function ({commit}) {
+      commit ('logOut');
+    },    
   }
 }

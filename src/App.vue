@@ -7,10 +7,10 @@
       </router-link>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <router-link class="nav-item nav-link" to="/signin">
+          <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a>
+          <router-link v-else class="nav-item nav-link" to="/signin">
             <a>Sign in</a>
           </router-link>
-          <a @click="logOut" class="nav-item nav-link" href="#">Log out</a>
           <a class="" href="#"></a>
         </div>
       </div>
@@ -137,8 +137,9 @@
 
 
       logOut () {
-        
-      }
+        let $vmc = this;
+        $vmc.$store.dispatch ('user/logOut');
+      },
     },
 
 
