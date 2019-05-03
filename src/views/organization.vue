@@ -2,7 +2,7 @@
 
   <div class="container">
     <hr />
-    <h1>{{ orgId }}</h1>
+    <h1>{{ orgName }}</h1>
 
     <div class="row col-6 mx-auto my-4">
       <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New project" aria-describedby="button-addon2">
@@ -34,16 +34,20 @@
 
     data () {
       return {
+        orgName: '',
         projectName: '',
         projects: [],
+        // title: this.$route.params.orgId,
       }
     },
 
 
     computed: {
+
+
       orgId () {
-        return this.$route.params.orgId; 
-      },
+        return this.$route.params.orgId;
+      }
     },
     
 
@@ -53,29 +57,45 @@
 
     mounted () {
       this.showProject ();
+      this.showOrgName ();
+
     },
 
 
     methods: {
+      showOrgName () {
+        let $vmc = this;
+        let id = $vmc.$route.params.orgId;
+        console.log (id);
+
+        const Org = Parse.Object.extend ("Organization");
+        let query = new Parse.Query (Org);
+        query.get (id)
+          .then (resp => {
+            let name = resp.get ('name');
+            $vmc.orgName = name;
+          })
+      },
+
+
       showProject () {
+        console.log ('show project');
         let $vmc = this;
 
-        const Project = Parse.Object.extend("Project");
-        let query = new Parse.Query(Project);
-
-        console.log ($vmc.orgId);
+        const Project = Parse.Object.extend ("Project");
+        let query = new Parse.Query (Project);
 
         query.equalTo ("orgId", $vmc.orgId);
         let proName = [];
         let proId = [];
         let obj = {};
         let ary = [];
-        query.find().then (resp => {
+        query.find ().then (resp => {
 
           for (let i = 0; i < resp.length; i++) {
             let data = {};
             let object = resp[i];
-            data.name = object.get('name');
+            data.name = object.get ('name');
 
             data.proId = object.id;
 
@@ -92,10 +112,10 @@
       newProject () {
         let $vmc = this;
 
-        let Pro = Parse.Object.extend("Project");
-        var Org = Parse.Object.extend("Organization");
+        let Pro = Parse.Object.extend ("Project");
+        var Org = Parse.Object.extend ("Organization");
         var org = new Org ();
-        let pro = new Pro();
+        let pro = new Pro ();
 
         pro.set ('name', $vmc.projectName);
         pro.set ('orgId', [$vmc.orgId]);
@@ -121,7 +141,8 @@
 
     watch: {
       orgId () {
-        this.showProject ();
+        this.showOrgName ();
+
       }
     }
   }
