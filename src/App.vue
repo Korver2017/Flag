@@ -10,7 +10,7 @@
           <router-link class="nav-item nav-link" to="/signin">
             <a>Sign in</a>
           </router-link>
-          <a class="nav-item nav-link" href="#"></a>
+          <a @click="logOut" class="nav-item nav-link" href="#">Log out</a>
           <a class="" href="#"></a>
         </div>
       </div>
@@ -133,7 +133,11 @@
 
             $vmc.orgs = ary;
           })
+      },
 
+
+      logOut () {
+        
       }
     },
 
