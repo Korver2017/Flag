@@ -2,8 +2,7 @@
 
   <div class="container">
     <hr />
-    <h1>Organization</h1>
-    <h1>Organization: {{ orgId }}</h1>
+    <h1>{{ orgId }}</h1>
 
     <div class="row col-6 mx-auto my-4">
       <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New project" aria-describedby="button-addon2">

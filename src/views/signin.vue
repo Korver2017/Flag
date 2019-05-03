@@ -10,7 +10,7 @@
       <button @click="signin" class="btn btn-success col-2">Sign in</button>
 
     </div>
-    
+
   </div>
 </template>
 
@@ -23,6 +23,9 @@
   import {mapState, mapActions} from 'vuex';
 
   export default {
+
+
+    name: 'signin',
 
 
     /**

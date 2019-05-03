@@ -22,8 +22,8 @@
     <div v-if="orgs.length !== 0" class="container mx-auto">
       <h5 class="text-left">Organization</h5>
       <div class="row">
-        <router-link v-for="org in orgs" :key="org" :to="org" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
-          {{ org }}
+        <router-link v-for="org in orgs" :key="org" :to="org.orgId" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
+          {{ org.name }}
         </router-link>
       </div>
 
@@ -123,11 +123,14 @@
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
               let object = resp[i];
               let query = new Parse.Query (Org);
+              obj.orgId = object.id;
               query.get (object.id)
                 .then (resp => {
-                  ary.push (resp.get ('name'));
+                  obj.name = resp.get ('name');
+                  ary.push (obj);
                 });
             }
 
