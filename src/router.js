@@ -9,14 +9,17 @@ export default new Router ({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/signin', name: 'signin', component: () => import('./views/signin.vue'),
+      path: '/signin', name: 'signin', component: () => import ('./views/signin.vue'),
     },
     {
       path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
+      // children: [
+      //   {path: ':proId', name: 'project', component: () => import('./views/project.vue')},
+      // ]
     },
-    // {
-    //   path: '/:orgId/:proId', component: () => import ('./views/project.vue'),
-    // },
+    {
+      path: '/:orgId/:proId', name: 'project', component: () => import ('./views/project.vue'),
+    },
     {
       path: '/issue/:id',
       component: () => import ('./views/issue.vue'),

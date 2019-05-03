@@ -10,14 +10,18 @@
     </div>
 
     <div class="row">
-      <div v-for="project in projects" class="projectItem col-4 border border-danger mt-3 py-5">
-        <router-link class="d-block" :to="'/' + orgId + '/' + project.proId" tag="li" active-class="active">
+      <div v-for="project in projects" class="projectItem border border-success col-3 py-2 ">
+        <!-- <router-link class="d-block" :to="'/' + orgId + '/' + project.proId" tag="li" active-class="active"> -->
+        <router-link class="d-block" :to="{ name: 'project', params: { proId: project.proId }}" tag="li" active-class="active">
           <a>
             <h4>{{ project.name }}</h4>
+            <h4>{{ project.proId }}</h4>
           </a>
         </router-link>
       </div>
     </div>
+
+    <!-- <router-view /> -->
 
   </div>
 
@@ -79,7 +83,6 @@
 
 
       showProject () {
-        console.log ('show project');
         let $vmc = this;
 
         const Project = Parse.Object.extend ("Project");
@@ -142,7 +145,7 @@
     watch: {
       orgId () {
         this.showOrgName ();
-
+        this.showProject ();
       }
     }
   }

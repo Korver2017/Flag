@@ -14,15 +14,14 @@
           <a class="" href="#"></a>
         </div>
       </div>
-      <span v-if="user.authed" class="nav-item nav-link align-right">Welcom, {{ user.email }}</span>
     </nav>
 
-    <h1 class="my-4">Flag</h1>
+    <h1 class="my-4">Flag<small v-if="user.authed" class="nav-item nav-link align-right">Welcome, {{ user.email }}</small></h1>
 
     <div v-if="orgs.length !== 0" class="container mx-auto">
       <h5 class="text-left">Organization</h5>
       <div class="row">
-        <router-link v-for="org in orgs" :key="org.id" :to="org.orgId" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
+        <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
           {{ org.name }}
         </router-link>
       </div>
