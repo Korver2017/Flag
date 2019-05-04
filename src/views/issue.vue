@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4">
     <!-- <h3>Issue Component</h3> -->
-    <h3 class="text-left">{{ title }} - {{ creator }}</h3>
+    <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
 
     <div class="card text-left">
       <h4 class="card-body py-5">
@@ -11,7 +11,7 @@
 
     <div v-for="comment in comments" class="card text-left">
       <div class="card-body">
-        {{ comment.content }} - Message by <span class="font-weight-bold">{{ comment.commentor }}</span>
+        {{ comment.content }} - Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
       </div>
     </div>
 

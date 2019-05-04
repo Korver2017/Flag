@@ -8,7 +8,7 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
 
-          <a v-if="user.authed" @click.prevent="logOut" to="/signin" class="nav-item nav-link" href="#">Log out</a>
+          <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a>
 
           <router-link v-else to="/signin" class="nav-item nav-link" href="#">Sign in</router-link>
           
@@ -77,6 +77,11 @@
 
 
     created () {
+
+
+      if (this.$store.state.user.authed === false) {
+        this.$router.push ({ path: '/signin' })
+      }
 
       // Add user
 
