@@ -13,7 +13,7 @@
           <label @keyup.enter="submit" for="content">Issue content</label>
           <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
         </div>
-        <button @click.prevent="submit" class="mx-3 btn btn-success">Add</button>
+        <button @click.prevent="submit" class="mx-3 btn btn-success">Add issue</button>
         <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
       </form>
       

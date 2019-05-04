@@ -15,6 +15,15 @@
       </div>
     </div>
 
+    <form class="col-8 mx-auto my-5">
+      <div class="form-group text-left">
+        <label @keyup.enter="addComment" for="content">Comment</label>
+        <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
+      </div>
+      <button @click.prevent="addComment" class="mx-3 btn btn-success">Add comment</button>
+      <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
+    </form>
+
   </div>
     
 
@@ -35,6 +44,7 @@
         content: '',
         title: '',
         comments: [],
+        commentText: '',
       }
     },
 
@@ -66,6 +76,15 @@
 
 
     mounted () {
+      this.showComment ();
+    },
+
+
+    methods: {
+
+      
+      showComment () {
+        
 
       let $vmc = this;
       let ary = [];
@@ -94,9 +113,34 @@
             });
 
         });
-
+      },
 
       
+      addComment () {
+
+        
+        let $vmc = this;
+
+        let Comment = Parse.Object.extend ("Comment");
+        let comment = new Comment ();
+
+        comment.set ('content', $vmc.commentText);
+        comment.set ('issueId', $vmc.issueId);
+
+        comment.save()
+          .then((comment) => {
+            $vmc.showComment ();
+            alert('New object created with objectId: ' + comment.id);
+            $vmc.commentText = '';
+            $vmc.commentText = '';
+          }, (error) => {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert('Failed to create new object, with error code: ' + error.message);
+          });
+        
+
+      }
     },
 
 
