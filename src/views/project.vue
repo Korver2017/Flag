@@ -3,9 +3,15 @@
     <h1 class="my-3">Project: {{ proName }}</h1>
 
     <div class="list-group">
-      <button v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action">
-        {{ issue }}
-      </button>
+
+      <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
+        <a>
+          {{ issue }}
+        </a>
+      </router-link>
+
+      
+      
     </div>
 
   </div>
@@ -63,7 +69,7 @@
 
 
       $vmc.showProName ();
-      
+
 
       const Issue = Parse.Object.extend ("Issue");
       let query = new Parse.Query (Issue);
@@ -71,11 +77,16 @@
       let ary = [];
       query.find().then (resp => {
         for (let i = 0; i < resp.length; i++) {
-          var object = resp[i];
-          ary.push (object.get ('name'));
+          let obj = {};
+          let object = resp[i];
+          obj.name = object.get ('name');
+          obj.issueId = object.id;
+          ary.push (obj);
         }
       })
       $vmc.issues = ary;
+
+
     },
 
 

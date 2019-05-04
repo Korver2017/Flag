@@ -21,12 +21,11 @@ export default new Router ({
       path: '/:orgId/:proId', name: 'project', component: () => import ('./views/project.vue'),
     },
     {
-      path: '/issue/:id',
-      component: () => import ('./views/issue.vue'),
+      path: '/:orgId/:proId/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
     },
-    {
-      path: '/issue/:id',
-      component: () => import ('./views/issue.vue'),
-    },
+    // {
+    //   path: '/issue/:id',
+    //   component: () => import ('./views/issue.vue'),
+    // },
   ]
 });
