@@ -1,17 +1,40 @@
 <template>
   <div class="container my-4">
-    <h1 class="my-3">Project: {{ proName }}</h1>
+    <h3 class="my-3 text-left">Project: {{ proName }}</h3>
 
-    <div class="list-group">
+    <div v-if="adding">
+
+      <form class="col-8 mx-auto my-5">
+        <div class="form-group text-left">
+          <label @keyup.enter="submit" for="title">Issue title</label>
+          <input v-model="title" class="form-control" placeholder="Issue title" id="title">
+        </div>
+        <div class="form-group text-left">
+          <label @keyup.enter="submit" for="content">Issue content</label>
+          <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
+        </div>
+        <button @click.prevent="submit" class="mx-3 btn btn-success">Add</button>
+        <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
+      </form>
+      
+    </div>
+    
+    <button v-else class="my-3 btn btn-success" @click="addIssue">Add issue</button>
+
+    <div class="list-group" v-if="issues.length >= 1">
 
       <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
         <a>
           {{ issue }}
         </a>
       </router-link>
+      
+    </div>
 
-      
-      
+    <div v-else class="card text-left">
+      <h4 class="card-body py-5">
+        尚無 Issue
+      </h4>
     </div>
 
   </div>
@@ -32,6 +55,9 @@
       return {
         proName: '',
         issues: [],
+        adding: false,
+        title: '',
+        content: '',
       }
     },
 
@@ -39,13 +65,11 @@
     computed: {
       proId () {
         return  this.$route.params.proId;
-      }
+      },
     },
 
 
     created () {
-
-
       // Add issue
 
       // let Issue = Parse.Object.extend ("Issue");
@@ -67,31 +91,13 @@
     mounted () {
       let $vmc = this;
 
-
       $vmc.showProName ();
-
-
-      const Issue = Parse.Object.extend ("Issue");
-      let query = new Parse.Query (Issue);
-      query.equalTo ("proId", $vmc.proId);
-      let ary = [];
-      query.find().then (resp => {
-        for (let i = 0; i < resp.length; i++) {
-          let obj = {};
-          let object = resp[i];
-          obj.name = object.get ('name');
-          obj.issueId = object.id;
-          ary.push (obj);
-        }
-      })
-      $vmc.issues = ary;
-
+      $vmc.showIssueName ();
 
     },
 
 
     methods: {
-
 
       showProName () {
         let $vmc = this;
@@ -106,7 +112,62 @@
             $vmc.proName = name;
           })
       },
+
+      showIssueName () {
+        let $vmc = this;
+        const Issue = Parse.Object.extend ("Issue");
+        let query = new Parse.Query (Issue);
+        query.equalTo ("proId", $vmc.proId);
+        let ary = [];
+        query.find().then (resp => {
+          for (let i = 0; i < resp.length; i++) {
+            let obj = {};
+            let object = resp[i];
+            obj.name = object.get ('name');
+            obj.issueId = object.id;
+            ary.push (obj);
+          }
+        })
+        $vmc.issues = ary;
+      },
+
+      addIssue () {
+        this.adding = true;
+      },
+
+      submit () {
+        let $vmc = this;
+
+        let Issue = Parse.Object.extend ("Issue");
+        let issue = new Issue ();
+
+        issue.set ('name', $vmc.title);
+        issue.set ('content', $vmc.content);
+        issue.set ('proId', $vmc.proId);
+
+        issue.save()
+          .then((issue) => {
+            alert('New object created with objectId: ' + issue.id);
+            $vmc.title = '';
+            $vmc.content = '';
+            $vmc.showIssueName ();
+            $vmc.adding = false;
+          }, (error) => {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert('Failed to create new object, with error code: ' + error.message);
+          });
+      },
+
+      cancel () {
+        this.adding = false;
+        this.title = '';
+        this.content = '';
+      }
     },
+
+    watch: {
+    }
   }
 </script>
 

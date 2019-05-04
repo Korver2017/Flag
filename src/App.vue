@@ -7,16 +7,16 @@
       </router-link>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-          <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a>
-          <router-link v-else class="nav-item nav-link" to="/signin">
-            <a>Sign in</a>
-          </router-link>
-          <a class="" href="#"></a>
+
+          <router-link v-if="user.authed" @click.prevent="logOut" to="/signin" class="nav-item nav-link" href="#">Log out</router-link>
+
+          <router-link v-else @click.prevent="signin" to="/signin" class="nav-item nav-link" href="#">Sign in</router-link>
+          
         </div>
       </div>
     </nav>
 
-    <h1 class="my-4">Flag<small v-if="user.authed" class="nav-item nav-link align-right">Welcome, {{ user.email }}</small></h1>
+    <h1 v-if="user.authed" class="nav-item nav-link align-right my-5">Welcome, {{ user.email }}</h1>
 
     <div v-if="orgs.length !== 0" class="container mx-auto">
       <h5 class="text-left">Organization</h5>

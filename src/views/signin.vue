@@ -1,13 +1,17 @@
 <template>
   <div class="mt-5">
-    <h1>Sign in component!</h1>
 
-    <div v-if="authed === false" class="container row mx-auto my-4">
+    <div v-if="authed === false" class="container mx-auto col-3 my-4">
 
-      <input @keyup.enter="signin" v-model="email" type="text" class="form-control col-5" placeholder="User name" aria-describedby="button-addon2" autofocus>
-      <input @keyup.enter="signin" v-model="password" type="text" class="form-control col-5" placeholder="Password" aria-describedby="button-addon2">
+      <p class="text-left">Email</p>
+      <input @keyup.enter="signin" v-model="email" type="text" class="form-control" placeholder="User name" aria-describedby="button-addon2" autofocus>
 
-      <button @click="signin" class="btn btn-success col-2">Sign in</button>
+      <br />
+
+      <p class="text-left">Password</p>
+      <input @keyup.enter="signin" v-model="password" type="text" class="form-control" placeholder="Password" aria-describedby="button-addon2">
+
+      <button @click="signin" class="btn btn-success my-5">Sign in</button>
 
     </div>
 

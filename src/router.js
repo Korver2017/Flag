@@ -13,9 +13,6 @@ export default new Router ({
     },
     {
       path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
-      // children: [
-      //   {path: ':proId', name: 'project', component: () => import('./views/project.vue')},
-      // ]
     },
     {
       path: '/:orgId/:proId', name: 'project', component: () => import ('./views/project.vue'),
@@ -23,9 +20,5 @@ export default new Router ({
     {
       path: '/:orgId/:proId/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
     },
-    // {
-    //   path: '/issue/:id',
-    //   component: () => import ('./views/issue.vue'),
-    // },
   ]
 });
