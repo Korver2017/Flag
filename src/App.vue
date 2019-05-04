@@ -8,15 +8,16 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
 
-          <router-link v-if="user.authed" @click.prevent="logOut" to="/signin" class="nav-item nav-link" href="#">Log out</router-link>
+          <a v-if="user.authed" @click.prevent="logOut" to="/signin" class="nav-item nav-link" href="#">Log out</a>
 
-          <router-link v-else @click.prevent="signin" to="/signin" class="nav-item nav-link" href="#">Sign in</router-link>
+          <router-link v-else to="/signin" class="nav-item nav-link" href="#">Sign in</router-link>
           
         </div>
       </div>
     </nav>
 
-    <h1 v-if="user.authed" class="nav-item nav-link align-right my-5">Welcome, {{ username }}</h1>
+    <template v-if="user.authed">
+    <h1 class="nav-item nav-link align-right my-5">Welcome, {{ username }}</h1>
 
     <div v-if="orgs.length !== 0" class="container mx-auto">
       <h5 class="text-left">Organization</h5>
@@ -27,6 +28,8 @@
       </div>
 
     </div>
+    
+    </template>
 
     <router-view />
 
@@ -154,6 +157,7 @@
       logOut () {
         let $vmc = this;
         $vmc.$store.dispatch ('user/logOut');
+        $vmc.$router.push ({ path: '/signin' })
       },
     },
 
