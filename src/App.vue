@@ -16,7 +16,7 @@
       </div>
     </nav>
 
-    <h1 v-if="user.authed" class="nav-item nav-link align-right my-5">Welcome, {{ user.email }}</h1>
+    <h1 v-if="user.authed" class="nav-item nav-link align-right my-5">Welcome, {{ username }}</h1>
 
     <div v-if="orgs.length !== 0" class="container mx-auto">
       <h5 class="text-left">Organization</h5>
@@ -67,7 +67,8 @@
 
     data () {
       return {
-        orgs: []
+        username: '',
+        orgs: [],
       }
     },
 
@@ -138,6 +139,18 @@
       },
 
 
+      showUsername () {
+        let $vmc = this;
+        let ary = [];
+        const Account = Parse.Object.extend ("Account");
+        let query = new Parse.Query (Account);
+        query.get ($vmc.user.id)
+          .then (resp => {
+            $vmc.username = resp.get ('username');
+        });
+      },
+
+
       logOut () {
         let $vmc = this;
         $vmc.$store.dispatch ('user/logOut');
@@ -147,8 +160,19 @@
 
     watch: {
       user () {
+      //   let $vmc = this;
+
         this.showOrg ();
+        this.showUsername ();
+      //   let ary = [];
+      //   const Account = Parse.Object.extend ("Account");
+      //   let query = new Parse.Query (Account);
+      //   query.get (user.id)
+      //     .then (resp => {
+      //       $vmc.username = resp.get ('username');
+      //   });
+      // },
       },
-    }
+    },
   }
 </script>

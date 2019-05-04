@@ -33,8 +33,8 @@ export default {
   state: {
     authed: false,
     input: {
-      email: 'korver@protype.tw',
-      password: '123456',
+      email: 'wake@protype.tw',
+      password: '6666',
       userId: '',
     }
   },
