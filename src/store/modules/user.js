@@ -32,6 +32,7 @@ export default {
    */
   state: {
     authed: false,
+    username: '',
     input: {
       email: 'wake@protype.tw',
       password: '6666',
@@ -78,8 +79,15 @@ export default {
               }
 
               state.authed = true;
-
               state.input.userId = resp[0].id;
+
+              console.log (state.input.userId);
+
+              let query = new Parse.Query(Account);
+              query.get (state.input.userId)
+                .then (resp => {
+                  state.username = resp.get ('username');
+                });
 
               alert (`${state.input.email} authed success!`);
             });

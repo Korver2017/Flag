@@ -1,7 +1,7 @@
 <template>
   <div class="container my-4">
     <!-- <h3>Issue Component</h3> -->
-    <h3 class="text-left">{{ title }}</h3>
+    <h3 class="text-left">{{ title }} - {{ creator }}</h3>
 
     <div class="card text-left">
       <h4 class="card-body py-5">
@@ -11,7 +11,7 @@
 
     <div v-for="comment in comments" class="card text-left">
       <div class="card-body">
-        {{ comment }}
+        {{ comment.content }} - Message by <span class="font-weight-bold">{{ comment.commentor }}</span>
       </div>
     </div>
 
@@ -43,6 +43,8 @@
       return {
         content: '',
         title: '',
+        creator: '',
+        commentor: '',
         comments: [],
         commentText: '',
       }
@@ -84,7 +86,6 @@
 
       
       showComment () {
-        
 
       let $vmc = this;
       let ary = [];
@@ -93,11 +94,9 @@
       let query = new Parse.Query (Issue);
       query.get ($vmc.issueId)
         .then (resp => {
-          let content = resp.get ('content');
-          $vmc.content = content;
-
-          let title = resp.get ('name');
-          $vmc.title = title;
+          $vmc.content = resp.get ('content');
+          $vmc.title = resp.get ('name');
+          $vmc.creator = resp.get ('creator');
         })
         .then (() => {
           const Comment = Parse.Object.extend ("Comment");
@@ -106,10 +105,13 @@
           query.find ()
             .then (resp => {
               for (let i = 0; i < resp.length; i ++) {
-                var object = resp[i];
-                ary.push (object.get ('content'));
-                $vmc.comments = ary;
+                let obj = {};
+                let object = resp[i];
+                obj.content = object.get ('content');
+                obj.commentor = object.get ('commentor');
+                ary.push (obj);
               }
+              $vmc.comments = ary;
             });
 
         });
@@ -120,12 +122,12 @@
 
         
         let $vmc = this;
-
         let Comment = Parse.Object.extend ("Comment");
         let comment = new Comment ();
 
         comment.set ('content', $vmc.commentText);
         comment.set ('issueId', $vmc.issueId);
+        comment.set ('commentor', $vmc.$store.state.user.username);
 
         comment.save()
           .then((comment) => {

@@ -6,14 +6,14 @@
 
       <form class="col-8 mx-auto my-5">
         <div class="form-group text-left">
-          <label @keyup.enter="submit" for="title">Issue title</label>
+          <label @keyup.enter="submitIssue" for="title">Issue title</label>
           <input v-model="title" class="form-control" placeholder="Issue title" id="title">
         </div>
         <div class="form-group text-left">
-          <label @keyup.enter="submit" for="content">Issue content</label>
+          <label @keyup.enter="submitIssue" for="content">Issue content</label>
           <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
         </div>
-        <button @click.prevent="submit" class="mx-3 btn btn-success">Add issue</button>
+        <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Add issue</button>
         <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
       </form>
       
@@ -25,7 +25,7 @@
 
       <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
         <a>
-          {{ issue }}
+          {{ issue.name }} - Created by <span class="font-weight-bold">{{ issue.creator }}</span>
         </a>
       </router-link>
       
@@ -58,8 +58,13 @@
         adding: false,
         title: '',
         content: '',
+        username: this.$store.state.user.username,
       }
     },
+
+
+    
+      
 
 
     computed: {
@@ -125,6 +130,7 @@
             let object = resp[i];
             obj.name = object.get ('name');
             obj.issueId = object.id;
+            obj.creator = object.get ('creator');
             ary.push (obj);
           }
         })
@@ -135,7 +141,7 @@
         this.adding = true;
       },
 
-      submit () {
+      submitIssue () {
         let $vmc = this;
 
         let Issue = Parse.Object.extend ("Issue");
@@ -144,6 +150,7 @@
         issue.set ('name', $vmc.title);
         issue.set ('content', $vmc.content);
         issue.set ('proId', $vmc.proId);
+        issue.set ('creator', $vmc.$store.state.user.username);
 
         issue.save()
           .then((issue) => {
