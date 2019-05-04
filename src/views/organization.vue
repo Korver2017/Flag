@@ -50,6 +50,7 @@
 
 
       orgId () {
+        console.log (this.$route.params.orgId);
         return this.$route.params.orgId;
       }
     },

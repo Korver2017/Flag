@@ -24,9 +24,7 @@
     <div class="list-group" v-if="issues.length >= 1">
 
       <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
-        <a>
-          {{ issue.name }} - Created by <span class="font-weight-bold">{{ issue.creator }}</span>
-        </a>
+        {{ issue.name }} - Created by <span class="font-weight-bold">{{ issue.creator }}</span>
       </router-link>
       
     </div>
@@ -95,6 +93,8 @@
 
     mounted () {
       let $vmc = this;
+
+      console.log ('project mounted');
 
       $vmc.showProName ();
       $vmc.showIssueName ();

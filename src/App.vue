@@ -27,9 +27,24 @@
         </router-link>
       </div>
 
+      <form class="col-8 mx-auto my-5">
+        <div class="form-group text-left">
+          <label @keyup.enter="addOrganization" for="name">Add organization</label>
+          <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
+        </div>
+        <!-- <div class="form-group text-left">
+          <label @keyup.enter="submitIssue" for="content">Issue content</label>
+          <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
+        </div> -->
+        <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
+        <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
+      </form>
+
     </div>
     
     </template>
+
+    
 
     <router-view />
 
@@ -71,6 +86,7 @@
     data () {
       return {
         username: '',
+        orgName: '',
         orgs: [],
       }
     },
@@ -164,23 +180,37 @@
         $vmc.$store.dispatch ('user/logOut');
         $vmc.$router.push ({ path: '/signin' })
       },
+
+
+      addOrganization () {
+        let $vmc = this;
+        
+        let Org = Parse.Object.extend ("Organization");
+        let org = new Org ();
+
+        org.set ('name', $vmc.orgName);
+        org.set ('memberId', [$vmc.$store.state.user.input.userId]);
+
+        org.save()
+          .then((org) => {
+            // Execute any logic that should take place after the object is saved.
+            $vmc.orgName = '';
+            $vmc.showOrg ();
+            alert('New object created with objectId: ' + org.id);
+          }, (error) => {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert('Failed to create new object, with error code: ' + error.message);
+          });
+      }
     },
 
 
     watch: {
       user () {
-      //   let $vmc = this;
 
         this.showOrg ();
         this.showUsername ();
-      //   let ary = [];
-      //   const Account = Parse.Object.extend ("Account");
-      //   let query = new Parse.Query (Account);
-      //   query.get (user.id)
-      //     .then (resp => {
-      //       $vmc.username = resp.get ('username');
-      //   });
-      // },
       },
     },
   }
