@@ -1,28 +1,39 @@
 <template>
   <div class="container my-4">
-    <!-- <h3>Issue Component</h3> -->
-    <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
+    <div class="row">
 
-    <div class="card text-left">
-      <h4 class="card-body py-5">
-        {{ content }}
-      </h4>
-    </div>
+      <div class="col-8">
+        <!-- <h3>Issue Component</h3> -->
+        <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
 
-    <div v-for="comment in comments" class="card text-left">
-      <div class="card-body">
-        {{ comment.content }} - Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+        <div class="card text-left">
+          <h4 class="card-body py-5">
+            {{ content }}
+          </h4>
+        </div>
+
+        <div v-for="comment in comments" class="card text-left">
+          <div class="card-body">
+            {{ comment.content }} - Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+          </div>
+        </div>
+
+        <form class="col-8 mx-auto my-5">
+          <div class="form-group text-left">
+            <label @keyup.enter="addComment" for="content">Comment</label>
+            <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
+          </div>
+          <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
+          <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
+        </form>
+      </div>
+
+      <div class="col-4">
+
+        <button v-for="label in labels" class="my-3 d-block btn btn-success">{{ label }}</button> <br />
+
       </div>
     </div>
-
-    <form class="col-8 mx-auto my-5">
-      <div class="form-group text-left">
-        <label @keyup.enter="addComment" for="content">Comment</label>
-        <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
-      </div>
-      <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
-      <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
-    </form>
 
   </div>
     
@@ -47,21 +58,26 @@
         commentor: '',
         comments: [],
         commentText: '',
+        labels: [],
       }
     },
 
 
     created () {
-      // Add comment
+      // Add Label
 
-      // let Comment = Parse.Object.extend ("Comment");
-      // let comment = new Comment ();
+      // let Label = Parse.Object.extend ("Label");
+      // let label = new Label ();
 
-      // comment.set ('content', 'Content, Lorem...');
+      // label.set ('title', 'Feature');
+      // label.set ('title', 'Bug');
+      // label.set ('title', 'Hotfix');
+      // label.set ('title', 'Enhancement');
+      // label.set ('title', 'Done');
 
-      // comment.save()
-      //   .then((comment) => {
-      //     alert('New object created with objectId: ' + comment.id);
+      // label.save()
+      //   .then((label) => {
+      //     alert('New object created with objectId: ' + label.id);
       //   }, (error) => {
       //     // Execute any logic that should take place if the save fails.
       //     // error is a Parse.Error with an error code and message.
@@ -78,7 +94,22 @@
 
 
     mounted () {
-      this.showComment ();
+      let $vmc = this;
+
+      $vmc.showComment ();
+
+      let Label = Parse.Object.extend("Label");
+      let query = new Parse.Query(Label);
+      let ary = [];
+      query.notEqualTo ("title", "qq");
+      query.find ()
+        .then (resp => {
+          for (let i = 0; i < resp.length; i++) {
+            let object = resp[i];
+            ary.push (object.get ('title'));
+          }
+        });
+      $vmc.labels = ary;
     },
 
 
