@@ -5,8 +5,11 @@
       <div class="col-8">
         <!-- <h3>Issue Component</h3> -->
         <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
+        <div class="d-flex flex-row bd-highlight">
+          <span v-for="l in label" class="py-2 px-3 mx-1 badge badge-primary">{{ l }}</span>
+        </div>
 
-        <div class="card text-left">
+        <div class="mt-5 card text-left">
           <h4 class="card-body py-5">
             {{ content }}
           </h4>
@@ -30,7 +33,7 @@
 
       <div class="col-4">
 
-        <button v-for="label in labels" class="my-3 d-block btn btn-success">{{ label }}</button> <br />
+        <button v-for="label in labels" @click="addLabel(label.labelId)" class="my-3 d-block btn btn-success">{{ label }}</button> <br />
 
       </div>
     </div>
@@ -59,6 +62,7 @@
         comments: [],
         commentText: '',
         labels: [],
+        label: [],
       }
     },
 
@@ -97,19 +101,20 @@
       let $vmc = this;
 
       $vmc.showComment ();
+      $vmc.allLabel ();
 
-      let Label = Parse.Object.extend("Label");
-      let query = new Parse.Query(Label);
       let ary = [];
-      query.notEqualTo ("title", "qq");
+      let Label = Parse.Object.extend ("Label");
+      let query = new Parse.Query (Label);
+      query.equalTo ('issueId', $vmc.issueId);
       query.find ()
         .then (resp => {
           for (let i = 0; i < resp.length; i++) {
             let object = resp[i];
             ary.push (object.get ('title'));
           }
-        });
-      $vmc.labels = ary;
+        })
+      $vmc.label = ary;
     },
 
 
@@ -171,8 +176,43 @@
             // error is a Parse.Error with an error code and message.
             alert('Failed to create new object, with error code: ' + error.message);
           });
-        
+      },
 
+
+      allLabel () {
+        let $vmc = this;
+        let Label = Parse.Object.extend("Label");
+        let query = new Parse.Query(Label);
+        let ary = [];
+        query.notEqualTo ("title", "qq");
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i++) {
+              let obj = {};
+              let object = resp[i];
+              obj.labelId = object.id;
+              obj.title = object.get ('title');
+              ary.push (obj);
+            }
+          });
+        $vmc.labels = ary;
+      },
+
+
+      addLabel (labelId) {
+        let $vmc = this;
+
+        var Label = Parse.Object.extend("Label");
+        var query = new Parse.Query(Label);
+        query.get (labelId)
+          .then (resp => {
+            resp.addUnique ("issueId", $vmc.issueId);
+            resp.save();
+            // The object was retrieved successfully.
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
       }
     },
 
