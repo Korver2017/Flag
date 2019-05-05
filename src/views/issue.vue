@@ -20,7 +20,7 @@
         <label @keyup.enter="addComment" for="content">Comment</label>
         <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
       </div>
-      <button @click.prevent="addComment" class="mx-3 btn btn-success">Add comment</button>
+      <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
       <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
     </form>
 

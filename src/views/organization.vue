@@ -6,22 +6,27 @@
 
     <div class="row col-6 mx-auto my-4">
       <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New project" aria-describedby="button-addon2">
-      <button class="btn btn-success col-4" @click="newProject">New project</button>
+      <button class="btn btn-success col-4" @click="newProject">New Project</button>
     </div>
 
-    <div class="row">
+     <!-- <div class="row">
       <div v-for="project in projects" class="projectItem border border-success col-3 py-2 ">
-        <!-- <router-link class="d-block" :to="'/' + orgId + '/' + project.proId" tag="li" active-class="active"> -->
+         <router-link class="d-block" :to="'/' + orgId + '/' + project.proId" tag="li" active-class="active"> 
         <router-link class="d-block" :to="{ name: 'project', params: { proId: project.proId }}" tag="li" active-class="active">
           <a>
             <h4>{{ project.name }}</h4>
-            <h4>{{ project.proId }}</h4>
+             <h4>{{ project.proId }}</h4>
           </a>
         </router-link>
       </div>
-    </div>
+    </div> -->
 
-    <!-- <router-view /> -->
+    <div v-for="project in projects" class="list-group-flush col-6">
+      <router-link class="list-group-item list-group-item-action" :to="{ name: 'project', params: { proId: project.proId }}" tag="button" active-class="active">
+         <h5>{{ project.name }}</h5>
+          <!-- <h4>{{ project.proId }}</h4> -->
+      </router-link>
+    </div>
 
   </div>
 

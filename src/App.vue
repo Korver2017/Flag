@@ -17,10 +17,11 @@
     </nav>
 
     <template v-if="user.authed">
-    <h1 class="nav-item nav-link align-right my-5">Welcome, {{ username }}</h1>
+    <h1 class="nav-item nav-link align-right mt-5">Hello, {{ username }}!</h1>
+    <h5>Welcome to Flag</h5>
 
     <div v-if="orgs.length !== 0" class="container mx-auto">
-      <h5 class="text-left">Organization</h5>
+      <h5 class="text-left">My Organization</h5>
       <div class="row">
         <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
           {{ org.name }}
@@ -32,12 +33,7 @@
           <label @keyup.enter="addOrganization" for="name">Add organization</label>
           <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
         </div>
-        <!-- <div class="form-group text-left">
-          <label @keyup.enter="submitIssue" for="content">Issue content</label>
-          <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
-        </div> -->
         <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
-        <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
       </form>
 
     </div>

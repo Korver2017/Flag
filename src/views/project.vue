@@ -13,13 +13,13 @@
           <label @keyup.enter="submitIssue" for="content">Issue content</label>
           <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
         </div>
-        <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Add issue</button>
+        <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Add Issue</button>
         <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
       </form>
       
     </div>
     
-    <button v-else class="my-3 btn btn-success" @click="addIssue">Add issue</button>
+    <button v-else class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
 
     <div class="list-group" v-if="issues.length >= 1">
 
