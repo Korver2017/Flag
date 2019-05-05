@@ -3,7 +3,6 @@
     <div class="row">
 
       <div class="col-8">
-        <!-- <h3>Issue Component</h3> -->
         <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
         <div class="d-flex flex-row bd-highlight">
           <span v-for="l in label" class="py-2 px-3 mx-1 badge badge-primary">{{ l }}</span>
@@ -33,7 +32,8 @@
 
       <div class="col-4">
 
-        <button v-for="label in labels" @click="toggleLabel(label.labelId)" class="my-3 d-block btn btn-success">{{ label }}</button> <br />
+        <button v-for="label in labels" @click="addLabel (label.labelId)" class="my-3 d-block btn btn-success">{{ label.title }}</button> <br />
+        <button v-for="label in labels" @click="removeLabel (label.labelId)" class="my-3 d-block btn btn-danger">{{ label.title }}</button> <br />
 
       </div>
     </div>
@@ -103,19 +103,6 @@
       $vmc.showComment ();
       $vmc.allLabel ();
       $vmc.showLabel ();
-
-      // let ary = [];
-      // let Label = Parse.Object.extend ("Label");
-      // let query = new Parse.Query (Label);
-      // query.equalTo ('issueId', $vmc.issueId);
-      // query.find ()
-      //   .then (resp => {
-      //     for (let i = 0; i < resp.length; i++) {
-      //       let object = resp[i];
-      //       ary.push (object.get ('title'));
-      //     }
-      //   })
-      // $vmc.label = ary;
     },
 
 
@@ -217,7 +204,7 @@
       },
 
 
-      toggleLabel (labelId) {
+      addLabel (labelId) {
         let $vmc = this;
 
         let Label = Parse.Object.extend ("Label");
@@ -225,19 +212,78 @@
       
         query.get (labelId)
           .then (resp => {
-            let ids = resp.get ('issueId');
-
-            if (ids.length > 3) {
-              console.log ('qq');
-            } else {
-              resp.addUnique ("issueId", $vmc.issueId);
-              resp.save ();
-            }
+            resp.addUnique ("issueId", $vmc.issueId);
+            resp.save ();
+            
           })
-          .then (() => $vmc.showLabel ())
+          // .then (() => {
+          //   let Label = Parse.Object.extend ("Label");
+          //   let query = new Parse.Query (Label);
+          //   query.get (labelId)
+          //     .then ((resp) => {
+          //       let ids = resp.get ('issueId');
+          //       console.log (ids);
 
-          // $vmc.showLabel ();
-      }
+          //       ids.filter (id => {
+          //         console.log (id);
+          //         if (id !== $vmc.issueId || id === '') {
+          //           resp.addUnique ("issueId", $vmc.issueId);
+          //           resp.save ();
+          //         }
+          //       });
+          //     })
+              .then (() => {
+                $vmc.showLabel ()
+              });
+          // })
+
+        // query = new Parse.Query (Label);
+        // query.get (labelId)
+        //   .then ((resp) => {
+        //     let ids = resp.get ('issueId');
+        //     console.log (ids);
+
+        //     ids.filter (id => {
+        //       if (id !== $vmc.issueId) {
+        //         console.log (resp);
+        //         console.log (ids);
+        //         console.log ('qq');
+        //         resp.addUnique ("issueId", $vmc.issueId);
+        //         resp.save ();
+        //       }
+        //     });
+        //   })
+        //   .then (() => {
+        //     $vmc.showLabel ()
+        //   });
+
+          //   if (ids) {
+          //     console.log ('qq');
+          //   } else {
+          //     resp.addUnique ("issueId", $vmc.issueId);
+          //     resp.save ();
+          //   }
+          // })
+          // .then (() => $vmc.showLabel ());
+      },
+
+
+      removeLabel (labelId) {
+        let $vmc = this;
+
+        let Label = Parse.Object.extend ("Label");
+        let query = new Parse.Query (Label);
+      
+        query.get (labelId)
+          .then (resp => {
+            resp.remove ("issueId", $vmc.issueId);
+            resp.save ();
+            
+          })
+          .then (() => {
+            $vmc.showLabel ();
+          })
+      },
     },
 
 
