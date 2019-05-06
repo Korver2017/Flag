@@ -25,18 +25,14 @@
 
           <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown>
 
-              <!-- {{ content }} -->
-            <!-- </h4> -->
-          <!-- </div> -->
           <template v-for="comment in comments">
+
             <p class="text-left mt-4 mb-0">
               Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
             </p>
 
-            <!-- <div class="card-body"> -->
-              <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
-              <!-- {{ comment.content }} -->
-            <!-- </div> -->
+            <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+            
           </template>
 
           <form class="mx-auto my-5">

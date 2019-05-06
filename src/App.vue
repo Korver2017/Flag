@@ -92,6 +92,9 @@
 
     created () {
 
+      let res = this.$md5 ('korver@protype.tw');
+      console.log (res);
+
 
       if (this.$store.state.user.authed === false) {
         this.$router.push ({ path: '/signin' })
