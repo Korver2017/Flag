@@ -1,22 +1,8 @@
 <template>
-  <div id="app">
+  <div>
+    <h1>Dashboard Component</h1>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <router-link class="navbar-brand nav-item nav-link" to="/">
-        <a>Home</a>
-      </router-link>
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-
-          <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a>
-
-          <!-- <router-link v-else to="/signin" class="nav-item nav-link" href="#">Sign in</router-link> -->
-          
-        </div>
-      </div>
-    </nav>
-
-    <!-- <template v-if="user.authed">
+    <template v-if="user.authed">
       <img v-if="url.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + url" alt="">
       <h2 class="nav-item nav-link align-right">Hi, {{ username }}!</h2>
       <h5>Welcome to Flag</h5>
@@ -39,24 +25,10 @@
 
       </div>
     
-    </template> -->
-
+    </template>
     
-
-    <router-view />
-
   </div>
 </template>
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  text-align: center;
-}
-</style>
 
 <script>
 
@@ -69,7 +41,7 @@
   export default {
 
 
-    name: 'Home',
+    name: 'dashboard',
 
 
     /**
@@ -134,6 +106,12 @@
         }
       },
       
+    },
+
+
+    mounted () {
+      this.showOrg ();
+      this.showUsername ();
     },
 
 
@@ -216,3 +194,7 @@
     },
   }
 </script>
+
+<style scoped>
+  
+</style>

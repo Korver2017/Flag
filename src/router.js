@@ -12,6 +12,9 @@ export default new Router ({
       path: '/signin', name: 'signin', component: () => import ('./views/signin.vue'),
     },
     {
+      path: '/dashboard', name: 'dashboard', component: () => import('./views/dashboard.vue'),
+    },
+    {
       path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
     },
     {

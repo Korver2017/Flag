@@ -1,7 +1,7 @@
 
 
 import Parse from "parse";
-
+import router from '@/router.js';
 /**
  *
  * User
@@ -58,12 +58,13 @@ export default {
       // console.log (data);
 
       if (state.authed === true) {
-        // console.log ('kk');
+        console.log ('kk');
         state.authed = false;
         state.username = '';
       } else {
         state.authed = data.authed;
         state.username = data.username;
+        router.push ('/dashboard');
       }
       
       // if (state.authed === true) {
@@ -204,8 +205,9 @@ export default {
      *
      */
     logOut: function ({commit}) {
-      if (confirm ('Do you want to log out?')) commit ('authed');
-      else return;
+      // if (confirm ('Are you sure to log out?'))
+      commit ('authed');
+      // else return;
     },    
   }
 }

@@ -48,11 +48,7 @@
 
       <div class="col-3">
 
-        <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-success">{{ label.title }}, {{ label.added }}</button> <br />
-        <!-- <button v-for="label in labels" @click="removeLabel (label.labelId)" class="my-3 d-block btn btn-danger">{{ label.title }}</button> <br /> -->
-
-        <div>{{ labels }}</div>
-
+        <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-success">{{ label.title }}, {{ label.added }}</button>
       </div>
     </div>
 
