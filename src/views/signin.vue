@@ -3,16 +3,22 @@
 
     <div v-if="authed === false" class="container mx-auto col-3 my-4">
 
-      <p class="text-left">Email</p>
 
-      <input @keyup.enter="signin" v-model="email" type="email" class="form-control" placeholder="User name" aria-describedby="button-addon2" autofocus>
 
+      <form class="col-10 mx-auto my-5">
+        <div class="form-group text-left">
+          <label @keyup.enter="signin" for="email">Email</label>
+          <input v-model="email" class="form-control" placeholder="Your Email" id="email" autofocus>
+        </div>
+        <div class="form-group text-left">
+          <label @keyup.enter="signin" for="password">Password</label>
+          <input v-model="password" placeholder="Password" class="form-control" id="password" rows="10">
+        </div>
+        <button @click.prevent="signin" class="mx-3 btn btn-success">Submit</button>
+      </form>
+
+      
       <br />
-
-      <p class="text-left">Password</p>
-      <input @keyup.enter="signin" v-model="password" type="" class="form-control" placeholder="Password" aria-describedby="button-addon2">
-
-      <button @click="signin" class="btn btn-success my-5">Sign in</button>
 
     </div>
 

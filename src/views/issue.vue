@@ -243,7 +243,6 @@
                   ary.push ($vmc.labels[i]);
                 }
               }
-              
             }
           })
 
@@ -256,7 +255,39 @@
         let $vmc = this;
         
         $vmc.labels[index].added = !$vmc.labels[index].added;
+        console.log ($vmc.labels[index].added);
 
+        if ($vmc.labels[index].added === true) {
+          console.log ('true');
+          let Label = Parse.Object.extend ("Label");
+          let query = new Parse.Query (Label);
+        
+          query.get (labelId)
+            .then (resp => {
+              resp.addUnique ("issueId", $vmc.issueId);
+              resp.save ()
+                .then (() => {
+                  $vmc.showLabel ();
+                });
+              
+            })
+        }
+        else  {
+          console.log ('false');
+          let Label = Parse.Object.extend ("Label");
+          let query = new Parse.Query (Label);
+          query.get (labelId)
+            .then (resp => {
+              resp.remove ("issueId", $vmc.issueId);
+              resp.save ()
+                .then (() => {
+                  $vmc.showLabel ()
+                });
+              
+            })
+            
+        }
+        
         // console.log ($vmc.labels);
         
 
