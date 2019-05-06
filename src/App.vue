@@ -62,6 +62,7 @@
 
   // Import
   import Parse from "parse";
+  import VueMarkdown from "vue-markdown";
 
 
   export default {
@@ -76,6 +77,7 @@
      *
      */
     components: {
+      VueMarkdown,
     },
 
 

@@ -3,7 +3,8 @@
 
     <div v-if="authed === false" class="container mx-auto col-3 my-4">
 
-      <p class="text-left">Email</p>
+      <vue-markdown class="text-left"># Email **This is bold text**</vue-markdown>
+
       <input @keyup.enter="signin" v-model="email" type="text" class="form-control" placeholder="User name" aria-describedby="button-addon2" autofocus>
 
       <br />
@@ -25,11 +26,17 @@
   // import Parse from "parse";
 
   import {mapState, mapActions} from 'vuex';
+  import VueMarkdown from "vue-markdown";
 
   export default {
 
 
     name: 'signin',
+
+
+    components: {
+      VueMarkdown,
+    },
 
 
     /**
