@@ -17,26 +17,27 @@
     </nav>
 
     <template v-if="user.authed">
-    <h1 class="nav-item nav-link align-right mt-5">Hello, {{ username }}!</h1>
-    <h5>Welcome to Flag</h5>
+      <img v-if="url.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + url" alt="">
+      <h2 class="nav-item nav-link align-right">Hi, {{ username }}!</h2>
+      <h5>Welcome to Flag</h5>
 
-    <div v-if="orgs.length !== 0" class="container mx-auto">
-      <h5 class="text-left">My Organization</h5>
-      <div class="row">
-        <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
-          {{ org.name }}
-        </router-link>
-      </div>
-
-      <form class="col-8 mx-auto my-5">
-        <div class="form-group text-left">
-          <label @keyup.enter="addOrganization" for="name">Add organization</label>
-          <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
+      <div v-if="orgs.length !== 0" class="container mx-auto">
+        <h5 class="text-left">My Organization</h5>
+        <div class="row">
+          <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
+            {{ org.name }}
+          </router-link>
         </div>
-        <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
-      </form>
 
-    </div>
+        <form class="col-8 mx-auto my-5">
+          <div class="form-group text-left">
+            <label @keyup.enter="addOrganization" for="name">Add organization</label>
+            <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
+          </div>
+          <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
+        </form>
+
+      </div>
     
     </template>
 
@@ -86,14 +87,12 @@
         username: '',
         orgName: '',
         orgs: [],
+        url: '',
       }
     },
 
 
     created () {
-
-      let res = this.$md5 ('korver@protype.tw');
-      console.log (res);
 
 
       if (this.$store.state.user.authed === false) {
@@ -171,6 +170,7 @@
         let query = new Parse.Query (Account);
         query.get ($vmc.user.id)
           .then (resp => {
+            $vmc.url = $vmc.$md5 (resp.get ('email'));
             $vmc.username = resp.get ('username');
         });
       },

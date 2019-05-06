@@ -150,7 +150,7 @@ export default {
      *
      */
     signin: function ({state, commit}) {
-
+        let $vmc = this;
         let Account = Parse.Object.extend("Account");
         let query = new Parse.Query(Account);
 
