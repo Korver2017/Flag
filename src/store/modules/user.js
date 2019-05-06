@@ -55,10 +55,10 @@ export default {
      *
      */
     authed (state, data) {
-      console.log (data);
+      // console.log (data);
 
       if (state.authed === true) {
-        console.log ('kk');
+        // console.log ('kk');
         state.authed = false;
         state.username = '';
       } else {
@@ -155,7 +155,7 @@ export default {
         let query = new Parse.Query(Account);
 
         query.equalTo("email", state.input.email);
-        console.log(state.input.email);
+        // console.log(state.input.email);
         query.find()
           .then(resp => {
 
@@ -177,7 +177,7 @@ export default {
                 // state.authed = true;
                 state.input.userId = resp[0].id;
 
-                console.log (state.input.userId);
+                // console.log (state.input.userId);
 
                 let query = new Parse.Query (Account);
                 query.get (state.input.userId)
@@ -204,8 +204,8 @@ export default {
      *
      */
     logOut: function ({commit}) {
-      console.log ('logOut');
-      commit ('authed');
+      if (confirm ('Do you want to log out?')) commit ('authed');
+      else return;
     },    
   }
 }

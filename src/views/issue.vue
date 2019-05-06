@@ -4,9 +4,13 @@
 
       <div class="col-8">
         <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
-        <div class="d-flex flex-row bd-highlight">
+        <!-- <div class="d-flex flex-row bd-highlight">
           <span v-for="l in label" class="py-2 px-3 mx-1 badge badge-primary">{{ l }}</span>
         </div>
+        <div>{{ label }}</div> -->
+        <template v-for="label in labels">
+          <span class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
+        </template>
 
         <div class="mt-5 card text-left">
           <h4 class="card-body py-5">
@@ -32,8 +36,10 @@
 
       <div class="col-4">
 
-        <button v-for="label in labels" @click="addLabel (label.labelId)" class="my-3 d-block btn btn-success">{{ label.title }}</button> <br />
-        <button v-for="label in labels" @click="removeLabel (label.labelId)" class="my-3 d-block btn btn-danger">{{ label.title }}</button> <br />
+        <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-success">{{ label.title }}, {{ label.added }}</button> <br />
+        <!-- <button v-for="label in labels" @click="removeLabel (label.labelId)" class="my-3 d-block btn btn-danger">{{ label.title }}</button> <br /> -->
+
+        <div>{{ labels }}</div>
 
       </div>
     </div>
@@ -103,6 +109,10 @@
       $vmc.showComment ();
       $vmc.allLabel ();
       $vmc.showLabel ();
+
+      console.log ($vmc.issueId);
+
+      // console.log ($vmc.labels);
     },
 
 
@@ -180,10 +190,12 @@
               let object = resp[i];
               obj.labelId = object.id;
               obj.title = object.get ('title');
+              obj.added = false;
               ary.push (obj);
             }
           });
         $vmc.labels = ary;
+        // console.log ($vmc.labels);
       },
 
 
@@ -195,96 +207,111 @@
         query.equalTo ('issueId', $vmc.issueId);
         query.find ()
           .then (resp => {
-            for (let i = 0; i < resp.length; i++) {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
               let object = resp[i];
-              ary.push (object.get ('title'));
+              // console.log (object.id);
+              // $vmc.labels.labelId = object.id;
+              // $vmc.labels.title
+
+              
+              // obj.labelId = object.id;
+              // obj.title = object.get ('title');
+              // console.log ($vmc.labels);
+              // obj.added = true;
+              for (let i = 0; i < $vmc.labels.length; i ++) {
+                if ($vmc.labels[i].labelId === object.id) {
+                  $vmc.labels[i].added = true;
+                  ary.push ($vmc.labels[i]);
+                }
+              }
+              
             }
           })
+
+
         $vmc.label = ary;
       },
 
 
-      addLabel (labelId) {
+      toggleLabel (added, labelId, index) {
         let $vmc = this;
+        
+        $vmc.labels[index].added = !$vmc.labels[index].added;
 
-        let Label = Parse.Object.extend ("Label");
-        let query = new Parse.Query (Label);
+        // console.log ($vmc.labels);
+        
+
+
+        // let Label = Parse.Object.extend ("Label");
+        // let query = new Parse.Query (Label);
       
-        query.get (labelId)
-          .then (resp => {
-            resp.addUnique ("issueId", $vmc.issueId);
-            resp.save ();
-            
-          })
-          // .then (() => {
-          //   let Label = Parse.Object.extend ("Label");
-          //   let query = new Parse.Query (Label);
-          //   query.get (labelId)
-          //     .then ((resp) => {
-          //       let ids = resp.get ('issueId');
-          //       console.log (ids);
-
-          //       ids.filter (id => {
-          //         console.log (id);
-          //         if (id !== $vmc.issueId || id === '') {
-          //           resp.addUnique ("issueId", $vmc.issueId);
-          //           resp.save ();
-          //         }
-          //       });
-          //     })
-              .then (() => {
-                $vmc.showLabel ()
-              });
-          // })
-
-        // query = new Parse.Query (Label);
         // query.get (labelId)
-        //   .then ((resp) => {
-        //     let ids = resp.get ('issueId');
-        //     console.log (ids);
-
-        //     ids.filter (id => {
-        //       if (id !== $vmc.issueId) {
-        //         console.log (resp);
-        //         console.log (ids);
-        //         console.log ('qq');
-        //         resp.addUnique ("issueId", $vmc.issueId);
-        //         resp.save ();
-        //       }
-        //     });
+        //   .then (resp => {
+        //     resp.addUnique ("issueId", $vmc.issueId);
+        //     resp.save ();
+            
         //   })
         //   .then (() => {
         //     $vmc.showLabel ()
         //   });
-
-          //   if (ids) {
-          //     console.log ('qq');
-          //   } else {
-          //     resp.addUnique ("issueId", $vmc.issueId);
-          //     resp.save ();
-          //   }
-          // })
-          // .then (() => $vmc.showLabel ());
+          
       },
 
 
-      removeLabel (labelId) {
-        let $vmc = this;
+      // removeLabel (labelId) {
+      //   let $vmc = this;
 
-        let Label = Parse.Object.extend ("Label");
-        let query = new Parse.Query (Label);
+      //   let Label = Parse.Object.extend ("Label");
+      //   let query = new Parse.Query (Label);
       
-        query.get (labelId)
-          .then (resp => {
-            resp.remove ("issueId", $vmc.issueId);
-            resp.save ();
+      //   query.get (labelId)
+      //     .then (resp => {
+      //       resp.remove ("issueId", $vmc.issueId);
+      //       resp.save ();
             
-          })
-          .then (() => {
-            $vmc.showLabel ();
-          })
-      },
+      //     })
+      //     .then (() => {
+      //       $vmc.showLabel ();
+      //     })
+      // },
     },
+
+
+    // beforeRouteLeave (to, from, next) {
+    //   let $vmc = this;
+    //   // let id = $vmc.issueId;
+    //   // console.log (id);
+    //   // console.log ($vmc.labels);
+    //   let Label = Parse.Object.extend ("Label");
+    //   let query = new Parse.Query (Label);
+    //   let ary = [];
+    
+    //   for (let i = 0; i < $vmc.labels.length; i ++) {
+    //     query.get ($vmc.labels[i].labelId)
+    //       .then ((resp) => {
+    //         console.log (resp);
+    //         // console.log ($vmc.issueId);
+    //         // resp.addUnique ("issueId", $vmc.issueId);
+    //         // console.log ($vmc.issueId);
+    //         // resp.save ();
+    //       })
+        
+    //     // console.log (ary);
+    //   }
+
+    //   // .then (() => {
+    //   //       console.log ('kk');
+    //   //       next ();
+    //   //     })
+      
+    //   // query.get ()
+    //   //   .then (resp => {
+    //   //     resp.addUnique ("issueId", $vmc.issueId);
+    //   //     resp.save ();
+    //   //   });
+      
+    // },
 
 
     watch: {

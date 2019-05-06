@@ -55,7 +55,7 @@
 
 
       orgId () {
-        console.log (this.$route.params.orgId);
+        // console.log (this.$route.params.orgId);
         return this.$route.params.orgId;
       }
     },
@@ -76,7 +76,7 @@
       showOrgName () {
         let $vmc = this;
         let id = $vmc.$route.params.orgId;
-        console.log (id);
+        // console.log (id);
 
         const Org = Parse.Object.extend ("Organization");
         let query = new Parse.Query (Org);

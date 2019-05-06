@@ -94,7 +94,7 @@
     mounted () {
       let $vmc = this;
 
-      console.log ('project mounted');
+      // console.log ('project mounted');
 
       $vmc.showProName ();
       $vmc.showIssueName ();
@@ -107,7 +107,7 @@
       showProName () {
         let $vmc = this;
         let id = $vmc.$route.params.proId;
-        console.log (id);
+        // console.log (id);
 
         const Pro = Parse.Object.extend ("Project");
         let query = new Parse.Query (Pro);
