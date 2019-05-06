@@ -1,40 +1,56 @@
 <template>
   <div class="container my-4">
+
+    <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
+      <template v-for="label in labels">
+        <span class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
+      </template>
+    <hr />
+    <!-- <div class="d-flex flex-row bd-highlight">
+      <span v-for="l in label" class="py-2 px-3 mx-1 badge badge-primary">{{ l }}</span>
+    </div>
+    <div>{{ label }}</div> -->
+    
     <div class="row">
+      <hr />
+        <div class="col-9">
 
-      <div class="col-8">
-        <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
-        <!-- <div class="d-flex flex-row bd-highlight">
-          <span v-for="l in label" class="py-2 px-3 mx-1 badge badge-primary">{{ l }}</span>
+          <!-- <div class="mt-5 card text-left"> -->
+            <!-- <h4 class="card-body py-5"> -->
+          <p class="text-left mt-4 mb-0">
+            Commented by <span class="font-weight-bold">{{ creator }}</span>
+          </p>
+
+          <p v-if="content.length === 0" class="p-4 border border-success text-left font-italic font-weight-lighter">No description provided.</p>
+
+          <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown>
+
+              <!-- {{ content }} -->
+            <!-- </h4> -->
+          <!-- </div> -->
+          <template v-for="comment in comments">
+            <p class="text-left mt-4 mb-0">
+              Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+            </p>
+
+            <!-- <div class="card-body"> -->
+              <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+              <!-- {{ comment.content }} -->
+            <!-- </div> -->
+          </template>
+
+          <form class="mx-auto my-5">
+            <div class="form-group text-left">
+              <label @keyup.enter="addComment" for="content">Comment</label>
+              <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
+            </div>
+            <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
+            <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
+          </form>
         </div>
-        <div>{{ label }}</div> -->
-        <template v-for="label in labels">
-          <span class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
-        </template>
+      
 
-        <div class="mt-5 card text-left">
-          <h4 class="card-body py-5">
-            {{ content }}
-          </h4>
-        </div>
-
-        <div v-for="comment in comments" class="card text-left">
-          <div class="card-body">
-            {{ comment.content }} - Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
-          </div>
-        </div>
-
-        <form class="col-8 mx-auto my-5">
-          <div class="form-group text-left">
-            <label @keyup.enter="addComment" for="content">Comment</label>
-            <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
-          </div>
-          <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
-          <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
-        </form>
-      </div>
-
-      <div class="col-4">
+      <div class="col-3">
 
         <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-success">{{ label.title }}, {{ label.added }}</button> <br />
         <!-- <button v-for="label in labels" @click="removeLabel (label.labelId)" class="my-3 d-block btn btn-danger">{{ label.title }}</button> <br /> -->
@@ -51,12 +67,18 @@
 
 <script>
   import Parse from "parse";
+  import VueMarkdown from "vue-markdown";
 
 
   export default {
     
 
     name: 'issue',
+
+
+    components: {
+      VueMarkdown,
+    },
 
 
     data () {

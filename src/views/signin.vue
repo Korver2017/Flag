@@ -3,14 +3,14 @@
 
     <div v-if="authed === false" class="container mx-auto col-3 my-4">
 
-      <vue-markdown class="text-left"># Email **This is bold text**</vue-markdown>
+      <p class="text-left">Email</p>
 
-      <input @keyup.enter="signin" v-model="email" type="text" class="form-control" placeholder="User name" aria-describedby="button-addon2" autofocus>
+      <input @keyup.enter="signin" v-model="email" type="email" class="form-control" placeholder="User name" aria-describedby="button-addon2" autofocus>
 
       <br />
 
       <p class="text-left">Password</p>
-      <input @keyup.enter="signin" v-model="password" type="text" class="form-control" placeholder="Password" aria-describedby="button-addon2">
+      <input @keyup.enter="signin" v-model="password" type="" class="form-control" placeholder="Password" aria-describedby="button-addon2">
 
       <button @click="signin" class="btn btn-success my-5">Sign in</button>
 
@@ -26,7 +26,6 @@
   // import Parse from "parse";
 
   import {mapState, mapActions} from 'vuex';
-  import VueMarkdown from "vue-markdown";
 
   export default {
 
@@ -35,7 +34,6 @@
 
 
     components: {
-      VueMarkdown,
     },
 
 

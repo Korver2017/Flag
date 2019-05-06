@@ -11,7 +11,7 @@
         </div>
         <div class="form-group text-left">
           <label @keyup.enter="submitIssue" for="content">Issue content</label>
-          <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="3"></textarea>
+          <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
         </div>
         <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Add Issue</button>
         <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
@@ -30,8 +30,9 @@
     </div>
 
     <div v-else class="card text-left">
-      <h4 class="card-body py-5">
-        尚無 Issue
+      <h4 class="card-body py-5 font-italic font-weight-lighter">
+        There aren’t any open issues.
+        No description provided.
       </h4>
     </div>
 
@@ -47,6 +48,10 @@
     
 
     name: 'project',
+
+
+    components: {
+    },
 
 
     data () {
