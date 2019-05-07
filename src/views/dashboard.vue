@@ -3,26 +3,30 @@
     <h1>Dashboard Component</h1>
 
     <template v-if="user.authed">
-      <img v-if="url.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + url" alt="">
+      <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
       <h2 class="nav-item nav-link align-right">Hi, {{ username }}!</h2>
       <h5>Welcome to Flag</h5>
 
-      <div v-if="orgs.length !== 0" class="container mx-auto">
-        <h5 class="text-left">My Organization</h5>
+      <div class="container my-5">
         <div class="row">
-          <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="list-group-item list-group-item-action btn btn-success col-2" active-class="active">
-            {{ org.name }}
-          </router-link>
-        </div>
-
-        <form class="col-8 mx-auto my-5">
-          <div class="form-group text-left">
-            <label @keyup.enter="addOrganization" for="name">Add organization</label>
-            <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
+          <div v-if="orgs.length !== 0" class="col-8 mx-auto">
+            <h5 class="text-left">My Organization</h5>
+              <div class="row">
+              <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                {{ org.name }}
+              </router-link>
+              </div>
           </div>
-          <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
-        </form>
 
+          <form class="col-4 mx-auto">
+            <div class="form-group text-left">
+              <label @keyup.enter="addOrganization" for="name">Add organization</label>
+              <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
+            </div>
+            <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
+          </form>
+
+        </div>
       </div>
     
     </template>
@@ -35,7 +39,6 @@
 
   // Import
   import Parse from "parse";
-  import VueMarkdown from "vue-markdown";
 
 
   export default {
@@ -50,7 +53,6 @@
      *
      */
     components: {
-      VueMarkdown,
     },
 
 
@@ -59,7 +61,7 @@
         username: '',
         orgName: '',
         orgs: [],
-        url: '',
+        avatarHash: '',
       }
     },
 
@@ -148,7 +150,7 @@
         let query = new Parse.Query (Account);
         query.get ($vmc.user.id)
           .then (resp => {
-            $vmc.url = $vmc.$md5 (resp.get ('email'));
+            $vmc.avatarHash = $vmc.$md5 (resp.get ('email'));
             $vmc.username = resp.get ('username');
         });
       },
