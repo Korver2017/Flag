@@ -202,7 +202,7 @@
         let Label = Parse.Object.extend ("Label");
         let query = new Parse.Query (Label);
         let ary = [];
-        query.notEqualTo ("title", "qq");
+        query.notEqualTo ("title", "");
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i++) {
@@ -212,6 +212,25 @@
               obj.title = object.get ('title');
               obj.added = false;
               ary.push (obj);
+
+              // let Label = Parse.Object.extend ("Label");
+              let arry = [];
+              let query = new Parse.Query (Label);
+              query.equalTo ('issueId', $vmc.issueId);
+              query.find ()
+                .then (resp => {
+                  for (let i = 0; i < resp.length; i ++) {
+                    let obj = {};
+                    let object = resp[i];
+                    for (let i = 0; i < $vmc.labels.length; i ++) {
+                      if ($vmc.labels[i].labelId === object.id) {
+                        $vmc.labels[i].added = true;
+                        arry.push ($vmc.labels[i]);
+                      }
+                    }
+                  }
+                })
+              $vmc.label = arry;
             }
           });
         $vmc.labels = ary;
@@ -219,27 +238,27 @@
 
 
       showLabel () {
-        let $vmc = this;
-        let ary = [];
-        let Label = Parse.Object.extend ("Label");
-        let query = new Parse.Query (Label);
-        query.equalTo ('issueId', $vmc.issueId);
-        query.find ()
-          .then (resp => {
-            for (let i = 0; i < resp.length; i ++) {
-              let obj = {};
-              let object = resp[i];
-              for (let i = 0; i < $vmc.labels.length; i ++) {
-                if ($vmc.labels[i].labelId === object.id) {
-                  $vmc.labels[i].added = true;
-                  ary.push ($vmc.labels[i]);
-                }
-              }
-            }
-          })
+        // let $vmc = this;
+        // let ary = [];
+        // let Label = Parse.Object.extend ("Label");
+        // let query = new Parse.Query (Label);
+        // query.equalTo ('issueId', $vmc.issueId);
+        // query.find ()
+        //   .then (resp => {
+        //     for (let i = 0; i < resp.length; i ++) {
+        //       let obj = {};
+        //       let object = resp[i];
+        //       for (let i = 0; i < $vmc.labels.length; i ++) {
+        //         if ($vmc.labels[i].labelId === object.id) {
+        //           $vmc.labels[i].added = true;
+        //           ary.push ($vmc.labels[i]);
+        //         }
+        //       }
+        //     }
+        //   })
 
 
-        $vmc.label = ary;
+        // $vmc.label = ary;
       },
 
 
