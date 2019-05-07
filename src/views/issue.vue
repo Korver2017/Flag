@@ -1,55 +1,62 @@
 <template>
   <div class="container my-4">
 
-    <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
-      <template v-for="label in labels">
-        <span class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
-      </template>
-    <hr />
-    <!-- <div class="d-flex flex-row bd-highlight">
-      <span v-for="l in label" class="py-2 px-3 mx-1 badge badge-primary">{{ l }}</span>
-    </div>
-    <div>{{ label }}</div> -->
+      <div class="row" v-if="editTitle === false">
+        <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
+        <button class="btn btn-success ml-5" @click="editTitle = true">Edit Title</button>
+      </div>
+
+      <div v-else class="row">
+
+        <input @keyup.enter="changeTitle" v-model="stashTitle" type="text" class="col-6 form-control" placeholder="New Title" aria-label="New Title" aria-describedby="button-addon2">
+
+        <button @click="changeTitle" class="ml-3 btn btn-success" type="button" id="button-addon2">Submit</button>
+        <button @click="cancelChange" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
+        
+      </div>
     
     <div class="row">
-      <hr />
-        <div class="col-9">
+      <span v-for="label in labels" class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
+    </div>
+    <hr />
+    
+    <div class="row">
 
-          <!-- <div class="mt-5 card text-left"> -->
-            <!-- <h4 class="card-body py-5"> -->
+      <div class="col-9">
+
+        <p class="text-left mt-4 mb-0">
+          Commented by <span class="font-weight-bold">{{ creator }}</span>
+        </p>
+
+        <p v-if="content.length === 0" class="p-4 border border-success text-left font-italic font-weight-lighter">No description provided.</p>
+
+        <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown>
+
+        <template v-for="comment in comments">
+
           <p class="text-left mt-4 mb-0">
-            Commented by <span class="font-weight-bold">{{ creator }}</span>
+            Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
           </p>
 
-          <p v-if="content.length === 0" class="p-4 border border-success text-left font-italic font-weight-lighter">No description provided.</p>
+          <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+          
+        </template>
 
-          <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown>
-
-          <template v-for="comment in comments">
-
-            <p class="text-left mt-4 mb-0">
-              Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
-            </p>
-
-            <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
-            
-          </template>
-
-          <form class="mx-auto my-5">
-            <div class="form-group text-left">
-              <label @keyup.enter="addComment" for="content">Comment</label>
-              <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
-            </div>
-            <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
-            <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
-          </form>
-        </div>
-      
+        <form class="mx-auto my-5">
+          <div class="form-group text-left">
+            <label @keyup.enter="addComment" for="content">Comment</label>
+            <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
+          </div>
+          <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
+        </form>
+        
+      </div>
+    
 
       <div class="col-3">
-
         <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-success">{{ label.title }}, {{ label.added }}</button>
       </div>
+      
     </div>
 
   </div>
@@ -77,6 +84,8 @@
       return {
         content: '',
         title: '',
+        editTitle: false,
+        stashTitle: '',
         creator: '',
         commentor: '',
         comments: [],
@@ -113,7 +122,7 @@
     computed: {
       issueId () {
         return this.$route.params.issueId; 
-      }
+      },
     },
 
 
@@ -124,9 +133,6 @@
       $vmc.allLabel ();
       $vmc.showLabel ();
 
-      console.log ($vmc.issueId);
-
-      // console.log ($vmc.labels);
     },
 
 
@@ -135,34 +141,34 @@
       
       showComment () {
 
-      let $vmc = this;
-      let ary = [];
+        let $vmc = this;
+        let ary = [];
 
-      const Issue = Parse.Object.extend ("Issue");
-      let query = new Parse.Query (Issue);
-      query.get ($vmc.issueId)
-        .then (resp => {
-          $vmc.content = resp.get ('content');
-          $vmc.title = resp.get ('name');
-          $vmc.creator = resp.get ('creator');
-        })
-        .then (() => {
-          const Comment = Parse.Object.extend ("Comment");
-          let query = new Parse.Query (Comment);
-          query.equalTo ('issueId', $vmc.issueId);
-          query.find ()
-            .then (resp => {
-              for (let i = 0; i < resp.length; i ++) {
-                let obj = {};
-                let object = resp[i];
-                obj.content = object.get ('content');
-                obj.commentor = object.get ('commentor');
-                ary.push (obj);
-              }
-              $vmc.comments = ary;
-            });
+        const Issue = Parse.Object.extend ("Issue");
+        let query = new Parse.Query (Issue);
+        query.get ($vmc.issueId)
+          .then (resp => {
+            $vmc.content = resp.get ('content');
+            $vmc.title = resp.get ('name');
+            $vmc.creator = resp.get ('creator');
+          })
+          .then (() => {
+            const Comment = Parse.Object.extend ("Comment");
+            let query = new Parse.Query (Comment);
+            query.equalTo ('issueId', $vmc.issueId);
+            query.find ()
+              .then (resp => {
+                for (let i = 0; i < resp.length; i ++) {
+                  let obj = {};
+                  let object = resp[i];
+                  obj.content = object.get ('content');
+                  obj.commentor = object.get ('commentor');
+                  ary.push (obj);
+                }
+                $vmc.comments = ary;
+              });
 
-        });
+          });
       },
 
       
@@ -209,7 +215,6 @@
             }
           });
         $vmc.labels = ary;
-        // console.log ($vmc.labels);
       },
 
 
@@ -224,15 +229,6 @@
             for (let i = 0; i < resp.length; i ++) {
               let obj = {};
               let object = resp[i];
-              // console.log (object.id);
-              // $vmc.labels.labelId = object.id;
-              // $vmc.labels.title
-
-              
-              // obj.labelId = object.id;
-              // obj.title = object.get ('title');
-              // console.log ($vmc.labels);
-              // obj.added = true;
               for (let i = 0; i < $vmc.labels.length; i ++) {
                 if ($vmc.labels[i].labelId === object.id) {
                   $vmc.labels[i].added = true;
@@ -251,25 +247,21 @@
         let $vmc = this;
         
         $vmc.labels[index].added = !$vmc.labels[index].added;
-        console.log ($vmc.labels[index].added);
 
         if ($vmc.labels[index].added === true) {
-          console.log ('true');
           let Label = Parse.Object.extend ("Label");
           let query = new Parse.Query (Label);
         
           query.get (labelId)
             .then (resp => {
-              resp.addUnique ("issueId", $vmc.issueId);
+              resp.addUnique ('issueId', $vmc.issueId);
               resp.save ()
                 .then (() => {
                   $vmc.showLabel ();
                 });
               
             })
-        }
-        else  {
-          console.log ('false');
+        } else {
           let Label = Parse.Object.extend ("Label");
           let query = new Parse.Query (Label);
           query.get (labelId)
@@ -283,80 +275,37 @@
             })
             
         }
-        
-        // console.log ($vmc.labels);
-        
-
-
-        // let Label = Parse.Object.extend ("Label");
-        // let query = new Parse.Query (Label);
-      
-        // query.get (labelId)
-        //   .then (resp => {
-        //     resp.addUnique ("issueId", $vmc.issueId);
-        //     resp.save ();
-            
-        //   })
-        //   .then (() => {
-        //     $vmc.showLabel ()
-        //   });
           
       },
 
 
-      // removeLabel (labelId) {
-      //   let $vmc = this;
+      changeTitle () {
+        let $vmc = this;
+        $vmc.title = $vmc.stashTitle;
+        $vmc.editTitle = false;
 
-      //   let Label = Parse.Object.extend ("Label");
-      //   let query = new Parse.Query (Label);
-      
-      //   query.get (labelId)
-      //     .then (resp => {
-      //       resp.remove ("issueId", $vmc.issueId);
-      //       resp.save ();
-            
-      //     })
-      //     .then (() => {
-      //       $vmc.showLabel ();
-      //     })
-      // },
-    },
-
-
-    // beforeRouteLeave (to, from, next) {
-    //   let $vmc = this;
-    //   // let id = $vmc.issueId;
-    //   // console.log (id);
-    //   // console.log ($vmc.labels);
-    //   let Label = Parse.Object.extend ("Label");
-    //   let query = new Parse.Query (Label);
-    //   let ary = [];
-    
-    //   for (let i = 0; i < $vmc.labels.length; i ++) {
-    //     query.get ($vmc.labels[i].labelId)
-    //       .then ((resp) => {
-    //         console.log (resp);
-    //         // console.log ($vmc.issueId);
-    //         // resp.addUnique ("issueId", $vmc.issueId);
-    //         // console.log ($vmc.issueId);
-    //         // resp.save ();
-    //       })
+        let Issue = Parse.Object.extend ("Issue");
+        let query = new Parse.Query (Issue);
         
-    //     // console.log (ary);
-    //   }
+        query.get ($vmc.issueId)
+        .then (resp => {
+          resp.set ('name', $vmc.title);
+          return resp.save();
+          // The object was retrieved successfully.
+        }, (error) => {
+          // The object was not retrieved successfully.
+          // error is a Parse.Error with an error code and message.
+        });
+      },
 
-    //   // .then (() => {
-    //   //       console.log ('kk');
-    //   //       next ();
-    //   //     })
+
+      cancelChange () {
+        let $vmc = this;
+        $vmc.stashTitle = '';
+        $vmc.editTitle = false;
+      },
       
-    //   // query.get ()
-    //   //   .then (resp => {
-    //   //     resp.addUnique ("issueId", $vmc.issueId);
-    //   //     resp.save ();
-    //   //   });
-      
-    // },
+    },
 
 
     watch: {
