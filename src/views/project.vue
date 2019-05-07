@@ -24,7 +24,9 @@
     <div class="list-group" v-if="issues.length >= 1">
 
       <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
-        {{ issue.name }} - Created by <span class="font-weight-bold">{{ issue.creator }}</span>
+        {{ issue.name }} - Created by <span class="font-weight-bold mr-3">{{ issue.creator }}</span>
+
+        <span v-for="label in labels" class="py-2 px-3 mx-1 badge badge-primary">{{ label }}</span>
       </router-link>
       
     </div>
@@ -62,6 +64,7 @@
         title: '',
         content: '',
         username: this.$store.state.user.username,
+        labels: [],
       }
     },
 
@@ -137,10 +140,51 @@
             obj.issueId = object.id;
             obj.creator = object.get ('creator');
             ary.push (obj);
+
+            let arry = [];
+            let Label = Parse.Object.extend ("Label");
+            let query = new Parse.Query (Label);
+            query.equalTo ('issueId', object.id);
+            query.find ()
+              .then (resp => {
+                for (let i = 0; i < resp.length; i ++) {
+                  let object = resp[i];
+                  arry.push (object.get ('title'));
+                  console.log ($vmc.labels);
+                }
+              })
+            $vmc.labels = arry;
           }
         })
         $vmc.issues = ary;
       },
+
+
+      showLabel () {
+        
+        // let $vmc = this;
+        // let ary = [];
+        // let Label = Parse.Object.extend ("Label");
+        // let query = new Parse.Query (Label);
+        // query.equalTo ('issueId', $vmc.issueId);
+        // query.find ()
+        //   .then (resp => {
+        //     for (let i = 0; i < resp.length; i ++) {
+        //       let obj = {};
+        //       let object = resp[i];
+        //       for (let i = 0; i < $vmc.labels.length; i ++) {
+        //         if ($vmc.labels[i].labelId === object.id) {
+        //           $vmc.labels[i].added = true;
+        //           ary.push ($vmc.labels[i]);
+        //         }
+        //       }
+        //     }
+        //   })
+
+
+        // $vmc.label = ary;
+      },
+      
 
       addIssue () {
         this.adding = true;
