@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Dashboard Component</h1>
 
     <template v-if="user.authed">
       <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
@@ -172,7 +171,7 @@
         org.set ('name', $vmc.orgName);
         org.set ('memberId', [$vmc.$store.state.user.input.userId]);
 
-        org.save()
+        org.save ()
           .then((org) => {
             // Execute any logic that should take place after the object is saved.
             $vmc.orgName = '';
@@ -189,7 +188,6 @@
 
     watch: {
       user () {
-
         this.showOrg ();
         this.showUsername ();
       },

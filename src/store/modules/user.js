@@ -58,7 +58,6 @@ export default {
       // console.log (data);
 
       if (state.authed === true) {
-        console.log ('kk');
         state.authed = false;
         state.username = '';
       } else {

@@ -109,8 +109,6 @@
 
         $vmc.$store.dispatch ('user/signin');
         $vmc.$router.push ({ path: '/dashboard' })
-        console.log ('kk');
-        // $vmc.$router.push ({ path: '/dashboard' })
       },
     },
   }
