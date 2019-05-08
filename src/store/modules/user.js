@@ -154,7 +154,6 @@ export default {
         let query = new Parse.Query(Account);
 
         query.equalTo("email", state.input.email);
-        // console.log(state.input.email);
         query.find()
           .then(resp => {
 
@@ -188,7 +187,7 @@ export default {
                     commit('authed', data);
                   });
 
-                alert(`${state.input.email} authed success!`);
+                // alert(`${state.input.email} authed success!`);
               });
 
             // commit('authed');

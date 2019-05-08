@@ -144,7 +144,6 @@
             let Label = Parse.Object.extend ('Label');
             let query = new Parse.Query (Label);
             query.equalTo ('issueId', object.id);
-            console.log (object.id);
             query.find ()
               .then (resp => {
                 for (let i = 0; i < resp.length; i ++) {
