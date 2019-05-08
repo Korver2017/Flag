@@ -57,6 +57,11 @@
     created () {
 
 
+      if (this.$store.state.user.authed === false) {
+        this.$router.push ({ path: '/signin' })
+      }
+
+
       /**
        *
        * Add User

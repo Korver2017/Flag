@@ -2,6 +2,7 @@
   <div>
 
     <template v-if="user.authed">
+      
       <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
       <h2 class="nav-item nav-link align-right">Hi, {{ username }}!</h2>
       <h5>Welcome to Flag</h5>
@@ -20,7 +21,7 @@
           <form class="col-4 mx-auto">
             <div class="form-group text-left">
               <label @keyup.enter="addOrganization" for="name">Add organization</label>
-              <input v-model="orgName" class="form-control" placeholder="Organization name" id="name">
+              <input v-model.trim="orgName" class="form-control" placeholder="Organization name" id="name">
             </div>
             <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
           </form>
@@ -71,25 +72,6 @@
       if (this.$store.state.user.authed === false) {
         this.$router.push ({ path: '/signin' })
       }
-
-      // Add user
-
-      // let Account = Parse.Object.extend ("Account");
-      // let account = new Account ();
-
-      // account.set ('username', 'k');
-      // account.set ('password', 'k123456');
-      // account.set ('email', 'k@protype.tw');
-
-      // account.save()
-      //   .then((account) => {
-      //     alert('New object created with objectId: ' + account.id);
-      //   }, (error) => {
-      //     // Execute any logic that should take place if the save fails.
-      //     // error is a Parse.Error with an error code and message.
-      //     alert('Failed to create new object, with error code: ' + error.message);
-      //   });
-
     },
 
 
@@ -116,10 +98,23 @@
     },
 
 
+
+    /**
+     *
+     * Methods
+     *
+     */
     methods: {
+
+
+      /**
+       *
+       * Display Organization
+       *
+       */
       showOrg () {
         let $vmc = this;
-        let Org = Parse.Object.extend ("Organization");
+        let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
         query.equalTo ('memberId', $vmc.user.id);
@@ -142,6 +137,11 @@
       },
 
 
+      /**
+       *
+       * Display Username
+       *
+       */
       showUsername () {
         let $vmc = this;
         let ary = [];
@@ -164,19 +164,23 @@
 
       addOrganization () {
         let $vmc = this;
+
+        if ($vmc.orgName === '') {
+          alert ('組織名稱不可空白');
+          return;
+        }
         
-        let Org = Parse.Object.extend ("Organization");
-        let org = new Org ();
+        let Org = Parse.Object.extend ('Organization')
+          , org = new Org ();
 
         org.set ('name', $vmc.orgName);
         org.set ('memberId', [$vmc.$store.state.user.input.userId]);
 
         org.save ()
-          .then((org) => {
+          .then(resp => {
             // Execute any logic that should take place after the object is saved.
             $vmc.orgName = '';
             $vmc.showOrg ();
-            alert('New object created with objectId: ' + org.id);
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.

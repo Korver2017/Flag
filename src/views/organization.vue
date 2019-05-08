@@ -12,7 +12,6 @@
     <div v-for="project in projects" class="list-group-flush">
       <router-link class="py-4 text-left list-group-item list-group-item-action" :to="{ name: 'project', params: { proId: project.proId }}" tag="button" active-class="active">
          <h5>{{ project.name }}</h5>
-          <!-- <h4>{{ project.proId }}</h4> -->
       </router-link>
     </div>
 
@@ -34,7 +33,6 @@
         orgName: '',
         projectName: '',
         projects: [],
-        // title: this.$route.params.orgId,
       }
     },
 
@@ -43,7 +41,6 @@
 
 
       orgId () {
-        // console.log (this.$route.params.orgId);
         return this.$route.params.orgId;
       }
     },
@@ -64,9 +61,8 @@
       showOrgName () {
         let $vmc = this;
         let id = $vmc.$route.params.orgId;
-        // console.log (id);
 
-        const Org = Parse.Object.extend ("Organization");
+        let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         query.get (id)
           .then (resp => {
@@ -79,10 +75,10 @@
       showProject () {
         let $vmc = this;
 
-        const Project = Parse.Object.extend ("Project");
+        let Project = Parse.Object.extend ('Project');
         let query = new Parse.Query (Project);
 
-        query.equalTo ("orgId", $vmc.orgId);
+        query.equalTo ('orgId', $vmc.orgId);
         let proName = [];
         let proId = [];
         let obj = {};
@@ -97,8 +93,6 @@
             data.proId = object.id;
 
             ary.push (data);
-
-            // console.log (ary);
           }
           
           $vmc.projects = ary;
@@ -109,20 +103,19 @@
       newProject () {
         let $vmc = this;
 
-        let Pro = Parse.Object.extend ("Project");
-        var Org = Parse.Object.extend ("Organization");
+        let Pro = Parse.Object.extend ('Project');
+        var Org = Parse.Object.extend ('Organization');
         var org = new Org ();
         let pro = new Pro ();
 
         pro.set ('name', $vmc.projectName);
         pro.set ('orgId', [$vmc.orgId]);
 
-        pro.save()
-          .then((pro) => {
+        pro.save ()
+          .then (resp => {
             $vmc.projects.push ($vmc.projectName);
             $vmc.showProject ();
             // Execute any logic that should take place after the object is saved.
-            alert('New object created with objectId: ' + pro.orgId);
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.

@@ -6,12 +6,12 @@
 
       <form class="col-8 mx-auto my-5">
         <div class="form-group text-left">
-          <label @keyup.enter="submitIssue" for="title">Issue title</label>
-          <input v-model="title" class="form-control" placeholder="Issue title" id="title">
+          <label @keyup.enter="submitIssue" for="title">Issue Title</label>
+          <input v-model.trim="title" class="form-control" placeholder="Issue Title" id="title">
         </div>
         <div class="form-group text-left">
-          <label @keyup.enter="submitIssue" for="content">Issue content</label>
-          <textarea v-model="content" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
+          <label @keyup.enter="submitIssue" for="content">Issue Content</label>
+          <textarea v-model="content" placeholder="Issue Content" class="form-control" id="content" rows="10"></textarea>
         </div>
         <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Add Issue</button>
         <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
@@ -26,7 +26,7 @@
       <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
         {{ issue.name }} - Created by <span class="font-weight-bold mr-3">{{ issue.creator }}</span>
 
-        <span v-for="label in labels" class="py-2 px-3 mx-1 badge badge-primary">{{ label }}</span>
+        <span v-for="label in issue.labels" class="py-2 px-3 mx-1 badge badge-primary">{{ label }}</span>
       </router-link>
       
     </div>
@@ -132,28 +132,29 @@
         let query = new Parse.Query (Issue);
         query.equalTo ("proId", $vmc.proId);
         let ary = [];
-        query.find().then (resp => {
+        query.find ().then (resp => {
           for (let i = 0; i < resp.length; i++) {
             let obj = {};
             let object = resp[i];
             obj.name = object.get ('name');
             obj.issueId = object.id;
             obj.creator = object.get ('creator');
-            ary.push (obj);
 
             let arry = [];
-            let Label = Parse.Object.extend ("Label");
+            let Label = Parse.Object.extend ('Label');
             let query = new Parse.Query (Label);
             query.equalTo ('issueId', object.id);
+            console.log (object.id);
             query.find ()
               .then (resp => {
                 for (let i = 0; i < resp.length; i ++) {
                   let object = resp[i];
                   arry.push (object.get ('title'));
-                  console.log ($vmc.labels);
                 }
-              })
-            $vmc.labels = arry;
+              });
+            obj.labels = arry;
+            ary.push (obj);
+            // $vmc.labels = arry;
           }
         })
         $vmc.issues = ary;

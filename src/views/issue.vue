@@ -3,7 +3,7 @@
 
       <div class="row" v-if="editTitle === false">
         <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
-        <button class="btn btn-success ml-5" @click="editTitle = true">Edit Title</button>
+        <button class="btn btn-warning ml-5" @click="editTitle = true">Edit Title</button>
       </div>
 
       <div v-else class="row">
@@ -30,14 +30,14 @@
             Commented by <span class="font-weight-bold">{{ creator }}</span>
           </p>
 
-          <button v-if="editing === false" class="ml-auto mr-5 btn btn-success" @click="editComment">Edit</button>
+          <button v-if="editing === false" class="ml-auto mr-5 btn btn-warning" @click="editComment">Edit</button>
         </div>
 
         <form v-if="editing === true" class="mx-auto my-5">
 
           <div class="form-group text-left">
             <label @keyup.enter="newContent" for="stashComment">Comment</label>
-            <textarea v-model="stashComment" placeholder="Issue Content" class="form-control" id="stashComment" rows="10"></textarea>
+            <textarea v-model="stashComment" placeholder="Comment Here" class="form-control" id="stashComment" rows="10"></textarea>
           </div>
 
           <button @click.prevent="newContent" class="mx-3 btn btn-success">Submit</button>
@@ -45,26 +45,27 @@
 
         </form>
 
-        <!-- <p v-if="content.length === 0" class="p-4 border border-success text-left font-italic font-weight-lighter">No description provided.</p>
-
-        <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown> -->
-
-        <!-- <template v-for="comment in comments"> -->
-
-          <p class="text-left mt-4 mb-0">
-            Commented by <span class="font-weight-bold">{{ commentor }}</span>
-          </p>
-
-          <vue-markdown class="p-4 border border-success text-left" :source="content"></vue-markdown>
-
           
-        <!-- </template> -->
+
+        <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
+        <p v-else class="p-4 border border-success text-left font-italic">No description provided.</p>
+
+
+        <div class="mt-5" v-for="comment in comments">
+        
+          <p class="text-left mb-0">
+            Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+          </p>
+          <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+        </div>
+
+
 
         <form class="mx-auto my-5">
 
           <div class="form-group text-left">
-            <label @keyup.enter="addComment" for="content">Comment</label>
-            <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
+            <label for="content">New Comment</label>
+            <textarea v-model="commentText" placeholder="Comment Here" class="form-control" id="content" rows="10"></textarea>
           </div>
           <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
 
@@ -74,7 +75,7 @@
     
 
       <div class="col-3">
-        <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-success">{{ label.title }}, {{ label.added }}</button>
+        <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-primary">{{ label.title }}</button>
       </div>
       
     </div>
@@ -149,11 +150,10 @@
 
 
     mounted () {
-      let $vmc = this;
 
-      $vmc.showComment ();
-      $vmc.allLabel ();
-      $vmc.showLabel ();
+      this.showIssueInfo ();
+      this.allLabel ();
+      this.showComment ();
 
     },
 
@@ -161,7 +161,7 @@
     methods: {
 
       
-      showComment () {
+      showIssueInfo () {
 
         let $vmc = this;
         let ary = [];
@@ -170,35 +170,17 @@
         let query = new Parse.Query (Issue);
         query.get ($vmc.issueId)
           .then (resp => {
-            $vmc.content = resp.get ('content');
             $vmc.title = resp.get ('name');
             $vmc.creator = resp.get ('creator');
-          })
-          // .then (() => {
-          //   const Comment = Parse.Object.extend ('Comment');
-          //   let query = new Parse.Query (Comment);
-          //   query.equalTo ('issueId', $vmc.issueId);
-          //   query.find ()
-          //     .then (resp => {
-          //       for (let i = 0; i < resp.length; i ++) {
-          //         let obj = {};
-          //         let object = resp[i];
-          //         $vmc.content = object.get ('comment');
-          //         $vmc.commentor = object.get ('commentor');
-          //         // ary.push (obj);
-          //       }
-          //       // $vmc.comments = ary;
-          //     });
-
-          // });
+            $vmc.content = resp.get ('content');
+          });
+          
       },
 
       
       addComment () {
-
-        
         let $vmc = this;
-        let Comment = Parse.Object.extend ("Comment");
+        let Comment = Parse.Object.extend ('Comment');
         let comment = new Comment ();
 
         comment.set ('content', $vmc.commentText);
@@ -206,11 +188,9 @@
         comment.set ('commentor', $vmc.$store.state.user.username);
 
         comment.save ()
-          .then ((comment) => {
+          .then (resp => {
+            $vmc.commentText = '';
             $vmc.showComment ();
-            alert ('New object created with objectId: ' + comment.id);
-            $vmc.commentText = '';
-            $vmc.commentText = '';
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
@@ -235,7 +215,6 @@
               obj.added = false;
               ary.push (obj);
 
-              // let Label = Parse.Object.extend ("Label");
               let arry = [];
               let query = new Parse.Query (Label);
               query.equalTo ('issueId', $vmc.issueId);
@@ -259,28 +238,24 @@
       },
 
 
-      showLabel () {
-        // let $vmc = this;
-        // let ary = [];
-        // let Label = Parse.Object.extend ("Label");
-        // let query = new Parse.Query (Label);
-        // query.equalTo ('issueId', $vmc.issueId);
-        // query.find ()
-        //   .then (resp => {
-        //     for (let i = 0; i < resp.length; i ++) {
-        //       let obj = {};
-        //       let object = resp[i];
-        //       for (let i = 0; i < $vmc.labels.length; i ++) {
-        //         if ($vmc.labels[i].labelId === object.id) {
-        //           $vmc.labels[i].added = true;
-        //           ary.push ($vmc.labels[i]);
-        //         }
-        //       }
-        //     }
-        //   })
+      showComment () {
+        let $vmc = this;
+        let ary = [];
+        let Comment = Parse.Object.extend ('Comment');
+        let query = new Parse.Query (Comment);
+        query.equalTo ('issueId', $vmc.issueId);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+              obj.content = object.get ('content');
+              obj.commentor = object.get ('commentor');
+              ary.push (obj);
+            }
+          });
+          $vmc.comments = ary;
 
-
-        // $vmc.label = ary;
       },
 
 
@@ -296,25 +271,16 @@
           query.get (labelId)
             .then (resp => {
               resp.addUnique ('issueId', $vmc.issueId);
-              resp.save ()
-                .then (() => {
-                  $vmc.showLabel ();
-                });
-              
-            })
+              resp.save ();
+            });
         } else {
           let Label = Parse.Object.extend ("Label");
           let query = new Parse.Query (Label);
           query.get (labelId)
             .then (resp => {
               resp.remove ("issueId", $vmc.issueId);
-              resp.save ()
-                .then (() => {
-                  $vmc.showLabel ()
-                });
-              
-            })
-            
+              resp.save ();
+            });
         }
           
       },

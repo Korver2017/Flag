@@ -29,7 +29,6 @@
 
 
   // Import
-  // import Parse from "parse";
 
   import {mapState, mapActions} from 'vuex';
 
