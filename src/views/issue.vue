@@ -14,6 +14,7 @@
         <button @click="cancelChange" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
         
       </div>
+
     
     <div class="row">
       <span v-for="label in labels" class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
@@ -24,30 +25,49 @@
 
       <div class="col-9">
 
-        <p class="text-left mt-4 mb-0">
-          Commented by <span class="font-weight-bold">{{ creator }}</span>
-        </p>
-
-        <p v-if="content.length === 0" class="p-4 border border-success text-left font-italic font-weight-lighter">No description provided.</p>
-
-        <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown>
-
-        <template v-for="comment in comments">
-
-          <p class="text-left mt-4 mb-0">
-            Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+        <div class="row mb-3">
+          <p class="text-left mb-0">
+            Commented by <span class="font-weight-bold">{{ creator }}</span>
           </p>
 
-          <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+          <button v-if="editing === false" class="ml-auto mr-5 btn btn-success" @click="editComment">Edit</button>
+        </div>
+
+        <form v-if="editing === true" class="mx-auto my-5">
+
+          <div class="form-group text-left">
+            <label @keyup.enter="newContent" for="stashComment">Comment</label>
+            <textarea v-model="stashComment" placeholder="Issue Content" class="form-control" id="stashComment" rows="10"></textarea>
+          </div>
+
+          <button @click.prevent="newContent" class="mx-3 btn btn-success">Submit</button>
+          <button @click.prevent="cancelEdit" class="mx-3 btn btn-danger">Cancel</button>
+
+        </form>
+
+        <!-- <p v-if="content.length === 0" class="p-4 border border-success text-left font-italic font-weight-lighter">No description provided.</p>
+
+        <vue-markdown v-else class="p-4 border border-success text-left" :source="content"></vue-markdown> -->
+
+        <!-- <template v-for="comment in comments"> -->
+
+          <p class="text-left mt-4 mb-0">
+            Commented by <span class="font-weight-bold">{{ commentor }}</span>
+          </p>
+
+          <vue-markdown class="p-4 border border-success text-left" :source="content"></vue-markdown>
+
           
-        </template>
+        <!-- </template> -->
 
         <form class="mx-auto my-5">
+
           <div class="form-group text-left">
             <label @keyup.enter="addComment" for="content">Comment</label>
             <textarea v-model="commentText" placeholder="Issue content" class="form-control" id="content" rows="10"></textarea>
           </div>
           <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
+
         </form>
         
       </div>
@@ -92,6 +112,8 @@
         commentText: '',
         labels: [],
         label: [],
+        editing: false,
+        stashComment : '',
       }
     },
 
@@ -144,7 +166,7 @@
         let $vmc = this;
         let ary = [];
 
-        const Issue = Parse.Object.extend ("Issue");
+        let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
         query.get ($vmc.issueId)
           .then (resp => {
@@ -152,23 +174,23 @@
             $vmc.title = resp.get ('name');
             $vmc.creator = resp.get ('creator');
           })
-          .then (() => {
-            const Comment = Parse.Object.extend ("Comment");
-            let query = new Parse.Query (Comment);
-            query.equalTo ('issueId', $vmc.issueId);
-            query.find ()
-              .then (resp => {
-                for (let i = 0; i < resp.length; i ++) {
-                  let obj = {};
-                  let object = resp[i];
-                  obj.content = object.get ('content');
-                  obj.commentor = object.get ('commentor');
-                  ary.push (obj);
-                }
-                $vmc.comments = ary;
-              });
+          // .then (() => {
+          //   const Comment = Parse.Object.extend ('Comment');
+          //   let query = new Parse.Query (Comment);
+          //   query.equalTo ('issueId', $vmc.issueId);
+          //   query.find ()
+          //     .then (resp => {
+          //       for (let i = 0; i < resp.length; i ++) {
+          //         let obj = {};
+          //         let object = resp[i];
+          //         $vmc.content = object.get ('comment');
+          //         $vmc.commentor = object.get ('commentor');
+          //         // ary.push (obj);
+          //       }
+          //       // $vmc.comments = ary;
+          //     });
 
-          });
+          // });
       },
 
       
@@ -183,10 +205,10 @@
         comment.set ('issueId', $vmc.issueId);
         comment.set ('commentor', $vmc.$store.state.user.username);
 
-        comment.save()
-          .then((comment) => {
+        comment.save ()
+          .then ((comment) => {
             $vmc.showComment ();
-            alert('New object created with objectId: ' + comment.id);
+            alert ('New object created with objectId: ' + comment.id);
             $vmc.commentText = '';
             $vmc.commentText = '';
           }, (error) => {
@@ -323,6 +345,37 @@
         $vmc.stashTitle = '';
         $vmc.editTitle = false;
       },
+
+
+      editComment () {
+        let $vmc = this;
+        $vmc.editing = true;
+        $vmc.stashComment = $vmc.content;
+      },
+
+
+      newContent () {
+        let $vmc = this;
+        $vmc.content = $vmc.stashComment;
+
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+        query.get ($vmc.issueId)
+          .then (resp => {
+            resp.set ('content', $vmc.content);
+            return resp.save ();
+          })
+        
+
+        $vmc.editing = false;
+      },
+
+
+      cancelEdit () {
+        let $vmc = this;
+        $vmc.stashComment = $vmc.content;
+        $vmc.editing = false;
+      }
       
     },
 

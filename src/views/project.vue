@@ -193,7 +193,7 @@
       submitIssue () {
         let $vmc = this;
 
-        let Issue = Parse.Object.extend ("Issue");
+        let Issue = Parse.Object.extend ('Issue');
         let issue = new Issue ();
 
         issue.set ('name', $vmc.title);
@@ -201,9 +201,8 @@
         issue.set ('proId', $vmc.proId);
         issue.set ('creator', $vmc.$store.state.user.username);
 
-        issue.save()
-          .then((issue) => {
-            alert('New object created with objectId: ' + issue.id);
+        issue.save ()
+          .then(resp => {
             $vmc.title = '';
             $vmc.content = '';
             $vmc.showIssueName ();
