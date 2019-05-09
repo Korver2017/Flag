@@ -254,6 +254,7 @@
         issue.set ('content', $vmc.content);
         issue.set ('proId', $vmc.proId);
         issue.set ('creator', $vmc.$store.state.user.username);
+        issue.set ('issueOpened', true);
 
         issue.save ()
           .then(resp => {
