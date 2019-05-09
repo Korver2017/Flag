@@ -367,7 +367,6 @@
 
       editComment (commentId, index) {
         let $vmc = this;
-        console.log ('edit comment', commentId);
         $vmc.comments[index].commentEditing = true;
         $vmc.stashComment = $vmc.comments[index].content;
       },

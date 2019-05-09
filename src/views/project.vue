@@ -20,16 +20,72 @@
     </div>
     
     <button v-else class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
+    <br />
 
-    <div class="list-group" v-if="issues.length >= 1">
 
-      <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" v-for="issue in issues" type="button" class="text-left list-group-item list-group-item-action" active-class="active">
-        {{ issue.name }} - Created by <span class="font-weight-bold mr-3">{{ issue.creator }}</span>
+    <button class="mb-5 btn btn-danger" @click="closeIssue">Close Issue</button> <br />
 
+    <div class="rwo text-left">
+      <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
+        Opened <span class="badge badge-light">{{ opened.length }}</span>
+      </button>
+      <button @click="showOpened = false" type="button" class="ml-3 btn btn-secondary">
+        Closed <span class="badge badge-light">{{ closed.length }}</span>
+      </button>
+    </div>
+
+
+    <!-- Issue List -->
+
+    <!-- <div class="mt-5 list-group" v-if="issues.length >= 1">
+
+      <template v-for="issue in issues">
+
+      <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="text-left list-group-item list-group-item-action" active-class="active">
+
+          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+          <a>{{ issue.name }}</a>
+        
         <span v-for="label in issue.labels" class="py-2 px-3 mx-1 badge badge-primary">{{ label }}</span>
       </router-link>
-      
+
+      </template>
+
+        
+    </div> -->
+
+
+    <!-- Issue List -->
+
+    <div class="mt-5 list-group" v-if="issues.length >= 1">
+
+      <template v-for="issue in issues">
+
+      <router-link v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="text-left list-group-item list-group-item-action" active-class="active">
+
+          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+          {{ checked }} | {{ issue.issueOpened }}
+          
+          <a>{{ issue.name }}</a>
+        
+
+        <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+      </router-link>
+
+      <router-link v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="text-left list-group-item list-group-item-action" active-class="active">
+
+          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+          <a>{{ issue.name }}</a>
+        
+        <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+      </router-link>
+
+      </template>
+
+        
     </div>
+
+    
 
     <div v-else class="card text-left">
       <h4 class="card-body py-5 font-italic font-weight-lighter">
@@ -65,18 +121,28 @@
         content: '',
         username: this.$store.state.user.username,
         labels: [],
+        checked: [],
+        opened: [],
+        closed: [],
+        showOpened: true,
       }
     },
-
-
-    
-      
 
 
     computed: {
       proId () {
         return  this.$route.params.proId;
       },
+
+
+      // openedCount () {
+      //   for (let i = 0; i < issues.length; i ++) {
+      //     let ary = [];
+      //     if ()
+      //     issues[i].issueOpened === true
+      //   }
+        
+      // }
     },
 
 
@@ -132,6 +198,8 @@
         let query = new Parse.Query (Issue);
         query.equalTo ("proId", $vmc.proId);
         let ary = [];
+        let opened = [];
+        let closed = [];
         query.find ().then (resp => {
           for (let i = 0; i < resp.length; i++) {
             let obj = {};
@@ -139,6 +207,7 @@
             obj.name = object.get ('name');
             obj.issueId = object.id;
             obj.creator = object.get ('creator');
+            obj.issueOpened = object.get ('issueOpened');
 
             let arry = [];
             let Label = Parse.Object.extend ('Label');
@@ -153,10 +222,17 @@
               });
             obj.labels = arry;
             ary.push (obj);
-            // $vmc.labels = arry;
+
+            if (obj.issueOpened === true) {
+              opened.push (obj);
+            } else if (obj.issueOpened === false) {
+              closed.push (obj);
+            }
           }
         })
         $vmc.issues = ary;
+        $vmc.opened = opened;
+        $vmc.closed = closed;
       },
 
 
@@ -218,6 +294,26 @@
         this.adding = false;
         this.title = '';
         this.content = '';
+      },
+
+
+      closeIssue () {
+        let $vmc = this;
+        let Issue = Parse.Object.extend ('Issue');
+        for (let i = 0; i < $vmc.checked.length; i ++) {
+          let query = new Parse.Query (Issue);
+          console.log ($vmc.checked[i]);
+          query.get ($vmc.checked[i])
+          .then (resp => {
+            resp.set ('issueOpened', false);
+            return resp.save ();
+            // The object was retrieved successfully.
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+        }
+        
       }
     },
 
