@@ -34,8 +34,8 @@ export default {
     authed: false,
     username: '',
     input: {
-      email: 'wake@protype.tw',
-      password: '6666',
+      email: '',
+      password: '',
       userId: '',
     }
   },
@@ -60,6 +60,9 @@ export default {
       if (state.authed === true) {
         state.authed = false;
         state.username = '';
+        state.input.email = '';
+        state.input.password = '';
+        state.input.userId = '';
       } else {
         state.authed = data.authed;
         state.username = data.username;

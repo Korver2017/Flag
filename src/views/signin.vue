@@ -12,7 +12,7 @@
         </div>
         <div class="form-group text-left">
           <label @keyup.enter="signin" for="password">Password</label>
-          <input v-model="password" placeholder="Password" class="form-control" id="password" rows="10">
+          <input v-model="password" type="password" placeholder="Password" class="form-control" id="password" rows="10">
         </div>
         <button @click.prevent="signin" class="mx-3 btn btn-success">Submit</button>
       </form>
