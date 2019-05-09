@@ -115,7 +115,7 @@
           <button @click="editLabel (label.labelId, index)" class="my-3 d-block btn btn-warning">{{ label.title }}</button>
 
           <div class="text-left" v-if="label.editMode === true">
-            <input @keyup.enter="updateLabel" v-model.trim="updateLabelTitle" type="text" class="mb-3 col-8 form-control" placeholder="Update Label" aria-label="Update Label" aria-describedby="button-addon2">
+            <input @keyup.enter="updateLabel (label.labelId, index)" v-model.trim="updateLabelTitle" type="text" class="mb-3 col-8 form-control" placeholder="Update Label" aria-label="Update Label" aria-describedby="button-addon2">
 
             <button @click="updateLabel (label.labelId, index)" class="btn btn-success" type="button" id="button-addon2">Submit</button>
             <button @click="cancelUpdate (index)" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
@@ -362,7 +362,6 @@
 
       editLabel (labelId, index) {
         let $vmc = this;
-        console.log (labelId, index);
 
         for (let i = 0; i < $vmc.labels.length; i ++) {
           $vmc.labels[i].editMode = false;
@@ -377,7 +376,6 @@
         let $vmc = this;
         let Label = Parse.Object.extend ('Label');
         let query = new Parse.Query (Label);
-        console.log (labelId);
 
         $vmc.labels[index].title = $vmc.updateLabelTitle;
         query.get (labelId)
