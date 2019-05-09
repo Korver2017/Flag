@@ -280,7 +280,6 @@
         let Issue = Parse.Object.extend ('Issue');
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
-          console.log ($vmc.checked[i]);
           query.get ($vmc.checked[i])
           .then (resp => {
             resp.set ('issueOpened', false);
@@ -302,7 +301,6 @@
         let Issue = Parse.Object.extend ('Issue');
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
-          console.log ($vmc.checked[i]);
           query.get ($vmc.checked[i])
           .then (resp => {
             resp.set ('issueOpened', true);

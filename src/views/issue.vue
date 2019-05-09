@@ -91,9 +91,37 @@
         
       </div>
     
+      <!-- Toggle Label -->
+      <!-- Add or Remove Label -->
 
       <div class="col-3">
+
         <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-primary">{{ label.title }}</button>
+        <hr />
+
+
+        <!-- New / Edit Label -->
+      
+        <p class="mt-5">New Label</p>
+        <div class="row">
+          <input @keyup.enter="addLabel" v-model.trim="newLabel" type="text" class="col-8 form-control" placeholder="New Label" aria-label="New Label" aria-describedby="button-addon2">
+
+          <button @click="addLabel" class="btn btn-success" type="button" id="button-addon2">Submit</button>
+        </div>
+        
+        <p class="mt-5">Edit Label</p>
+        <template v-for="(label, index) in labels">
+        
+          <button @click="editLabel (label.labelId, index)" class="my-3 d-block btn btn-warning">{{ label.title }}</button>
+
+          <div class="text-left" v-if="label.editMode === true">
+            <input @keyup.enter="updateLabel" v-model.trim="updateLabelTitle" type="text" class="mb-3 col-8 form-control" placeholder="Update Label" aria-label="Update Label" aria-describedby="button-addon2">
+
+            <button @click="updateLabel (label.labelId, index)" class="btn btn-success" type="button" id="button-addon2">Submit</button>
+            <button @click="cancelUpdate (index)" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
+          </div>
+        </template>
+      
       </div>
       
     </div>
@@ -131,6 +159,8 @@
         commentText: '',
         labels: [],
         label: [],
+        newLabel : '',
+        updateLabelTitle: '',
         editing: false,
         stashIssueContent : '',
       }
@@ -231,6 +261,7 @@
               obj.labelId = object.id;
               obj.title = object.get ('title');
               obj.added = false;
+              obj.editMode = false;
               ary.push (obj);
 
               let arry = [];
@@ -304,6 +335,75 @@
             });
         }
           
+      },
+
+
+      addLabel () {
+        let $vmc = this;
+        var Label = Parse.Object.extend ('Label');
+        var label = new Label ();
+
+        label.set ('title', $vmc.newLabel);
+        label.set ('issueId', []);
+        $vmc.newLabel = '';
+
+        label.save ()
+          .then (resp => {
+            // Execute any logic that should take place after the object is saved.
+            $vmc.allLabel ();
+            alert ('New object created with objectId: ' + resp.id);
+          }, (error) => {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert ('Failed to create new object, with error code: ' + error.message);
+          });
+      },
+
+
+      editLabel (labelId, index) {
+        let $vmc = this;
+        console.log (labelId, index);
+
+        for (let i = 0; i < $vmc.labels.length; i ++) {
+          $vmc.labels[i].editMode = false;
+        }
+
+        $vmc.labels[index].editMode = true;
+
+      },
+
+
+      updateLabel (labelId, index) {
+        let $vmc = this;
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        console.log (labelId);
+
+        $vmc.labels[index].title = $vmc.updateLabelTitle;
+        query.get (labelId)
+          .then (resp => {
+            // Now let's update it with some new data. In this case, only cheatMode and score
+            // will get sent to the cloud. playerName hasn't changed.
+            resp.set ('title', $vmc.updateLabelTitle);
+            resp.save ()
+              .then (() => {
+                $vmc.updateLabelTitle = '';
+                $vmc.labels[index].editMode = false;
+              });
+            
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+        $vmc.showIssueInfo ();
+      },
+
+
+      cancelUpdate (index) {
+        let $vmc = this;
+        $vmc.updateLabelTitle = '';
+        $vmc.labels[index].editMode = false;
+        
       },
 
 
