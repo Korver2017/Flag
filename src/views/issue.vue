@@ -59,7 +59,10 @@
             <p class="text-left mb-0">
               Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
             </p>
-            <button class="ml-auto mr-5 btn btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
+            <div class="row ml-auto mr-5">
+              <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
+              <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
+            </div>
           </div>
 
           <vue-markdown v-if="comment.commentEditing === false" class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
@@ -493,7 +496,31 @@
       cancelEditComment (index) {
         let $vmc = this;
         $vmc.comments[index].commentEditing = false;
-      }
+      },
+
+
+      deleteComment (commentId, index) {
+        let $vmc = this;
+        let Comment = Parse.Object.extend ('Comment');
+        let query = new Parse.Query (Comment);
+        query.get (commentId)
+        .then (resp => {
+          if (confirm ('確定刪除此評論？')) {
+            resp.destroy ()
+            .then (() => {
+              $vmc.showComment ();
+            })
+          }
+          else return;
+          
+          // The object was retrieved successfully.
+        }, (error) => {
+          // The object was not retrieved successfully.
+          // error is a Parse.Error with an error code and message.
+        });
+
+        console.log ('delete');
+      },
       
 
     },
