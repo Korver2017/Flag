@@ -30,14 +30,14 @@
             Commented by <span class="font-weight-bold">{{ creator }}</span>
           </p>
 
-          <button v-if="editing === false" class="ml-auto mr-5 btn btn-warning" @click="editComment">Edit</button>
+          <button v-if="editing === false" class="ml-auto mr-5 btn btn-warning" @click="editIssueContent">Edit</button>
         </div>
 
         <form v-if="editing === true" class="mx-auto my-5">
 
           <div class="form-group text-left">
-            <label @keyup.enter="newContent" for="stashComment">Comment</label>
-            <textarea v-model="stashComment" placeholder="Comment Here" class="form-control" id="stashComment" rows="10"></textarea>
+            <label @keyup.enter="newContent" for="stashIssueContent">Comment</label>
+            <textarea v-model="stashIssueContent" placeholder="Comment Here" class="form-control" id="stashIssueContent" rows="10"></textarea>
           </div>
 
           <button @click.prevent="newContent" class="mx-3 btn btn-success">Submit</button>
@@ -51,12 +51,30 @@
         <p v-else class="p-4 border border-success text-left font-italic">No description provided.</p>
 
 
-        <div class="mt-5" v-for="comment in comments">
-        
-          <p class="text-left mb-0">
-            Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
-          </p>
-          <vue-markdown class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+        <!-- Comment -->
+
+
+        <div class="mt-5" v-for="(comment, index) in comments">
+          <div class="row mb-3">
+            <p class="text-left mb-0">
+              Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+            </p>
+            <button class="ml-auto mr-5 btn btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
+          </div>
+
+          <vue-markdown v-if="comment.commentEditing === false" class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+
+          <form v-else class="mx-auto my-5">
+
+            <div class="form-group text-left">
+              <label for="commentContent">Edit Comment</label>
+              <textarea v-model="stashComment" placeholder="Comment Here" class="form-control" id="commentContent" rows="10"></textarea>
+            </div>
+            <button @click.prevent="editedComment(comment.commentId, index)" class="mx-3 btn btn-success">Submit</button>
+            <button @click.prevent="cancelEditComment" class="mx-3 btn btn-danger">Cancel</button>
+
+          </form>
+
         </div>
 
 
@@ -114,7 +132,9 @@
         labels: [],
         label: [],
         editing: false,
-        stashComment : '',
+        stashIssueContent : '',
+        // stashComment: '',
+        // commentEditing : false,
       }
     },
 
@@ -249,8 +269,11 @@
             for (let i = 0; i < resp.length; i ++) {
               let obj = {};
               let object = resp[i];
+              obj.commentId = object.id;
               obj.content = object.get ('content');
               obj.commentor = object.get ('commentor');
+              obj.commentEditing = false;
+              obj.stashComment = '';
               ary.push (obj);
             }
           });
@@ -313,16 +336,16 @@
       },
 
 
-      editComment () {
+      editIssueContent () {
         let $vmc = this;
         $vmc.editing = true;
-        $vmc.stashComment = $vmc.content;
+        $vmc.stashIssueContent = $vmc.content;
       },
 
 
       newContent () {
         let $vmc = this;
-        $vmc.content = $vmc.stashComment;
+        $vmc.content = $vmc.stashIssueContent;
 
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
@@ -339,10 +362,42 @@
 
       cancelEdit () {
         let $vmc = this;
-        $vmc.stashComment = $vmc.content;
+        $vmc.stashIssueContent = $vmc.content;
         $vmc.editing = false;
-      }
+      },
+
+
+      editComment (commentId, index) {
+        let $vmc = this;
+        console.log ('edit comment', commentId);
+        $vmc.comments[index].commentEditing = true;
+        // $vmc.comments[index].stashComment = $vmc.comments[index];
+        $vmc.stashComment = $vmc.comments[index].content;
+      },
+
+
+      editedComment (commentId, index) {
+        let $vmc = this;
+        // $vmc.comments[index] = $vmc.comments[index].stashComment;
+        $vmc.comments[index].content = $vmc.stashComment;
+        $vmc.comments[index].commentEditing = false;
+
+        let Comment = Parse.Object.extend ('Comment');
+        let query = new Parse.Query (Comment);
+
+        
+        query.get (commentId)
+        .then (resp => {
+          resp.set ('content', $vmc.stashComment);
+          return resp.save();
+          // The object was retrieved successfully.
+        }, (error) => {
+          // The object was not retrieved successfully.
+          // error is a Parse.Error with an error code and message.
+        });
+      },
       
+
     },
 
 
