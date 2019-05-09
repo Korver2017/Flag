@@ -70,8 +70,8 @@
               <label for="commentContent">Edit Comment</label>
               <textarea v-model="stashComment" placeholder="Comment Here" class="form-control" id="commentContent" rows="10"></textarea>
             </div>
-            <button @click.prevent="editedComment(comment.commentId, index)" class="mx-3 btn btn-success">Submit</button>
-            <button @click.prevent="cancelEditComment" class="mx-3 btn btn-danger">Cancel</button>
+            <button @click.prevent="editedComment (comment.commentId, index)" class="mx-3 btn btn-success">Submit</button>
+            <button @click.prevent="cancelEditComment (index)" class="mx-3 btn btn-danger">Cancel</button>
 
           </form>
 
@@ -133,8 +133,6 @@
         label: [],
         editing: false,
         stashIssueContent : '',
-        // stashComment: '',
-        // commentEditing : false,
       }
     },
 
@@ -371,20 +369,17 @@
         let $vmc = this;
         console.log ('edit comment', commentId);
         $vmc.comments[index].commentEditing = true;
-        // $vmc.comments[index].stashComment = $vmc.comments[index];
         $vmc.stashComment = $vmc.comments[index].content;
       },
 
 
       editedComment (commentId, index) {
         let $vmc = this;
-        // $vmc.comments[index] = $vmc.comments[index].stashComment;
         $vmc.comments[index].content = $vmc.stashComment;
         $vmc.comments[index].commentEditing = false;
 
         let Comment = Parse.Object.extend ('Comment');
         let query = new Parse.Query (Comment);
-
         
         query.get (commentId)
         .then (resp => {
@@ -396,6 +391,12 @@
           // error is a Parse.Error with an error code and message.
         });
       },
+
+
+      cancelEditComment (index) {
+        let $vmc = this;
+        $vmc.comments[index].commentEditing = false;
+      }
       
 
     },
