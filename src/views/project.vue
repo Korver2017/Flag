@@ -22,9 +22,15 @@
     <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
     <br />
 
-    <div class="row">
-      <button v-if="showOpened === true" class="mb-5 btn btn-danger" @click="closeIssue">Close Issue</button>
-      <button v-else class="mb-5 btn btn-success" @click="reopenIssue">Reopen Issue</button>
+    <div class="row mb-5">
+
+      <button v-if="showOpened === true" class="btn btn-danger" @click="closeIssue">Close Issue</button>
+      <button v-else class="btn btn-success" @click="reopenIssue">Reopen Issue</button>
+      
+      <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-primary" active-class="active">
+        Milestone
+      </router-link>
+
     </div>
 
     <div class="rwo text-left">
@@ -34,6 +40,56 @@
       <button @click="showOpened = false" type="button" class="ml-3 btn btn-secondary">
         Closed <span class="badge badge-light">{{ closed.length }}</span>
       </button>
+    </div>
+
+    <!-- Mark-As Dropdown Menu -->
+
+    <div class="row">
+      <div class="dropdown ml-auto mr-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Mark as
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a @click="" class="dropdown-item">Open</a>
+          <a @click="" class="dropdown-item">Closed</a>
+        </div>
+      </div>
+
+      <!-- Label Dropdown Menu -->
+
+      <div class="dropdown mr-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Label
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a @click="" class="dropdown-item">Open</a>
+          <a @click="" class="dropdown-item">Closed</a>
+        </div>
+      </div>
+
+      <!-- Milestone Dropdown Menu -->
+
+      <div class="dropdown mr-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          加入到 Milestone
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a @click="addIssueTo (mile.mileId)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</a>
+        </div>
+      </div>
+
+      <!-- Label Dropdown Menu -->
+
+      <div class="dropdown mr-3">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Assign to
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a @click="" class="dropdown-item">Open</a>
+          <a @click="" class="dropdown-item">Closed</a>
+        </div>
+      </div>
+      
     </div>
 
     <!-- Issue List -->
@@ -103,6 +159,7 @@
         opened: [],
         closed: [],
         showOpened: true,
+        milestones: [],
       }
     },
 
@@ -125,16 +182,16 @@
 
 
     created () {
-      // Add issue
+      // Add Milestone
 
-      // let Issue = Parse.Object.extend ("Issue");
-      // let issue = new Issue ();
+      // let Milestone = Parse.Object.extend ("Milestone");
+      // let milestone = new Milestone ();
 
-      // issue.set ('name', 'Issue-1');
+      // milestone.set ('issues', []);
 
-      // issue.save()
-      //   .then((issue) => {
-      //     alert('New object created with objectId: ' + issue.id);
+      // milestone.save()
+      //   .then((milestone) => {
+      //     alert('New object created with objectId: ' + milestone.id);
       //   }, (error) => {
       //     // Execute any logic that should take place if the save fails.
       //     // error is a Parse.Error with an error code and message.
@@ -150,7 +207,7 @@
 
       $vmc.showProName ();
       $vmc.showIssueName ();
-
+      $vmc.showMilestone ();
     },
 
 
@@ -314,7 +371,68 @@
           });
         }
         $vmc.checked = [];
-      }
+      },
+
+
+      showMilestone () {
+        let $vmc = this;
+        let Mile = Parse.Object.extend ('Milestone');
+        let query = new Parse.Query (Mile);
+        let ary = [];
+        query.equalTo ('proId', $vmc.proId);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i++) {
+              let obj = {};
+              let object = resp[i];
+              obj.mileId = object.id;
+              obj.title = object.get ('title');
+              ary.push (obj)
+            }
+          });
+        $vmc.milestones = ary;
+      },
+
+
+      addIssueTo (mileId) {
+        let $vmc = this;
+
+        let Issue = Parse.Object.extend ('Issue');
+        let ary = [];
+
+        for (let i = 0; i < $vmc.checked.length; i ++) {
+          let query = new Parse.Query (Issue);
+          query.get ($vmc.checked[i])
+            .then (resp => {
+              // The object was retrieved successfully.
+              // let obj = {};
+
+              // obj.proId = resp.get ('proId');
+              ary.push (resp.id);
+              // obj.issueOpened = resp.get ('issueOpened');
+              
+              let Mile = Parse.Object.extend ('Milestone');
+              let query = new Parse.Query (Mile);
+              query.get (mileId)
+                .then (resp => {
+                  // The object was retrieved successfully.
+                  resp.set ('proId', $vmc.proId);
+                  resp.set ('issues', ary);
+                  return resp.save ();
+                }, (error) => {
+                  // The object was not retrieved successfully.
+                  // error is a Parse.Error with an error code and message.
+                });
+              
+            }, (error) => {
+              // The object was not retrieved successfully.
+              // error is a Parse.Error with an error code and message.
+            });
+        }
+
+
+        
+      },
     },
 
     watch: {
