@@ -339,18 +339,16 @@
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
           query.get ($vmc.checked[i])
-          .then (resp => {
-            resp.set ('issueOpened', false);
-            resp.save ()
-              .then ($vmc.showIssueName ())
-            // The object was retrieved successfully.
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
+            .then (resp => {
+              resp.set ('issueOpened', false);
+              resp.save ()
+                .then (() => {
+                  $vmc.showIssueName ();
+                })
+            }, (error) => {
           });
         }
         $vmc.checked = [];
-        
       },
 
 
@@ -363,7 +361,7 @@
           .then (resp => {
             resp.set ('issueOpened', true);
             resp.save ()
-              .then ($vmc.showIssueName ())
+              .then (() => $vmc.showIssueName ());
             // The object was retrieved successfully.
           }, (error) => {
             // The object was not retrieved successfully.
@@ -402,13 +400,13 @@
 
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
+          
           query.get ($vmc.checked[i])
             .then (resp => {
-              // The object was retrieved successfully.
-              // let obj = {};
-
-              // obj.proId = resp.get ('proId');
-              ary.push (resp.id);
+              
+              resp.addUnique ('milestone', mileId);
+              resp.save ();
+              // ary.push (resp.id);
               // obj.issueOpened = resp.get ('issueOpened');
               
               let Mile = Parse.Object.extend ('Milestone');
@@ -417,7 +415,6 @@
                 .then (resp => {
                   // The object was retrieved successfully.
                   resp.set ('proId', $vmc.proId);
-                  resp.set ('issues', ary);
                   return resp.save ();
                 }, (error) => {
                   // The object was not retrieved successfully.
@@ -428,6 +425,8 @@
               // The object was not retrieved successfully.
               // error is a Parse.Error with an error code and message.
             });
+
+          
         }
 
 
