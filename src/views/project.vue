@@ -38,7 +38,7 @@
 
     <div class="row">
       
-      <div class="dropdown ml-auto mr-3">
+      <div class="dropdown ml-auto mr-3 mb-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Mark as
         </button>

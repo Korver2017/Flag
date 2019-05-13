@@ -8,9 +8,10 @@
       <h5>Welcome to Flag</h5>
 
       <div class="container my-5">
+
         <div class="row">
           <div v-if="orgs.length !== 0" class="col-8 mx-auto">
-            <h5 class="text-left">My Organization</h5>
+            <h5 class="text-left">My Organizations</h5>
               <div class="row">
               <router-link v-for="org in orgs" :key="org.id" :to="{ name: 'organization', params: { orgId: org.orgId }}" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
                 {{ org.name }}
@@ -20,13 +21,29 @@
 
           <form class="col-4 mx-auto">
             <div class="form-group text-left">
-              <label @keyup.enter="addOrganization" for="name">Add organization</label>
-              <input v-model.trim="orgName" class="form-control" placeholder="Organization name" id="name">
+              <label @keyup.enter="addOrganization" for="name">Add Organization</label>
+              <input v-model.trim="orgName" class="form-control" placeholder="Organization Name" id="name">
             </div>
-            <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add organization</button>
+            <button @click.prevent="addOrganization" class="mx-3 btn btn-success">Add Organization</button>
           </form>
 
         </div>
+
+
+        <div class="row">
+          <div v-if="projects.length !== 0" class="col-8 mr-auto">
+            <h5 class="text-left">My Projects</h5>
+              <div class="row">
+
+                <router-link v-for="project in projects" :key="project.id" :to="project" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                  {{ project }}
+                </router-link>
+
+              </div>
+          </div>
+
+        </div>
+
       </div>
     
     </template>
@@ -62,12 +79,12 @@
         orgName: '',
         orgs: [],
         avatarHash: '',
+        projects: [],
       }
     },
 
 
     created () {
-
 
       if (this.$store.state.user.authed === false) {
         this.$router.push ({ path: '/signin' })
@@ -95,6 +112,7 @@
     mounted () {
       this.showOrg ();
       this.showUsername ();
+      this.showProject ();
     },
 
 
@@ -105,6 +123,34 @@
      *
      */
     methods: {
+
+
+      /**
+       *
+       * Display Username
+       *
+       */
+      showUsername () {
+        let $vmc = this;
+        let ary = [];
+        const Account = Parse.Object.extend ("Account");
+        let query = new Parse.Query (Account);
+        query.get ($vmc.user.id)
+          .then (resp => {
+            $vmc.avatarHash = $vmc.$md5 (resp.get ('email'));
+            $vmc.username = resp.get ('username');
+        });
+      },
+
+
+      logOut () {
+        let $vmc = this;
+        $vmc.$store.dispatch ('user/logOut');
+        $vmc.$router.push ({ path: '/signin' })
+      },
+
+
+      
 
 
       /**
@@ -137,31 +183,6 @@
       },
 
 
-      /**
-       *
-       * Display Username
-       *
-       */
-      showUsername () {
-        let $vmc = this;
-        let ary = [];
-        const Account = Parse.Object.extend ("Account");
-        let query = new Parse.Query (Account);
-        query.get ($vmc.user.id)
-          .then (resp => {
-            $vmc.avatarHash = $vmc.$md5 (resp.get ('email'));
-            $vmc.username = resp.get ('username');
-        });
-      },
-
-
-      logOut () {
-        let $vmc = this;
-        $vmc.$store.dispatch ('user/logOut');
-        $vmc.$router.push ({ path: '/signin' })
-      },
-
-
       addOrganization () {
         let $vmc = this;
 
@@ -186,7 +207,35 @@
             // error is a Parse.Error with an error code and message.
             alert('Failed to create new object, with error code: ' + error.message);
           });
-      }
+      },
+
+
+      showProject () {
+        let $vmc = this;
+        let ary = [];
+        let Org = Parse.Object.extend ('Organization');
+        let query = new Parse.Query (Org);
+        query.equalTo ('memberId', $vmc.user.id);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let object = resp[i];
+              let Project = Parse.Object.extend ('Project');
+              let query = new Parse.Query (Project);
+              query.equalTo ('orgId', object.id);
+              query.find ()
+                .then (resp => {
+                  for (let i = 0; i < resp.length; i++) {
+                    let object = resp[i];
+                    ary.push (object.get ('name'));
+                  }
+
+                  $vmc.projects = ary;
+                });
+            }
+
+          })
+      },
     },
 
 
