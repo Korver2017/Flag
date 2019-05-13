@@ -48,18 +48,6 @@
         </div>
       </div>
 
-      <!-- Label Dropdown Menu
-
-      <div class="dropdown mr-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Label
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="" class="dropdown-item">Open</button>
-          <button @click="" class="dropdown-item">Closed</button>
-        </div>
-      </div> -->
-
       <!-- Milestone Dropdown Menu -->
 
       <div class="dropdown mr-3">
@@ -71,15 +59,14 @@
         </div>
       </div>
 
-      <!-- Label Dropdown Menu -->
+      <!-- Assign-To Dropdown Menu -->
 
       <div class="dropdown mr-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assign to
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a @click="" class="dropdown-item">Open</a>
-          <a @click="" class="dropdown-item">Closed</a>
+          <button v-for="user in users" @click="assignTo (user.avatarHash)" class="dropdown-item">{{ user }}</button>
         </div>
       </div>
       
@@ -91,21 +78,32 @@
 
       <template v-for="issue in issues">
 
-      <router-link v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="text-left list-group-item list-group-item-action" active-class="active">
+        <router-link style="line-height: 50px" v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+
+            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+            <a>{{ issue.name }}</a>
+
+          <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+          <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
+            <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
+          </template>
+          
+        </router-link>
+
+        <router-link style="line-height: 50px" v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+          
 
           <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
           <a>{{ issue.name }}</a>
+          
+          <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
 
-        <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
-      </router-link>
-
-      <router-link v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="text-left list-group-item list-group-item-action" active-class="active">
-
-          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
-          <a>{{ issue.name }}</a>
-        
-        <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
-      </router-link>
+          <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
+            <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
+          </template>
+          
+        </router-link>
 
       </template>
 
@@ -153,6 +151,8 @@
         closed: [],
         showOpened: true,
         milestones: [],
+        users: [],
+        // avatarHash: '',
       }
     },
 
@@ -161,16 +161,6 @@
       proId () {
         return  this.$route.params.proId;
       },
-
-
-      // openedCount () {
-      //   for (let i = 0; i < issues.length; i ++) {
-      //     let ary = [];
-      //     if ()
-      //     issues[i].issueOpened === true
-      //   }
-        
-      // }
     },
 
 
@@ -195,16 +185,53 @@
 
     mounted () {
       let $vmc = this;
-
-      // console.log ('project mounted');
-
+      
+      $vmc.showUser ();
       $vmc.showProName ();
-      $vmc.showIssueName ();
+      $vmc.showIssue ();
       $vmc.showMilestone ();
     },
 
 
     methods: {
+      showUser () {
+        let $vmc = this;
+        let Project = Parse.Object.extend ('Project');
+        let query = new Parse.Query (Project);
+        let ary = [];
+        query.get ($vmc.proId)
+          .then (resp => {
+            let orgId = resp.get ('orgId')
+            let Org = Parse.Object.extend ('Organization');
+            let query = new Parse.Query (Org);
+            query.get (orgId)
+              .then (resp => {
+                let results = resp.get ('memberId');
+                for (let i = 0; i < results.length; i ++) {
+                  let obj = {};
+                  let object = results[i];
+                  let Account = Parse.Object.extend ('Account');
+                  let query = new Parse.Query (Account);
+                  query.get (object)
+                    .then (resp => {
+                      obj.name = resp.get ('username');
+                      obj.userId = object;
+                      obj.avatarHash = resp.get ('avatarHash');
+                      obj.email = resp.get ('email');
+
+                      // obj.avatarHash = $vmc.$md5 (email);
+                      ary.push (obj);
+                    });
+                }
+              });
+
+              $vmc.users = ary;
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
+
 
       showProName () {
         let $vmc = this;
@@ -220,9 +247,9 @@
           })
       },
 
-      showIssueName () {
+      showIssue () {
         let $vmc = this;
-        const Issue = Parse.Object.extend ("Issue");
+        const Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
         query.equalTo ("proId", $vmc.proId);
         let ary = [];
@@ -236,6 +263,10 @@
             obj.issueId = object.id;
             obj.creator = object.get ('creator');
             obj.issueOpened = object.get ('issueOpened');
+
+            // let avatarHash = $vmc.$md5 (assignee.email);
+            // obj.assignee = assignee;
+            obj.avatarHash = object.get ('assignee');
 
             let arry = [];
             let Label = Parse.Object.extend ('Label');
@@ -307,10 +338,10 @@
         issue.set ('issueOpened', true);
 
         issue.save ()
-          .then(resp => {
+          .then (resp => {
             $vmc.title = '';
             $vmc.content = '';
-            $vmc.showIssueName ();
+            $vmc.showIssue ();
             $vmc.adding = false;
           }, (error) => {
             // Execute any logic that should take place if the save fails.
@@ -336,7 +367,7 @@
               resp.set ('issueOpened', false);
               resp.save ()
                 .then (() => {
-                  $vmc.showIssueName ();
+                  $vmc.showIssue ();
                 })
             }, (error) => {
           });
@@ -354,7 +385,7 @@
           .then (resp => {
             resp.set ('issueOpened', true);
             resp.save ()
-              .then (() => $vmc.showIssueName ());
+              .then (() => $vmc.showIssue ());
             // The object was retrieved successfully.
           }, (error) => {
             // The object was not retrieved successfully.
@@ -387,7 +418,6 @@
 
       addIssueTo (mileId) {
         let $vmc = this;
-
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
 
@@ -425,6 +455,26 @@
 
         
       },
+
+
+      assignTo (avatarHash) {
+        let $vmc = this;
+        let Issue = Parse.Object.extend ('Issue');
+        let ary = [];
+
+        for (let i = 0; i < $vmc.checked.length; i ++) {
+          let query = new Parse.Query (Issue);
+          
+          query.get ($vmc.checked[i])
+            .then (resp => {
+              resp.addUnique ('assignee', avatarHash);
+              resp.save ()
+                .then (resp => {
+                  $vmc.showIssue ();
+                })
+            })
+        }
+      }
     },
 
     watch: {

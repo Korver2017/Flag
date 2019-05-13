@@ -110,6 +110,7 @@
 
 
     mounted () {
+      
       this.showOrg ();
       this.showUsername ();
       this.showProject ();
@@ -133,13 +134,19 @@
       showUsername () {
         let $vmc = this;
         let ary = [];
-        const Account = Parse.Object.extend ("Account");
+        let Account = Parse.Object.extend ('Account');
         let query = new Parse.Query (Account);
         query.get ($vmc.user.id)
           .then (resp => {
             $vmc.avatarHash = $vmc.$md5 (resp.get ('email'));
             $vmc.username = resp.get ('username');
-        });
+            resp.set ('avatarHash', $vmc.avatarHash);
+            return resp.save ();
+          })
+          // .then (resp => {
+          //   let query = new Parse.Query (Account);
+          //   query.set ('avatarHash', $vmc.avatarHash);
+          // });
       },
 
 
