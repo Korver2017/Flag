@@ -20,18 +20,10 @@
     </div>
     
     <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
-    <br />
 
-    <div class="row mb-5">
-
-      <button v-if="showOpened === true" class="btn btn-danger" @click="closeIssue">Close Issue</button>
-      <button v-else class="btn btn-success" @click="reopenIssue">Reopen Issue</button>
-      
-      <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-primary" active-class="active">
-        Milestone
-      </router-link>
-
-    </div>
+    <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-primary" active-class="active">
+      Milestone
+    </router-link>
 
     <div class="rwo text-left">
       <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
@@ -45,27 +37,28 @@
     <!-- Mark-As Dropdown Menu -->
 
     <div class="row">
+      
       <div class="dropdown ml-auto mr-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Mark as
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a @click="" class="dropdown-item">Open</a>
-          <a @click="" class="dropdown-item">Closed</a>
+          <button @click="reopenIssue" class="dropdown-item">Open</button>
+          <button @click="closeIssue" class="dropdown-item">Closed</button>
         </div>
       </div>
 
-      <!-- Label Dropdown Menu -->
+      <!-- Label Dropdown Menu
 
       <div class="dropdown mr-3">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Label
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a @click="" class="dropdown-item">Open</a>
-          <a @click="" class="dropdown-item">Closed</a>
+          <button @click="" class="dropdown-item">Open</button>
+          <button @click="" class="dropdown-item">Closed</button>
         </div>
-      </div>
+      </div> -->
 
       <!-- Milestone Dropdown Menu -->
 
@@ -74,7 +67,7 @@
           加入到 Milestone
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a @click="addIssueTo (mile.mileId)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</a>
+          <button @click="addIssueTo (mile.mileId)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</button>
         </div>
       </div>
 
