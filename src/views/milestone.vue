@@ -31,7 +31,7 @@
 
         <div class="row">
           
-          <h4>{{ mile.mileOpened }}</h4>
+          <h4>{{ mile.title }}</h4>
 
           <div class="text-right mb-5 ml-auto mr-5">
         
@@ -241,12 +241,12 @@
 
         mile.set ("title", $vmc.mileTitle);
         mile.set ("proId", $vmc.proId);
+        mile.set ("mileOpened", true);
 
         mile.save ()
-          .then(resp => {
+          .then (resp => {
             $vmc.showMile ();
             // Execute any logic that should take place after the object is saved.
-            alert('New object created with objectId: ' + resp.id);
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.

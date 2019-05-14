@@ -439,7 +439,10 @@
             .then (resp => {
               
               resp.addUnique ('milestone', mileId);
-              resp.save ();
+              resp.save ()
+                .then (resp => {
+                  $vmc.checked = [];
+                });
               // ary.push (resp.id);
               // obj.issueOpened = resp.get ('issueOpened');
               
