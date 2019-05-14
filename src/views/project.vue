@@ -13,7 +13,7 @@
           <label @keyup.enter="submitIssue" for="content">Issue Content</label>
           <textarea v-model="content" placeholder="Issue Content" class="form-control" id="content" rows="10"></textarea>
         </div>
-        <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Add Issue</button>
+        <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Submit</button>
         <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
       </form>
       
@@ -66,7 +66,7 @@
           Assign to
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button v-for="user in users" @click="assignTo (user.avatarHash)" class="dropdown-item">{{ user }}</button>
+          <button v-for="user in users" @click="assignTo (user.userId, user.avatarHash)" class="dropdown-item">{{ user.name }}</button>
         </div>
       </div>
       
@@ -152,6 +152,8 @@
         showOpened: true,
         milestones: [],
         users: [],
+        orgName: '',
+        // memberId: [],
         // avatarHash: '',
       }
     },
@@ -161,6 +163,11 @@
       proId () {
         return  this.$route.params.proId;
       },
+
+
+      userId () {
+        return this.$store.state.user.input.userId;
+      }
     },
 
 
@@ -242,9 +249,9 @@
         let query = new Parse.Query (Pro);
         query.get (id)
           .then (resp => {
-            let name = resp.get ('name');
-            $vmc.proName = name;
-          })
+            $vmc.proName = resp.get ('name');
+            $vmc.orgName = resp.get ('orgName');
+          });
       },
 
       showIssue () {
@@ -263,10 +270,9 @@
             obj.issueId = object.id;
             obj.creator = object.get ('creator');
             obj.issueOpened = object.get ('issueOpened');
-
-            // let avatarHash = $vmc.$md5 (assignee.email);
-            // obj.assignee = assignee;
-            obj.avatarHash = object.get ('assignee');
+            obj.avatarHash = object.get ('avatarHash');
+            obj.userId = object.get ('userId');
+            // obj.assignee = object.get ('assignee');
 
             let arry = [];
             let Label = Parse.Object.extend ('Label');
@@ -327,7 +333,6 @@
 
       submitIssue () {
         let $vmc = this;
-
         let Issue = Parse.Object.extend ('Issue');
         let issue = new Issue ();
 
@@ -336,6 +341,12 @@
         issue.set ('proId', $vmc.proId);
         issue.set ('creator', $vmc.$store.state.user.username);
         issue.set ('issueOpened', true);
+        issue.set ('milestone', []);
+        issue.set ('avatarHash', []);
+        issue.set ('userId', []);
+        issue.set ('proName', $vmc.proName);
+        issue.set ('orgName', $vmc.orgName);
+        // issue.addUnique ('memberId', $vmc.userId);
 
         issue.save ()
           .then (resp => {
@@ -346,7 +357,7 @@
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
-            alert('Failed to create new object, with error code: ' + error.message);
+            alert ('Failed to create new object, with error code: ' + error.message);
           });
       },
 
@@ -457,23 +468,35 @@
       },
 
 
-      assignTo (avatarHash) {
+      assignTo (userId, avatarHash) {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
-
-        for (let i = 0; i < $vmc.checked.length; i ++) {
-          let query = new Parse.Query (Issue);
-          
-          query.get ($vmc.checked[i])
-            .then (resp => {
-              resp.addUnique ('assignee', avatarHash);
-              resp.save ()
+        let query = new Parse.Query (Issue);
+        query.containedIn ('objectId', $vmc.checked);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+              let query = new Parse.Query (Issue);
+              query.get (object.id)
                 .then (resp => {
-                  $vmc.showIssue ();
+                  resp.addUnique ('avatarHash', avatarHash);
+                  resp.addUnique ('userId', userId);
+                  // obj.assignee = userId;
+                  // obj.avatarHash = avatarHash;
+                  // resp.addUnique ('assignee', obj);
+                  resp.save ()
+                    .then (() => {
+                      $vmc.showIssue ();
+                      $vmc.checked = [];
+                    })
                 })
-            })
-        }
+
+            }
+          })
+
       }
     },
 

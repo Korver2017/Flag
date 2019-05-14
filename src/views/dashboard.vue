@@ -9,7 +9,7 @@
 
       <div class="container my-5">
 
-        <div class="row">
+        <div class="row my-5">
           <div v-if="orgs.length !== 0" class="col-8 mx-auto">
             <h5 class="text-left">My Organizations</h5>
               <div class="row">
@@ -30,13 +30,13 @@
         </div>
 
 
-        <div class="row">
+        <div class="row my-5">
           <div v-if="projects.length !== 0" class="col-8 mr-auto">
             <h5 class="text-left">My Projects</h5>
               <div class="row">
 
-                <router-link v-for="project in projects" :key="project.id" :to="project" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
-                  {{ project }}
+                <router-link v-for="project in projects" :key="project.id" :to="project.name" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                  {{ project.orgName }} / {{ project.name }}
                 </router-link>
 
               </div>
@@ -44,9 +44,59 @@
 
         </div>
 
+
+
+
+
+
+
+        <!-- My Issue -->
+
+<!-- <template> -->
+
+        <div class="row my-5">
+          <div v-if="issues.length !== 0" class="col-8 mr-auto">
+            <h5 class="text-left">My Issues</h5>
+              <div class="row">
+
+              
+                  <router-link v-for="issue in issues" :key="issue.id" :to="issue.issueName" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                    {{ issue.orgName }} / {{ issue.proName }} / {{ issue.issueName }}
+                  </router-link>
+
+              </div>
+          </div>
+
+        </div>
+
+
+
+
+
+        <div class="row my-5">
+          <div v-if="assigneeList.length !== 0" class="col-8 mr-auto">
+            <h5 class="text-left">指派給我的 Issues</h5>
+              <div class="row">
+
+              
+                  <router-link v-for="assignee in assigneeList" :key="assignee.id" :to="assignee.assignIssue" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                    {{ assignee.orgName }} / {{ assignee.proName }} / {{ assignee.assignIssue }}
+                  </router-link>
+
+              </div>
+          </div>
+
+        </div>
+
+
+
+
+
       </div>
-    
+        
     </template>
+
+    
     
   </div>
 </template>
@@ -80,6 +130,8 @@
         orgs: [],
         avatarHash: '',
         projects: [],
+        issues: [],
+        assigneeList: [],
       }
     },
 
@@ -110,10 +162,11 @@
 
 
     mounted () {
-      
       this.showOrg ();
       this.showUsername ();
       this.showProject ();
+      this.showIssue ();
+      this.showAssignee ();
     },
 
 
@@ -155,9 +208,6 @@
         $vmc.$store.dispatch ('user/logOut');
         $vmc.$router.push ({ path: '/signin' })
       },
-
-
-      
 
 
       /**
@@ -202,17 +252,16 @@
           , org = new Org ();
 
         org.set ('name', $vmc.orgName);
-        org.set ('memberId', [$vmc.$store.state.user.input.userId]);
+        org.set ('memberId', $vmc.$store.state.user.input.userId);
 
         org.save ()
-          .then(resp => {
+          .then (resp => {
             // Execute any logic that should take place after the object is saved.
             $vmc.orgName = '';
             $vmc.showOrg ();
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
-            alert('Failed to create new object, with error code: ' + error.message);
           });
       },
 
@@ -233,8 +282,12 @@
               query.find ()
                 .then (resp => {
                   for (let i = 0; i < resp.length; i++) {
+                    let obj = {};
                     let object = resp[i];
-                    ary.push (object.get ('name'));
+                    obj.orgName = object.get ('orgName');
+                    obj.name = object.get ('name');
+                    // obj.
+                    ary.push (obj);
                   }
 
                   $vmc.projects = ary;
@@ -243,14 +296,97 @@
 
           })
       },
+
+
+      showIssue () {
+        let $vmc = this;
+
+        let Org = Parse.Object.extend ('Organization');
+        let query = new Parse.Query (Org);
+        let ary = [];
+        query.equalTo ('memberId', $vmc.user.id);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let object = resp[i];
+              ary.push (object.id);
+            }
+            return ary;
+          })
+          .then (resp => {
+            let ary = [];
+            let orgId = resp;
+            let Project = Parse.Object.extend ('Project');
+            let query = new Parse.Query (Project);
+            query.containedIn ('orgId', resp);
+            query.find ()
+              .then (resp => {
+                for (let i = 0; i < resp.length; i ++) {
+                  let object = resp[i];
+                  ary.push (object.id)
+                }
+                return ary;
+              })
+              .then (resp => {
+                let ary = [];
+                let obj = {};
+                let Issue = Parse.Object.extend ('Issue');
+                let query = new Parse.Query (Issue);
+
+                query.containedIn ('proId', resp)
+                query.find ()
+                  .then (resp => {
+                    
+                    for (let i = 0; i < resp.length; i ++) {
+                      let object = resp[i];
+                      obj.proName = object.get ('proName');
+                      obj.orgName = object.get ('orgName');
+                      obj.issueName = object.get ('name');
+                      ary.push (obj);
+                      obj = {};
+                    }
+
+                    $vmc.issues = ary;
+                  })
+                  
+              })
+
+          })
+        
+      },
+
+
+      showAssignee () {
+        let $vmc = this;
+        let ary = [];
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+        // console.log ($vmc.user.id);
+        query.equalTo ('userId', $vmc.user.id);
+        query.find ()
+          .then (resp => {
+            // The object was retrieved successfully.
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+
+              obj.assignIssue = object.get ('name');
+              obj.orgName = object.get ('orgName');
+              obj.proName = object.get ('proName');
+              ary.push (obj);
+            }
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+
+        $vmc.assigneeList = ary;
+      }
+      
     },
 
 
     watch: {
-      user () {
-        this.showOrg ();
-        this.showUsername ();
-      },
     },
   }
 </script>

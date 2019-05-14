@@ -3,12 +3,17 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
-      <router-link class="navbar-brand nav-item nav-link" to="/">
+      <router-link class="navbar-brand nav-item nav-link" to="/dashboard">
         <a>Flag</a>
       </router-link>
 
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+
+          <router-link to="/dashboard" tag="a" class="nav-item nav-link" active-class="active">
+            Dashboard
+          </router-link>
+          
           <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a>
         </div>
       </div>

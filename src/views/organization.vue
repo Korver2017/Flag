@@ -41,7 +41,9 @@
 
       orgId () {
         return this.$route.params.orgId;
-      }
+      },
+
+
     },
     
 
@@ -101,15 +103,22 @@
 
       newProject () {
         let $vmc = this;
-
         let Pro = Parse.Object.extend ('Project');
-        var Org = Parse.Object.extend ('Organization');
-        var org = new Org ();
         let pro = new Pro ();
+        // let Org = Parse.Object.extend ('Organization');
+        // let query = new Parse.Query (Org);
+        // query.get ($vmc.orgId)
+        // .then (resp => {
+        //   // The object was retrieved successfully.
+        //   resp.
+        // }, (error) => {
+        //   // The object was not retrieved successfully.
+        //   // error is a Parse.Error with an error code and message.
+        // });
 
         pro.set ('name', $vmc.projectName);
-        pro.set ('orgId', [$vmc.orgId]);
-
+        pro.set ('orgId', $vmc.orgId);
+        pro.set ('orgName', $vmc.orgName);
         pro.save ()
           .then (resp => {
             $vmc.projects.push ($vmc.projectName);
@@ -122,17 +131,16 @@
           })
 
         $vmc.projectName = '';
-
       }
 
     },
 
 
     watch: {
-      orgId () {
-        this.showOrgName ();
-        this.showProject ();
-      }
+      // orgId () {
+      //   this.showOrgName ();
+      //   this.showProject ();
+      // }
     }
   }
 </script>

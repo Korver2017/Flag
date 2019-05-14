@@ -34,7 +34,7 @@ export default {
     authed: false,
     username: '',
     input: {
-      email: 'wake@protype.tw',
+      email: 'korver@protype.tw',
       password: '6666',
       userId: '',
     }
