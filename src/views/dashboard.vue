@@ -61,14 +61,18 @@
         </div>
 
         <div class="row my-5">
-          <div v-if="assigneeList.length !== 0" class="col-8 mr-auto">
+          <div class="col-8 mr-auto">
             <h5 class="text-left">指派給我的 Issues</h5>
-              <div class="row">
+              <div class="row" v-if="assigneeList.length !== 0">
               
                   <router-link v-for="assignee in assigneeList" :key="assignee.id" :to="assignee.proId + '/' + assignee.proId + '/' + assignee.issueId" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
                     {{ assignee.orgName }} / {{ assignee.proName }} / {{ assignee.assignIssue }}
                   </router-link>
 
+              </div>
+
+              <div class="row my-5" v-else>
+                <h4 class="mx-auto font-italic">目前尚無資料</h4>
               </div>
           </div>
 
@@ -347,8 +351,7 @@
         let ary = [];
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
-        // console.log ($vmc.user.id);
-        query.equalTo ('userId', $vmc.user.id);
+        query.equalTo ('assigneeId', $vmc.user.id);
         query.find ()
           .then (resp => {
             // The object was retrieved successfully.

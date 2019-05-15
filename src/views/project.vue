@@ -66,7 +66,8 @@
           Assign to
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button v-for="user in users" @click="assignTo (user.userId, user.avatarHash)" class="dropdown-item">{{ user.name }}</button>
+          <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">{{ user.name }}</button>
+        
         </div>
       </div>
       
@@ -80,10 +81,13 @@
 
         <router-link style="line-height: 50px" v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
 
-            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
-            <a>{{ issue.name }}</a>
+          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+          <a>{{ issue.name }}</a>
 
           <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+          <!-- <h1>{{ issue }}</h1> -->
+          
 
           <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
             <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
@@ -224,7 +228,7 @@
                   query.get (object)
                     .then (resp => {
                       obj.name = resp.get ('username');
-                      obj.userId = object;
+                      obj.assigneeId = object;
                       obj.avatarHash = resp.get ('avatarHash');
                       obj.email = resp.get ('email');
 
@@ -260,7 +264,7 @@
         let $vmc = this;
         const Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
-        query.equalTo ("proId", $vmc.proId);
+        query.equalTo ('proId', $vmc.proId);
         let ary = [];
         let opened = [];
         let closed = [];
@@ -273,7 +277,7 @@
             obj.creator = object.get ('creator');
             obj.issueOpened = object.get ('issueOpened');
             obj.avatarHash = object.get ('avatarHash');
-            obj.userId = object.get ('userId');
+            obj.assigneeId = object.get ('assigneeId');
             // obj.assignee = object.get ('assignee');
 
             let arry = [];
@@ -346,8 +350,8 @@
         issue.set ('issueOpened', true);
         issue.set ('milestone', []);
         issue.set ('avatarHash', []);
-        issue.set ('userId', []);
-        issue.set ('issueId', )
+        // issue.set ('userId', []);
+        // issue.set ('issueId', )
         issue.set ('orgId', $vmc.orgId);
         issue.set ('proId', $vmc.proId);
         issue.set ('orgName', $vmc.orgName);
@@ -474,7 +478,7 @@
       },
 
 
-      assignTo (userId, avatarHash) {
+      assignTo (assigneeId, avatarHash) {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
@@ -489,7 +493,7 @@
               query.get (object.id)
                 .then (resp => {
                   resp.addUnique ('avatarHash', avatarHash);
-                  resp.addUnique ('userId', userId);
+                  resp.addUnique ('assigneeId', assigneeId);
                   // obj.assignee = userId;
                   // obj.avatarHash = avatarHash;
                   // resp.addUnique ('assignee', obj);
@@ -512,5 +516,8 @@
 </script>
 
 <style scoped>
-  
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+  }
 </style>
