@@ -39,7 +39,7 @@
     <div class="row">
       
       <div class="dropdown ml-auto mr-3 mb-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Mark as
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -48,10 +48,14 @@
         </div>
       </div>
 
+      <button type="button" class="btn btn-primary" disabled>
+          <span class="spinner-border spinner-border-sm"></span> Loading...
+      </button>
+
       <!-- Milestone Dropdown Menu -->
 
       <div class="dropdown mr-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           加入到 Milestone
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -62,7 +66,7 @@
       <!-- Assign-To Dropdown Menu -->
 
       <div class="dropdown mr-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assign to
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -85,9 +89,6 @@
           <a>{{ issue.name }}</a>
 
           <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
-
-          <!-- <h1>{{ issue }}</h1> -->
-          
 
           <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
             <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
@@ -170,6 +171,12 @@
 
       userId () {
         return this.$store.state.user.input.userId;
+      },
+
+
+      checking () {
+        let $vmc = this;
+        if ($vmc.checked.length === 0) return false;
       }
     },
 
@@ -519,5 +526,9 @@
   input[type="checkbox"] {
     width: 20px;
     height: 20px;
+  };
+
+  .notCheck button {
+
   }
 </style>
