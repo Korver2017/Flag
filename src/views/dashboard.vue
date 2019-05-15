@@ -35,7 +35,7 @@
             <h5 class="text-left">My Projects</h5>
               <div class="row">
 
-                <router-link v-for="project in projects" :key="project.id" :to="project.name" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                <router-link v-for="project in projects" :key="project.id" :to="project.orgId + '/' + project.proId" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
                   {{ project.orgName }} / {{ project.name }}
                 </router-link>
 
@@ -44,42 +44,28 @@
 
         </div>
 
-
-
-
-
-
-
         <!-- My Issue -->
-
-<!-- <template> -->
 
         <div class="row my-5">
           <div v-if="issues.length !== 0" class="col-8 mr-auto">
             <h5 class="text-left">My Issues</h5>
               <div class="row">
-
               
-                  <router-link v-for="issue in issues" :key="issue.id" :to="issue.issueName" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
-                    {{ issue.orgName }} / {{ issue.proName }} / {{ issue.issueName }}
-                  </router-link>
+                <router-link v-for="issue in issues" :key="issue.id" :to="issue.orgId + '/' + issue.proId + '/' + issue.issueId" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                  {{ issue.orgName }} / {{ issue.proName }} / {{ issue.issueName }}
+                </router-link>
 
               </div>
           </div>
 
         </div>
 
-
-
-
-
         <div class="row my-5">
           <div v-if="assigneeList.length !== 0" class="col-8 mr-auto">
             <h5 class="text-left">指派給我的 Issues</h5>
               <div class="row">
-
               
-                  <router-link v-for="assignee in assigneeList" :key="assignee.id" :to="assignee.assignIssue" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
+                  <router-link v-for="assignee in assigneeList" :key="assignee.id" :to="assignee.proId + '/' + assignee.proId + '/' + assignee.issueId" tag="button" class="col-4 list-group-item list-group-item-action btn btn-success" active-class="active">
                     {{ assignee.orgName }} / {{ assignee.proName }} / {{ assignee.assignIssue }}
                   </router-link>
 
@@ -87,10 +73,6 @@
           </div>
 
         </div>
-
-
-
-
 
       </div>
         
@@ -286,7 +268,8 @@
                     let object = resp[i];
                     obj.orgName = object.get ('orgName');
                     obj.name = object.get ('name');
-                    // obj.
+                    obj.orgId = object.get ('orgId');
+                    obj.proId = object.id;
                     ary.push (obj);
                   }
 
@@ -333,12 +316,15 @@
                 let Issue = Parse.Object.extend ('Issue');
                 let query = new Parse.Query (Issue);
 
-                query.containedIn ('proId', resp)
+                query.containedIn ('proId', resp);
                 query.find ()
                   .then (resp => {
                     
                     for (let i = 0; i < resp.length; i ++) {
                       let object = resp[i];
+                      obj.issueId = object.id;
+                      obj.orgId = object.get ('orgId');
+                      obj.proId = object.get ('proId');
                       obj.proName = object.get ('proName');
                       obj.orgName = object.get ('orgName');
                       obj.issueName = object.get ('name');
@@ -371,6 +357,9 @@
               let object = resp[i];
 
               obj.assignIssue = object.get ('name');
+              obj.issueId = object.id;
+              obj.orgId = object.get ('orgId');
+              obj.proId = object.get ('proId');
               obj.orgName = object.get ('orgName');
               obj.proName = object.get ('proName');
               ary.push (obj);

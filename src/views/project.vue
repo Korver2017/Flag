@@ -153,6 +153,7 @@
         milestones: [],
         users: [],
         orgName: '',
+        orgId: '',
         // memberId: [],
         // avatarHash: '',
       }
@@ -201,6 +202,8 @@
 
 
     methods: {
+
+
       showUser () {
         let $vmc = this;
         let Project = Parse.Object.extend ('Project');
@@ -208,9 +211,10 @@
         let ary = [];
         query.get ($vmc.proId)
           .then (resp => {
-            let orgId = resp.get ('orgId')
+            let orgId = resp.get ('orgId');
             let Org = Parse.Object.extend ('Organization');
             let query = new Parse.Query (Org);
+            $vmc.orgId = orgId;
             query.get (orgId)
               .then (resp => {
                 let results = resp.get ('memberId');
@@ -237,15 +241,15 @@
             // The object was not retrieved successfully.
             // error is a Parse.Error with an error code and message.
           });
+
       },
 
 
       showProName () {
         let $vmc = this;
         let id = $vmc.$route.params.proId;
-        // console.log (id);
 
-        const Pro = Parse.Object.extend ("Project");
+        const Pro = Parse.Object.extend ('Project');
         let query = new Parse.Query (Pro);
         query.get (id)
           .then (resp => {
@@ -335,18 +339,20 @@
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let issue = new Issue ();
+        let query = new Parse.Query (Issue);
 
         issue.set ('name', $vmc.title);
         issue.set ('content', $vmc.content);
-        issue.set ('proId', $vmc.proId);
         issue.set ('creator', $vmc.$store.state.user.username);
         issue.set ('issueOpened', true);
         issue.set ('milestone', []);
         issue.set ('avatarHash', []);
         issue.set ('userId', []);
-        issue.set ('proName', $vmc.proName);
+        issue.set ('issueId', )
+        issue.set ('orgId', $vmc.orgId);
+        issue.set ('proId', $vmc.proId);
         issue.set ('orgName', $vmc.orgName);
-        // issue.addUnique ('memberId', $vmc.userId);
+        issue.set ('proName', $vmc.proName);
 
         issue.save ()
           .then (resp => {
@@ -443,8 +449,6 @@
                 .then (resp => {
                   $vmc.checked = [];
                 });
-              // ary.push (resp.id);
-              // obj.issueOpened = resp.get ('issueOpened');
               
               let Mile = Parse.Object.extend ('Milestone');
               let query = new Parse.Query (Mile);
