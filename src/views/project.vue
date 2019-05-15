@@ -1,6 +1,13 @@
 <template>
   <div class="container my-4">
-    <h3 class="my-3 text-left">Project: {{ proName }}</h3>
+    <h3 class="my-3 text-left">
+
+      <router-link :to="{ name: 'organization', params: { orgId: orgId }}" tag="a" active-class="active">
+        <a>{{ orgName }}</a>
+      </router-link>
+       / {{ proName }}
+
+    </h3>
 
     <div v-if="adding">
 

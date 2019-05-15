@@ -1,19 +1,32 @@
 <template>
   <div class="container my-4">
 
-      <div class="row" v-if="editTitle === false">
-        <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
-        <button class="btn btn-warning ml-5" @click="editTitle = true">Edit Title</button>
-      </div>
+    <h3 class="my-3 text-left">
+      <router-link :to="{ name: 'organization', params: { orgId: orgData.orgId }}" tag="a" active-class="active">
+        <a>{{ orgData.orgName }}</a>
+      </router-link> / 
 
-      <div v-else class="row">
+      <router-link :to="{ name: 'project', params: { proId: proData.proId }}" tag="a" active-class="active">
+        <a>{{ proData.proName }}</a>
+      </router-link>
+    </h3>
 
-        <input @keyup.enter="changeTitle" v-model="stashTitle" type="text" class="col-6 form-control" placeholder="New Title" aria-label="New Title" aria-describedby="button-addon2">
+    
 
-        <button @click="changeTitle" class="ml-3 btn btn-success" type="button" id="button-addon2">Submit</button>
-        <button @click="cancelChange" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
-        
-      </div>
+
+    <div class="row" v-if="editTitle === false">
+      <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
+      <button class="btn btn-warning ml-5" @click="editTitle = true">Edit Title</button>
+    </div>
+
+    <div v-else class="row">
+
+      <input @keyup.enter="changeTitle" v-model="stashTitle" type="text" class="col-6 form-control" placeholder="New Title" aria-label="New Title" aria-describedby="button-addon2">
+
+      <button @click="changeTitle" class="ml-3 btn btn-success" type="button" id="button-addon2">Submit</button>
+      <button @click="cancelChange" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
+      
+    </div>
 
     
     <div class="row">
@@ -45,7 +58,6 @@
 
         </form>
 
-          
 
         <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
         <p v-else class="p-4 border border-success text-left font-italic">No description provided.</p>
@@ -170,6 +182,8 @@
         updateLabelTitle: '',
         editing: false,
         stashIssueContent : '',
+        orgData: '',
+        proData: '',
       }
     },
 
@@ -225,6 +239,8 @@
 
         let $vmc = this;
         let ary = [];
+        let orgData = {};
+        let proData = {};
 
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
@@ -234,6 +250,13 @@
             $vmc.creatorId = resp.get ('creatorId');
             $vmc.creator = resp.get ('creator');
             $vmc.content = resp.get ('content');
+
+            orgData.orgId = resp.get ('orgId');
+            orgData.orgName = resp.get ('orgName');
+            $vmc.orgData = orgData;
+            proData.proId = resp.get ('proId');
+            proData.proName = resp.get ('proName');
+            $vmc.proData = proData;
           });
           
       },
