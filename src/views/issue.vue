@@ -30,7 +30,7 @@
             Commented by <span class="font-weight-bold">{{ creator }}</span>
           </p>
 
-          <button v-if="editing === false" class="ml-auto mr-5 btn btn-warning" @click="editIssueContent">Edit</button>
+          <button v-if="editing === false && creatorId === userId" class="ml-auto mr-5 btn btn-warning" @click="editIssueContent">Edit</button>
         </div>
 
         <form v-if="editing === true" class="mx-auto my-5">
@@ -57,9 +57,12 @@
         <div class="mt-5" v-for="(comment, index) in comments">
           <div class="row mb-3">
             <p class="text-left mb-0">
+
+              <!-- <h1>{{ comment }}</h1> -->
+
               Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
             </p>
-            <div class="row ml-auto mr-5">
+            <div v-if="comment.userId === userId" class="row ml-auto mr-5">
               <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
               <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
             </div>
@@ -156,6 +159,7 @@
         title: '',
         editTitle: false,
         stashTitle: '',
+        creatorId: '',
         creator: '',
         commentor: '',
         comments: [],
@@ -194,14 +198,19 @@
 
 
     computed: {
+      userId () {
+        return this.$store.state.user.input.userId;
+      },
+
+      
       issueId () {
         return this.$route.params.issueId; 
       },
+
     },
 
 
     mounted () {
-
       this.showIssueInfo ();
       this.allLabel ();
       this.showComment ();
@@ -222,6 +231,7 @@
         query.get ($vmc.issueId)
           .then (resp => {
             $vmc.title = resp.get ('name');
+            $vmc.creatorId = resp.get ('creatorId');
             $vmc.creator = resp.get ('creator');
             $vmc.content = resp.get ('content');
           });
@@ -237,6 +247,7 @@
         comment.set ('content', $vmc.commentText);
         comment.set ('issueId', $vmc.issueId);
         comment.set ('commentor', $vmc.$store.state.user.username);
+        comment.set ('userId', $vmc.$store.state.user.input.userId);
 
         comment.save ()
           .then (resp => {
@@ -303,6 +314,7 @@
               let object = resp[i];
               obj.commentId = object.id;
               obj.content = object.get ('content');
+              obj.userId = object.get ('userId');
               obj.commentor = object.get ('commentor');
               obj.commentEditing = false;
               obj.stashComment = '';

@@ -152,26 +152,26 @@ export default {
      * User signin
      *
      */
-    signin: function ({state, commit}) {
-        let Account = Parse.Object.extend("Account");
-        let query = new Parse.Query(Account);
+    signin: function ({ state, commit }) {
+        let Account = Parse.Object.extend ('Account');
+        let query = new Parse.Query (Account);
 
         query.equalTo("email", state.input.email);
-        query.find()
+        query.find ()
           .then(resp => {
 
             if (resp.length < 1) {
-              alert('Email 錯誤');
+              alert ('Email 錯誤');
               return;
             }
 
-            query.equalTo("password", state.input.password);
-            query.find()
-              .then(resp => {
+            query.equalTo ('password', state.input.password);
+            query.find ()
+              .then (resp => {
 
 
                 if (resp.length < 1) {
-                  alert('密碼錯誤');
+                  alert ('密碼錯誤');
                   return;
                 }
 
@@ -185,9 +185,9 @@ export default {
                   .then (resp => {
                     // state.username = resp.get('username');
                     let data = {};
-                    data.username = resp.get('username');
+                    data.username = resp.get ('username');
                     data.authed = true;
-                    commit('authed', data);
+                    commit ('authed', data);
                   });
 
                 // alert(`${state.input.email} authed success!`);
