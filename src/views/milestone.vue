@@ -26,9 +26,11 @@
 
     
     <ul v-for="(mile, index) in milestones" class="list-group list-group-flush">
+
       <li v-if="mile.mileOpened === false && showOpened === false" class="py-5 text-left list-group-item">
 
         <div class="row">
+          <h1>{{ mile.mileId }}</h1>
           
           <h4>{{ mile.title }}</h4>
 
@@ -75,6 +77,12 @@
         <div class="row">
           
           <h4>{{ mile.title }}</h4>
+          <button class="btn btn-success" @click="showMileDetail (mile.mileId)">{{ mile.mileId }}</button>
+          <h1>{{ mile }}</h1>
+
+          <li v-for="mileIssue in mileIssues">
+            {{ mileIssue }}
+          </li>
 
           <div class="text-right mb-5 ml-auto mr-5">
         
@@ -139,6 +147,7 @@
         orgId: '',
         orgName: '',
         proName: '',
+        mileIssues: [],
       }
     },
 
@@ -185,12 +194,10 @@
 
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
-        console.log ($vmc.proId);
         query.equalTo ('proId', $vmc.proId)
         query.find ()
           .then (resp => {
             let query = new Parse.Query (Issue);
-            console.log (resp[0].id);
             query.get (resp[0].id)
               .then (resp => {
                 $vmc.orgName = resp.get ('orgName');
@@ -257,28 +264,6 @@
       },
 
 
-      // addMilestone () {
-      //   let $vmc = this;
-
-      //   const Mile = Parse.Object.extend ('Milestone');
-      //   const mile = new Mile ();
-
-      //   mile.set ("title", $vmc.mileTitle);
-      //   mile.set ("proId", $vmc.proId);
-      //   mile.set ("mileOpened", true);
-
-      //   mile.save ()
-      //     .then (resp => {
-      //       $vmc.showMile ();
-      //       // Execute any logic that should take place after the object is saved.
-      //     }, (error) => {
-      //       // Execute any logic that should take place if the save fails.
-      //       // error is a Parse.Error with an error code and message.
-      //       alert('Failed to create new object, with error code: ' + error.message);
-      //     });
-      // },
-
-
       editMilestone (index) {
         let $vmc = this;
         let Mile = Parse.Object.extend ('Milestone');
@@ -333,6 +318,25 @@
         $vmc.milestones[index].titleEditing = false;
         $vmc.milestones[index].newTitle = '';
       },
+
+
+      showMileDetail (mileId) {
+        let $vmc = this;
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+        let ary = [];
+        query.equalTo ('milestone', mileId);
+        query.find()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i++) {
+              let object = resp[i];
+              ary.push (object.get ('name'));
+            }
+          })
+
+        $vmc.mileIssues = ary;
+        
+      }
     },
     
   }
