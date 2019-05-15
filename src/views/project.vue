@@ -48,10 +48,6 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary" disabled>
-          <span class="spinner-border spinner-border-sm"></span> Loading...
-      </button>
-
       <!-- Milestone Dropdown Menu -->
 
       <div class="dropdown mr-3">
