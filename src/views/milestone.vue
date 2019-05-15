@@ -13,19 +13,6 @@
 
     </h3>
 
-    <!-- <form class="col-6 ml-auto">
-
-      <div class="form-group text-left">
-        <label @keyup.enter="addMilestone" for="name">Add Milestone</label>
-        <div class="row">
-        <input v-model.trim="mileTitle" class="form-control col-8" placeholder="Milestone Name" id="name">
-
-        <button class="btn btn-success" @click.prevent="addMilestone">New Milestone</button>
-        </div>
-      </div>
-      
-    </form> -->
-
     <div class="rwo text-left mb-5">
 
       <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">

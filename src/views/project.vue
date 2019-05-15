@@ -28,8 +28,8 @@
     
     <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
 
-    <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-primary" active-class="active">
-      Milestone
+    <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-info" active-class="active">
+      Milestone <span class="badge badge-light">{{ milestones.length }}</span>
     </router-link>
 
     <form class="col-6 ml-auto">
@@ -39,7 +39,7 @@
         <div class="row">
         <input v-model.trim="mileTitle" class="form-control col-8" placeholder="Milestone Name" id="name">
 
-        <button class="btn btn-success" @click.prevent="addMilestone">New Milestone</button>
+        <button class="btn btn-success" @click.prevent="addMilestone">Submit</button>
         </div>
       </div>
       
@@ -549,6 +549,8 @@
 
         mile.save ()
           .then (resp => {
+            $vmc.mileTitle = '';
+            $vmc.showMilestone ();
             // $vmc.showMile ();
             // Execute any logic that should take place after the object is saved.
           }, (error) => {
