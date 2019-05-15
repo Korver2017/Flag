@@ -3,7 +3,7 @@
   <div class="container mt-4">
     <h1>{{ orgName }}</h1>
 
-    <div class="row col-6 mx-auto my-4">
+    <div class="row col-6 mx-auto my-5">
       <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New Project" aria-describedby="button-addon2">
       <button class="btn btn-success" @click="newProject">New Project</button>
     </div>
@@ -137,10 +137,6 @@
 
 
     watch: {
-      // orgId () {
-      //   this.showOrgName ();
-      //   this.showProject ();
-      // }
     }
   }
 </script>

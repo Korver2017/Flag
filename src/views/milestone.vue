@@ -1,7 +1,19 @@
 <template>
-  <div class="container mt-5">
+  <div class="container my-4">
 
-    <form class="col-6 ml-auto">
+    <h3 class="my-5 text-left">
+
+      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+        <a>{{ orgName }}</a>
+      </router-link> / 
+      
+      <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+        <a>{{ proName }}</a>
+      </router-link>
+
+    </h3>
+
+    <!-- <form class="col-6 ml-auto">
 
       <div class="form-group text-left">
         <label @keyup.enter="addMilestone" for="name">Add Milestone</label>
@@ -12,7 +24,7 @@
         </div>
       </div>
       
-    </form>
+    </form> -->
 
     <div class="rwo text-left mb-5">
 
@@ -137,6 +149,9 @@
         mileTitle: '',
         mileOpened: 0,
         mileClosed: 0,
+        orgId: '',
+        orgName: '',
+        proName: '',
       }
     },
 
@@ -173,10 +188,31 @@
       let $vmc = this;
 
       $vmc.showMile ();
+      $vmc.showRouteName ();      
     },
 
 
     methods: {
+      showRouteName () {
+        let $vmc = this;
+
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+        console.log ($vmc.proId);
+        query.equalTo ('proId', $vmc.proId)
+        query.find ()
+          .then (resp => {
+            let query = new Parse.Query (Issue);
+            console.log (resp[0].id);
+            query.get (resp[0].id)
+              .then (resp => {
+                $vmc.orgName = resp.get ('orgName');
+                $vmc.proName = resp.get ('proName');
+              })
+          })
+      },
+
+      
       showMile () {
         let $vmc = this;
         let ary = [];
@@ -200,6 +236,7 @@
               let query = new Parse.Query (Issue);
               let obj = {};
               let count = 0;
+
               obj.title = object.get ('title');
               query.equalTo ('milestone', object.id);
               query.find ()
@@ -233,26 +270,26 @@
       },
 
 
-      addMilestone () {
-        let $vmc = this;
+      // addMilestone () {
+      //   let $vmc = this;
 
-        const Mile = Parse.Object.extend ('Milestone');
-        const mile = new Mile ();
+      //   const Mile = Parse.Object.extend ('Milestone');
+      //   const mile = new Mile ();
 
-        mile.set ("title", $vmc.mileTitle);
-        mile.set ("proId", $vmc.proId);
-        mile.set ("mileOpened", true);
+      //   mile.set ("title", $vmc.mileTitle);
+      //   mile.set ("proId", $vmc.proId);
+      //   mile.set ("mileOpened", true);
 
-        mile.save ()
-          .then (resp => {
-            $vmc.showMile ();
-            // Execute any logic that should take place after the object is saved.
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert('Failed to create new object, with error code: ' + error.message);
-          });
-      },
+      //   mile.save ()
+      //     .then (resp => {
+      //       $vmc.showMile ();
+      //       // Execute any logic that should take place after the object is saved.
+      //     }, (error) => {
+      //       // Execute any logic that should take place if the save fails.
+      //       // error is a Parse.Error with an error code and message.
+      //       alert('Failed to create new object, with error code: ' + error.message);
+      //     });
+      // },
 
 
       editMilestone (index) {

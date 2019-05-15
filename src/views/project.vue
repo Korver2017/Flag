@@ -1,8 +1,8 @@
 <template>
   <div class="container my-4">
-    <h3 class="my-3 text-left">
+    <h3 class="my-5 text-left">
 
-      <router-link :to="{ name: 'organization', params: { orgId: orgId }}" tag="a" active-class="active">
+      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
         <a>{{ orgName }}</a>
       </router-link>
        / {{ proName }}
@@ -31,6 +31,19 @@
     <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-primary" active-class="active">
       Milestone
     </router-link>
+
+    <form class="col-6 ml-auto">
+
+      <div class="form-group text-left">
+        <label @keyup.enter="addMilestone" for="name">Add Milestone</label>
+        <div class="row">
+        <input v-model.trim="mileTitle" class="form-control col-8" placeholder="Milestone Name" id="name">
+
+        <button class="btn btn-success" @click.prevent="addMilestone">New Milestone</button>
+        </div>
+      </div>
+      
+    </form>
 
     <div class="rwo text-left">
       <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
@@ -162,6 +175,8 @@
         users: [],
         orgName: '',
         orgId: '',
+        // proId: '',
+        mileTitle: '',
       }
     },
 
@@ -517,7 +532,31 @@
             }
           })
 
-      }
+      },
+
+
+      
+      addMilestone () {
+        let $vmc = this;
+
+        const Mile = Parse.Object.extend ('Milestone');
+        const mile = new Mile ();
+
+        mile.set ('title', $vmc.mileTitle);
+        mile.set ('proId', $vmc.proId);
+        mile.set ('orgId', $vmc.orgId);
+        mile.set ('mileOpened', true);
+
+        mile.save ()
+          .then (resp => {
+            // $vmc.showMile ();
+            // Execute any logic that should take place after the object is saved.
+          }, (error) => {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and message.
+            alert ('Failed to create new object, with error code: ' + error.message);
+          });
+      },
     },
 
     watch: {
@@ -530,8 +569,4 @@
     width: 20px;
     height: 20px;
   };
-
-  .notCheck button {
-
-  }
 </style>

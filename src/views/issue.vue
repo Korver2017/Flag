@@ -1,18 +1,15 @@
 <template>
   <div class="container my-4">
 
-    <h3 class="my-3 text-left">
-      <router-link :to="{ name: 'organization', params: { orgId: orgData.orgId }}" tag="a" active-class="active">
+    <h3 class="my-5 text-left">
+      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
         <a>{{ orgData.orgName }}</a>
       </router-link> / 
 
-      <router-link :to="{ name: 'project', params: { proId: proData.proId }}" tag="a" active-class="active">
+      <router-link :to="{ name: 'project'}" tag="a" active-class="active">
         <a>{{ proData.proName }}</a>
       </router-link>
     </h3>
-
-    
-
 
     <div class="row" v-if="editTitle === false">
       <h3 class="text-left">{{ title }} - Created by {{ creator }}</h3>
@@ -69,9 +66,6 @@
         <div class="mt-5" v-for="(comment, index) in comments">
           <div class="row mb-3">
             <p class="text-left mb-0">
-
-              <!-- <h1>{{ comment }}</h1> -->
-
               Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
             </p>
             <div v-if="comment.userId === userId" class="row ml-auto mr-5">
@@ -554,7 +548,6 @@
           // error is a Parse.Error with an error code and message.
         });
       },
-      
 
     },
 
