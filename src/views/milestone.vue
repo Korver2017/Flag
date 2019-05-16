@@ -30,9 +30,13 @@
       <li v-if="mile.mileOpened === false && showOpened === false" class="py-5 text-left list-group-item">
 
         <div class="row">
-          <h1>{{ mile.mileId }}</h1>
+          <!-- <h1>{{ mile.mileId }}</h1> -->
           
-          <h4>{{ mile.title }}</h4>
+          <!-- <h4>{{ mile.title }}</h4> -->
+
+          <router-link :to="{ name: 'milestone-detail', params: { mileId: mile.mileId }}" tag="a" active-class="active">
+            <a>{{ mile.title }}</a>
+          </router-link>
 
           <div class="text-right mb-5 ml-auto mr-5">
         
