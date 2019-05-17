@@ -34,7 +34,7 @@
           
           <!-- <h4>{{ mile.title }}</h4> -->
 
-          <router-link :to="{ name: 'milestone-detail', params: { mileId: mile.mileId }}" tag="a" active-class="active">
+          <router-link :to="{ name: 'milestone-detail', params: { mileId: mile.mileId, mileTitle: mile.title }}" tag="a" active-class="active">
             <a>{{ mile.title }}</a>
           </router-link>
 
@@ -80,13 +80,17 @@
 
         <div class="row">
           
-          <h4>{{ mile.title }}</h4>
+          <!-- <h4>{{ mile.title }}</h4>
           <button class="btn btn-success" @click="showMileDetail (mile.mileId)">{{ mile.mileId }}</button>
           <h1>{{ mile }}</h1>
 
           <li v-for="mileIssue in mileIssues">
             {{ mileIssue }}
-          </li>
+          </li> -->
+
+          <router-link :to="{ name: 'milestone-detail', params: { mileId: mile.mileId, mileTitle: mile.title }}" tag="a" active-class="active">
+            <a>{{ mile.title }}{{mile.mileId}}</a>
+          </router-link>
 
           <div class="text-right mb-5 ml-auto mr-5">
         
