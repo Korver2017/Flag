@@ -79,7 +79,7 @@
             <div class="col-6">
 
               <div class="mx-auto row">
-                <p class="mx-2">{{ mile.percentage }}% complete</p>
+                <p class="mx-2">{{ mile.percentage }}% Complete</p>
                 <p class="mx-2">{{ mile.open }} open</p>
                 <p class="mx-2">{{ mile.closed }} closed</p>
               </div>
@@ -149,7 +149,7 @@
             <div class="col-6">
 
               <div class="mx-auto row">
-                <p class="mx-2">{{ mile.percentage }}% complete</p>
+                <p class="mx-2">{{ mile.percentage }}% Complete</p>
                 <p class="mx-2">{{ mile.open }} open</p>
                 <p class="mx-2">{{ mile.closed }} closed</p>
               </div>
@@ -356,7 +356,13 @@
                   obj.all = all;
                   obj.closed = closed;
                   obj.open = all - closed;
-                  obj.percentage = ((closed / all) * 100).toFixed (0);
+
+                  if (all === 0) {
+                    obj.percentage = 0;
+                  } else {
+                    obj.percentage = ((closed / all) * 100).toFixed (0);
+                  }
+                  
                   obj.titleEditing = false;
                   obj.newTitle = '';
                   obj.mileEditing = false,

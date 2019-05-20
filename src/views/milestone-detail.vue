@@ -91,7 +91,7 @@
       
     </div>
 
-    <h3 class="text-left">{{ percentage }}% complete</h3>
+    <h3 class="text-left">{{ percentage }}% Complete</h3>
 
     <!-- Issue List -->
 
@@ -297,7 +297,11 @@
           .then (resp => {
             let closed = $vmc.closed.length;
             let opened = $vmc.opened.length
-            $vmc.percentage = ((closed / (opened + closed)) * 100).toFixed (0);
+            if (opened + closed === 0) {
+              $vmc.percentage = 0;
+            } else {
+              $vmc.percentage = ((closed / (opened + closed)) * 100).toFixed (0);
+            }
           })
 
           $vmc.issues = ary;
@@ -473,9 +477,10 @@
           query.get ($vmc.checked[i].issueId)
             .then (resp => {
               
-              resp.addUnique ('milestone', mileId);
+              resp.set ('milestone', mileId);
               resp.save ()
                 .then (resp => {
+                  $vmc.showIssue ();
                   $vmc.checked = [];
                 });
               

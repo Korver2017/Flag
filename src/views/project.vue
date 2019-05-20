@@ -476,7 +476,7 @@
           query.get ($vmc.checked[i])
             .then (resp => {
               
-              resp.addUnique ('milestone', mileId);
+              resp.set ('milestone', mileId);
               resp.save ()
                 .then (resp => {
                   $vmc.checked = [];
