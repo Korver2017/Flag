@@ -28,11 +28,15 @@
     
     <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
 
-    <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-info" active-class="active">
+    <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active"><i class="fa fa-map-signs" aria-hidden="true"></i>
       Milestone <span class="badge badge-light">{{ milestones.length }}</span>
     </router-link>
 
-    <form class="col-6 ml-auto">
+    <!-- <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-info" active-class="active">
+      Milestone <span class="badge badge-light">{{ milestones.length }}</span>
+    </router-link> -->
+
+    <!-- <form class="col-6 ml-auto">
 
       <div class="form-group text-left">
         <label @keyup.enter="addMilestone" for="name">Add Milestone</label>
@@ -43,7 +47,7 @@
         </div>
       </div>
       
-    </form>
+    </form> -->
 
     <div class="rwo text-left">
       <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
@@ -494,12 +498,7 @@
               // The object was not retrieved successfully.
               // error is a Parse.Error with an error code and message.
             });
-
-          
         }
-
-
-        
       },
 
 
@@ -536,29 +535,29 @@
 
 
       
-      addMilestone () {
-        let $vmc = this;
+      // addMilestone () {
+      //   let $vmc = this;
 
-        const Mile = Parse.Object.extend ('Milestone');
-        const mile = new Mile ();
+      //   const Mile = Parse.Object.extend ('Milestone');
+      //   const mile = new Mile ();
 
-        mile.set ('title', $vmc.mileTitle);
-        mile.set ('proId', $vmc.proId);
-        mile.set ('orgId', $vmc.orgId);
-        mile.set ('mileOpened', true);
+      //   mile.set ('title', $vmc.mileTitle);
+      //   mile.set ('proId', $vmc.proId);
+      //   mile.set ('orgId', $vmc.orgId);
+      //   mile.set ('mileOpened', true);
 
-        mile.save ()
-          .then (resp => {
-            $vmc.mileTitle = '';
-            $vmc.showMilestone ();
-            // $vmc.showMile ();
-            // Execute any logic that should take place after the object is saved.
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert ('Failed to create new object, with error code: ' + error.message);
-          });
-      },
+      //   mile.save ()
+      //     .then (resp => {
+      //       $vmc.mileTitle = '';
+      //       $vmc.showMilestone ();
+      //       // $vmc.showMile ();
+      //       // Execute any logic that should take place after the object is saved.
+      //     }, (error) => {
+      //       // Execute any logic that should take place if the save fails.
+      //       // error is a Parse.Error with an error code and message.
+      //       alert ('Failed to create new object, with error code: ' + error.message);
+      //     });
+      // },
     },
 
     watch: {

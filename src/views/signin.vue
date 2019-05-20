@@ -7,7 +7,7 @@
 
       <form class="col-10 mx-auto my-5">
         <div class="form-group text-left">
-          <label @keyup.enter="signin" for="email">Email</label>
+          <label @keyup.enter="signin" for="email"></label>
           <input v-model="email" class="form-control" placeholder="Your Email" id="email" autofocus>
         </div>
         <div class="form-group text-left">
@@ -17,8 +17,6 @@
         <button @click.prevent="signin" class="mx-3 btn btn-success">Submit</button>
       </form>
 
-      
-      <br />
 
     </div>
 
@@ -30,7 +28,7 @@
 
   // Import
 
-  import {mapState, mapActions} from 'vuex';
+  import { mapState, mapActions } from 'vuex';
 
   export default {
 
@@ -49,7 +47,7 @@
      */
     data () {
       return {
-        state: false
+        state: false,
       }
     },
 

@@ -52,14 +52,13 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <button @click="addIssueTo (mile.mileId)" v-for="(mile, index) in milestones" class="dropdown-item">
-            
-            <!-- <template>
-              {{ checked }} | {{ mile }} | {{ mileId }}
-            </template> -->
+
             {{ mile.title }}
+
             <template v-if="mileId === mile.mileId">
-              123
+              <i class="ml-2 fa fa-check" aria-hidden="true"></i>
             </template>
+
             </button>
         </div>
       </div>
@@ -71,7 +70,19 @@
           Assign to
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">{{ user.name }}</button>
+          <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">
+
+            <template v-for="c in checked">
+
+              <template v-for="assigneeId in c.assigneeId">
+                {{ user.name }}
+                <i v-if="assigneeId === user.assigneeId" class="ml-2 fa fa-check" aria-hidden="true"></i>
+
+              </template>
+              
+            </template>
+            
+          </button>
         
         </div>
       </div>
@@ -90,7 +101,7 @@
 
         <li v-if="issue.issueOpened === true && showOpened === true" v-for="issue in issues" style="line-height: 50px" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
 
-          <input class="mr-3" type="checkbox" :value="issue.issueId" v-model="checked">
+          <input class="mr-3" type="checkbox" :value="{ issueId: issue.issueId, assigneeId: issue.assigneeId }" v-model="checked">
 
           <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="a" active-class="active">
             <a>{{ issue.name }}</a>
@@ -175,12 +186,12 @@
       },
 
 
-      checkExist () {
-        let $vmc = this;
-        $vmc.checked.forEach (item => {
-          console.log (item);
-        })
-      },
+      // checkExist () {
+      //   let $vmc = this;
+      //   $vmc.checked.forEach (item => {
+      //     console.log (item);
+      //   })
+      // },
 
 
       proId () {
@@ -228,6 +239,7 @@
               obj.name = object.get ('name');
               obj.issueId = object.id;
               obj.avatarHash = object.get ('avatarHash');
+              obj.assigneeId = object.get ('assigneeId');
 
               let arry = [];
               let Label = Parse.Object.extend ('Label');
@@ -282,12 +294,12 @@
                   let query = new Parse.Query (Account);
                   query.get (object)
                     .then (resp => {
+                      // obj.uerId = object;
                       obj.name = resp.get ('username');
                       obj.assigneeId = object;
                       obj.avatarHash = resp.get ('avatarHash');
                       obj.email = resp.get ('email');
 
-                      // obj.avatarHash = $vmc.$md5 (email);
                       ary.push (obj);
                     });
                 }

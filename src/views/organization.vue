@@ -1,6 +1,7 @@
 <template>
 
   <div class="container mt-4">
+    
     <h1>{{ orgName }}</h1>
 
     <div class="row col-6 mx-auto my-5">
@@ -9,7 +10,7 @@
     </div>
 
     <div v-for="project in projects" class="list-group-flush">
-      <router-link class="py-3 text-left list-group-item list-group-item-action" :to="{ name: 'project', params: { proId: project.proId }}" tag="button" active-class="active">
+      <router-link class="py-3 text-left list-group-item list-group-item-action" :to="{ name: 'project', params: { proId: project.proId, orgId: orgId }}" tag="button" active-class="active">
          <h5>{{ project.name }}</h5>
       </router-link>
     </div>
@@ -32,7 +33,12 @@
         orgName: '',
         projectName: '',
         projects: [],
+        // date: '',
       }
+    },
+
+
+    components: {
     },
 
 
