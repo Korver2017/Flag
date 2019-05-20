@@ -72,7 +72,9 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">
 
-            <template v-for="c in checked">
+            {{ user.name }}
+
+            <!-- <template v-for="c in checked">
 
               <template v-for="assigneeId in c.assigneeId">
                 {{ user.name }}
@@ -80,7 +82,7 @@
 
               </template>
               
-            </template>
+            </template> -->
             
           </button>
         
@@ -116,12 +118,41 @@
           
         </li>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <li v-if="issue.issueOpened === false && showOpened === false" v-for="issue in issues" style="line-height: 50px" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+
+          <input class="mr-3" type="checkbox" :value="{ issueId: issue.issueId, assigneeId: issue.assigneeId }" v-model="checked">
 
           <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="a" active-class="active">
             <a>{{ issue.name }}</a>
           </router-link>
           
+
           <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
 
           <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
@@ -266,7 +297,7 @@
           .then (resp => {
             let closed = $vmc.closed.length;
             let opened = $vmc.opened.length
-            $vmc.percentage = (closed / (opened + closed)) * 100;
+            $vmc.percentage = ((closed / (opened + closed)) * 100).toFixed (0);
           })
 
           $vmc.issues = ary;
@@ -377,7 +408,7 @@
         let Issue = Parse.Object.extend ('Issue');
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
-          query.get ($vmc.checked[i])
+          query.get ($vmc.checked[i].issueId)
             .then (resp => {
               resp.set ('issueOpened', false);
               resp.save ()
@@ -396,7 +427,7 @@
         let Issue = Parse.Object.extend ('Issue');
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
-          query.get ($vmc.checked[i])
+          query.get ($vmc.checked[i].issueId)
           .then (resp => {
             resp.set ('issueOpened', true);
             resp.save ()
@@ -439,7 +470,7 @@
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
           
-          query.get ($vmc.checked[i])
+          query.get ($vmc.checked[i].issueId)
             .then (resp => {
               
               resp.addUnique ('milestone', mileId);
@@ -478,7 +509,8 @@
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
         let query = new Parse.Query (Issue);
-        query.containedIn ('objectId', $vmc.checked);
+        let checkedIds = $vmc.checked.map (item => item.issueId);
+        query.containedIn ('objectId', checkedIds);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
