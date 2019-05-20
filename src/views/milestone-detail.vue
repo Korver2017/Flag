@@ -1,8 +1,5 @@
 <template>
   <div class="container my-4">
-
-    <h1>Milestone Detail Component</h1>
-    <!-- <h1>{{ mileId }}</h1> -->
     
     <h3 class="my-5 text-left">
 
@@ -59,7 +56,7 @@
               <i class="ml-2 fa fa-check" aria-hidden="true"></i>
             </template>
 
-            </button>
+          </button>
         </div>
       </div>
 
@@ -70,19 +67,10 @@
           Assign to
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">
+          <button v-for="(user, index) in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">
 
             {{ user.name }}
-
-            <!-- <template v-for="c in checked">
-
-              <template v-for="assigneeId in c.assigneeId">
-                {{ user.name }}
-                <i v-if="assigneeId === user.assigneeId" class="ml-2 fa fa-check" aria-hidden="true"></i>
-
-              </template>
-              
-            </template> -->
+            <!-- <i class="ml-2 fa fa-check" aria-hidden="true"></i> -->
             
           </button>
         
@@ -118,32 +106,6 @@
           
         </li>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <li v-if="issue.issueOpened === false && showOpened === false" v-for="issue in issues" style="line-height: 50px" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
 
           <input class="mr-3" type="checkbox" :value="{ issueId: issue.issueId, assigneeId: issue.assigneeId }" v-model="checked">
@@ -151,7 +113,6 @@
           <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="a" active-class="active">
             <a>{{ issue.name }}</a>
           </router-link>
-          
 
           <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
 
@@ -160,7 +121,6 @@
           </template>
           
         </li>
-
 
     </div>
 
@@ -186,11 +146,8 @@
       return {
         proName: '',
         issues: [],
-        adding: false,
-        title: '',
-        content: '',
         username: this.$store.state.user.username,
-        labels: [],
+        // labels: [],
         checked: [],
         opened: [],
         closed: [],
@@ -200,8 +157,6 @@
         orgName: '',
         orgId: '',
         percentage: 0,
-        // proId: '',
-        // mileTitle: '',
       }
     },
 
@@ -217,16 +172,8 @@
       },
 
 
-      // checkExist () {
-      //   let $vmc = this;
-      //   $vmc.checked.forEach (item => {
-      //     console.log (item);
-      //   })
-      // },
-
-
       proId () {
-        return  this.$route.params.proId;
+        return this.$route.params.proId;
       },
 
 
@@ -361,55 +308,12 @@
             $vmc.orgName = resp.get ('orgName');
           });
       },
-      
-
-      addIssue () {
-        this.adding = true;
-      },
-
-      submitIssue () {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        let issue = new Issue ();
-        let query = new Parse.Query (Issue);
-
-        issue.set ('name', $vmc.title);
-        issue.set ('content', $vmc.content);
-        issue.set ('creator', $vmc.$store.state.user.username);
-        issue.set ('creatorId', $vmc.$store.state.user.input.userId);
-        issue.set ('issueOpened', true);
-        issue.set ('milestone', []);
-        issue.set ('avatarHash', []);
-        // issue.set ('userId', []);
-        // issue.set ('issueId', )
-        issue.set ('orgId', $vmc.orgId);
-        issue.set ('proId', $vmc.proId);
-        issue.set ('orgName', $vmc.orgName);
-        issue.set ('proName', $vmc.proName);
-
-        issue.save ()
-          .then (resp => {
-            $vmc.title = '';
-            $vmc.content = '';
-            $vmc.showIssue ();
-            $vmc.adding = false;
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert ('Failed to create new object, with error code: ' + error.message);
-          });
-      },
-
-      cancel () {
-        this.adding = false;
-        this.title = '';
-        this.content = '';
-      },
 
 
       closeIssue () {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
+
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
           query.get ($vmc.checked[i].issueId)
@@ -419,9 +323,9 @@
                 .then (() => {
                   $vmc.showIssue ();
                 })
-            }, (error) => {
-          });
+              }, (error) => {});
         }
+
         $vmc.checked = [];
       },
 
@@ -437,11 +341,12 @@
             resp.save ()
               .then (() => $vmc.showIssue ());
             // The object was retrieved successfully.
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
+            }, (error) => {
+              // The object was not retrieved successfully.
+              // error is a Parse.Error with an error code and message.
+            });
         }
+
         $vmc.checked = [];
       },
 
@@ -501,11 +406,7 @@
               // error is a Parse.Error with an error code and message.
             });
 
-          
         }
-
-
-        
       },
 
 
