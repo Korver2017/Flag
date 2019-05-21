@@ -33,6 +33,7 @@
         orgName: '',
         projectName: '',
         projects: [],
+        defaultLabels: [],
         // date: '',
       }
     },
@@ -54,6 +55,43 @@
     
 
     created () {
+      let $vmc = this;
+      let ary = [];
+
+      const Label = Parse.Object.extend ('Label');
+      // const label = new Label ();
+
+      // gameScore.set("score", 1337);
+      // gameScore.set("playerName", "Sean Plott");
+      // gameScore.set("cheatMode", false);
+
+      // gameScore.save()
+      // .then((gameScore) => {
+      //   // Execute any logic that should take place after the object is saved.
+      //   alert('New object created with objectId: ' + gameScore.id);
+      // }, (error) => {
+      //   // Execute any logic that should take place if the save fails.
+      //   // error is a Parse.Error with an error code and message.
+      //   alert('Failed to create new object, with error code: ' + error.message);
+      // });
+      
+      const query = new Parse.Query (Label);
+      query.equalTo ('proId', 'default');
+      query.find ()
+        .then (resp => {
+          for (let i = 0; i < resp.length; i++) {
+            let obj = {};
+            let object = resp[i];
+            obj.title = object.get ('title');
+            obj.labelDesc = object.get ('labelDesc');
+            ary.push (obj);
+            // label.set ('title', obj.title);
+            // label.set ('labelDesc', obj.labelDesc);
+            // label.save ();
+          }
+        })
+
+      $vmc.defaultLabels = ary;
     },
 
 
@@ -111,30 +149,44 @@
         let $vmc = this;
         let Pro = Parse.Object.extend ('Project');
         let pro = new Pro ();
-        // let Org = Parse.Object.extend ('Organization');
-        // let query = new Parse.Query (Org);
-        // query.get ($vmc.orgId)
-        // .then (resp => {
-        //   // The object was retrieved successfully.
-        //   resp.
-        // }, (error) => {
-        //   // The object was not retrieved successfully.
-        //   // error is a Parse.Error with an error code and message.
-        // });
 
         pro.set ('name', $vmc.projectName);
         pro.set ('orgId', $vmc.orgId);
         pro.set ('orgName', $vmc.orgName);
         pro.save ()
           .then (resp => {
-            $vmc.projects.push ($vmc.projectName);
+            // $vmc.projects.push ($vmc.projectName);
             $vmc.showProject ();
-            // Execute any logic that should take place after the object is saved.
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert('Failed to create new object, with error code: ' + error.message);
-          })
+            let proId = resp.id;
+            const Label = Parse.Object.extend ('Label');
+
+            let len = $vmc.defaultLabels.length
+            for (let i = 0; i < len; i ++) {
+              let label = new Label ();
+              let object = $vmc.defaultLabels[i];
+              // label.set ('')
+              // console.log (object);
+              label.set ('title', object.title);
+              label.set ('labelDesc', object.labelDesc);
+              label.set ('proId', proId);
+              label.save ()
+                .then (resp => {
+                  console.log (resp);
+                })
+            }
+            
+              
+
+            // gameScore.set("score", 1337);
+            // gameScore.set("playerName", "Sean Plott");
+            // gameScore.set("cheatMode", false);
+
+            // gameScore.save()
+            }, (error) => {
+              // Execute any logic that should take place if the save fails.
+              // error is a Parse.Error with an error code and message.
+              alert('Failed to create new object, with error code: ' + error.message);
+            });
 
         $vmc.projectName = '';
       }
