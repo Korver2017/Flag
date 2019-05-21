@@ -29,5 +29,8 @@ export default new Router ({
     {
       path: '/:orgId/:proId/milestone/:mileId', name: 'milestone-detail', component: () => import('./views/milestone-detail.vue'),
     },
+    {
+      path: '/:orgId/:proId/label', name: 'label', component: () => import('./views/label.vue'),
+    },
   ]
 });

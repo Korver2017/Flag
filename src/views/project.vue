@@ -27,27 +27,14 @@
     </div>
     
     <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
+    
+    <router-link :to="{ name: 'label', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active">
+      Label
+    </router-link>
 
     <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active"><i class="fa fa-map-signs" aria-hidden="true"></i>
       Milestone <span class="badge badge-light">{{ milestones.length }}</span>
     </router-link>
-
-    <!-- <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-info" active-class="active">
-      Milestone <span class="badge badge-light">{{ milestones.length }}</span>
-    </router-link> -->
-
-    <!-- <form class="col-6 ml-auto">
-
-      <div class="form-group text-left">
-        <label @keyup.enter="addMilestone" for="name">Add Milestone</label>
-        <div class="row">
-        <input v-model.trim="mileTitle" class="form-control col-8" placeholder="Milestone Name" id="name">
-
-        <button class="btn btn-success" @click.prevent="addMilestone">Submit</button>
-        </div>
-      </div>
-      
-    </form> -->
 
     <div class="rwo text-left">
       <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
