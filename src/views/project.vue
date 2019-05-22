@@ -59,6 +59,17 @@
         </div>
       </div>
 
+      <!-- Label Dropdown Menu -->
+
+      <div class="dropdown mr-3">
+        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Label
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <button @click="addLabelTo (label.labelId)" v-for="label in labels" class="dropdown-item">{{ label.title }}</button>
+        </div>
+      </div>
+
       <!-- Milestone Dropdown Menu -->
 
       <div class="dropdown mr-3">
@@ -219,6 +230,7 @@
       $vmc.showUser ();
       $vmc.showProName ();
       $vmc.showIssue ();
+      $vmc.showLabel ();
       $vmc.showMilestone ();
     },
 
@@ -331,28 +343,30 @@
 
 
       showLabel () {
-        
-        // let $vmc = this;
-        // let ary = [];
-        // let Label = Parse.Object.extend ("Label");
-        // let query = new Parse.Query (Label);
-        // query.equalTo ('issueId', $vmc.issueId);
-        // query.find ()
-        //   .then (resp => {
-        //     for (let i = 0; i < resp.length; i ++) {
-        //       let obj = {};
-        //       let object = resp[i];
-        //       for (let i = 0; i < $vmc.labels.length; i ++) {
-        //         if ($vmc.labels[i].labelId === object.id) {
-        //           $vmc.labels[i].added = true;
-        //           ary.push ($vmc.labels[i]);
-        //         }
-        //       }
-        //     }
-        //   })
+        let $vmc = this;
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        let ary = [];
 
+        query.equalTo ('proId', $vmc.proId);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+              
+              obj.labelId = object.id;
+              obj.title = object.get ('title');
+              obj.labelDesc = object.get ('labelDesc');
+              obj.issueId = object.get ('issueId');
+              ary.push (obj);
+            }
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
 
-        // $vmc.label = ary;
+        $vmc.labels = ary;
       },
       
 
@@ -457,6 +471,32 @@
           });
 
         $vmc.milestones = ary;
+      },
+
+
+      addLabelTo (labelId) {
+        let $vmc = this;
+
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+
+        query.get (labelId)
+          .then (resp => {
+            for (let i = 0; i < $vmc.checked.length; i ++) {
+              let object = $vmc.checked[i];
+              
+              resp.addUnique ('issueId', object);
+              console.log (object);
+            }
+            
+            resp.save ()
+              .then (resp => {
+                $vmc.showIssue ();
+              });
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
       },
 
 
