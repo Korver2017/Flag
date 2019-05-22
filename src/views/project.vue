@@ -66,7 +66,7 @@
           加入到 Milestone
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="addIssueTo (mile.mileId)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</button>
+          <button @click="addIssueTo (mile.mileId, mile.title)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</button>
         </div>
       </div>
 
@@ -110,6 +110,10 @@
           <a>{{ issue.name }}</a>
           
           <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+          <span v-if="issue.mileTitle !== ''">
+            <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
+          </span>
 
           <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
             <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
@@ -288,13 +292,14 @@
           for (let i = 0; i < resp.length; i++) {
             let obj = {};
             let object = resp[i];
+
             obj.name = object.get ('name');
             obj.issueId = object.id;
             obj.creator = object.get ('creator');
             obj.issueOpened = object.get ('issueOpened');
             obj.avatarHash = object.get ('avatarHash');
             obj.assigneeId = object.get ('assigneeId');
-            // obj.assignee = object.get ('assignee');
+            obj.mileTitle = object.get ('mileTitle');
 
             let arry = [];
             let Label = Parse.Object.extend ('Label');
@@ -307,6 +312,7 @@
                   arry.push (object.get ('title'));
                 }
               });
+
             obj.labels = arry;
             ary.push (obj);
 
@@ -316,7 +322,8 @@
               closed.push (obj);
             }
           }
-        })
+        });
+
         $vmc.issues = ary;
         $vmc.opened = opened;
         $vmc.closed = closed;
@@ -448,11 +455,12 @@
               ary.push (obj)
             }
           });
+
         $vmc.milestones = ary;
       },
 
 
-      addIssueTo (mileId) {
+      addIssueTo (mileId, mileTitle) {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
@@ -464,8 +472,10 @@
             .then (resp => {
               
               resp.set ('milestone', mileId);
+              resp.set ('mileTitle', mileTitle);
               resp.save ()
                 .then (resp => {
+                  $vmc.showIssue ();
                   $vmc.checked = [];
                 });
               
