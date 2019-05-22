@@ -293,18 +293,17 @@
       showRouteName () {
         let $vmc = this;
 
-        let Issue = Parse.Object.extend ('Issue');
-        let query = new Parse.Query (Issue);
-        query.equalTo ('proId', $vmc.proId)
-        query.find ()
+        let Project = Parse.Object.extend ('Project');
+        let query = new Parse.Query (Project);
+
+        query.get ($vmc.proId)
           .then (resp => {
-            let query = new Parse.Query (Issue);
-            query.get (resp[0].id)
-              .then (resp => {
-                $vmc.orgName = resp.get ('orgName');
-                $vmc.proName = resp.get ('proName');
-              })
-          })
+            $vmc.orgName = resp.get ('orgName');
+            $vmc.proName = resp.get ('name');
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
       },
 
       

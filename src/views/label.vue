@@ -111,19 +111,6 @@
             // The object was not retrieved successfully.
             // error is a Parse.Error with an error code and message.
           });
-
-        // let Issue = Parse.Object.extend ('Issue');
-        // let query = new Parse.Query (Issue);
-        // query.equalTo ('proId', $vmc.proId)
-        // query.find ()
-        //   .then (resp => {
-        //     let query = new Parse.Query (Issue);
-        //     query.get (resp[0].id)
-        //       .then (resp => {
-        //         $vmc.orgName = resp.get ('orgName');
-        //         $vmc.proName = resp.get ('proName');
-        //       })
-        //   })
       },
       showLabel () {
         let $vmc = this;
