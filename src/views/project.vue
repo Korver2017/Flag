@@ -364,7 +364,7 @@
         issue.set ('creator', $vmc.$store.state.user.username);
         issue.set ('creatorId', $vmc.$store.state.user.input.userId);
         issue.set ('issueOpened', true);
-        issue.set ('milestone', []);
+        issue.set ('milestone', '');
         issue.set ('avatarHash', []);
         // issue.set ('userId', []);
         // issue.set ('issueId', )

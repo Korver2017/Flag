@@ -1,6 +1,5 @@
 <template>
   <div class="my-5 container">
-    <h3>{{ labels }}</h3>
 
     <h3 class="my-5 text-left">
 
@@ -13,10 +12,6 @@
       </router-link>
 
     </h3>
-
-    <h1 class="mb-5">Label Component</h1>
-
-    <h3>{{ proId }}</h3>
 
     <div v-if="addingLabel === false" class="text-right mr-5">
       <button class="btn btn-success" @click="addingLabel = true">Add Label</button>
@@ -105,18 +100,30 @@
       showRouteName () {
         let $vmc = this;
 
-        let Issue = Parse.Object.extend ('Issue');
-        let query = new Parse.Query (Issue);
-        query.equalTo ('proId', $vmc.proId)
-        query.find ()
+        let Project = Parse.Object.extend ('Project');
+        let query = new Parse.Query (Project);
+
+        query.get ($vmc.proId)
           .then (resp => {
-            let query = new Parse.Query (Issue);
-            query.get (resp[0].id)
-              .then (resp => {
-                $vmc.orgName = resp.get ('orgName');
-                $vmc.proName = resp.get ('proName');
-              })
-          })
+            $vmc.orgName = resp.get ('orgName');
+            $vmc.proName = resp.get ('name');
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+
+        // let Issue = Parse.Object.extend ('Issue');
+        // let query = new Parse.Query (Issue);
+        // query.equalTo ('proId', $vmc.proId)
+        // query.find ()
+        //   .then (resp => {
+        //     let query = new Parse.Query (Issue);
+        //     query.get (resp[0].id)
+        //       .then (resp => {
+        //         $vmc.orgName = resp.get ('orgName');
+        //         $vmc.proName = resp.get ('proName');
+        //       })
+        //   })
       },
       showLabel () {
         let $vmc = this;
