@@ -34,7 +34,6 @@
         projectName: '',
         projects: [],
         defaultLabels: [],
-        // date: '',
       }
     },
 
@@ -59,22 +58,6 @@
       let ary = [];
 
       const Label = Parse.Object.extend ('Label');
-      // const label = new Label ();
-
-      // gameScore.set("score", 1337);
-      // gameScore.set("playerName", "Sean Plott");
-      // gameScore.set("cheatMode", false);
-
-      // gameScore.save()
-      // .then((gameScore) => {
-      //   // Execute any logic that should take place after the object is saved.
-      //   alert('New object created with objectId: ' + gameScore.id);
-      // }, (error) => {
-      //   // Execute any logic that should take place if the save fails.
-      //   // error is a Parse.Error with an error code and message.
-      //   alert('Failed to create new object, with error code: ' + error.message);
-      // });
-      
       const query = new Parse.Query (Label);
       query.equalTo ('proId', 'default');
       query.find ()
@@ -85,9 +68,6 @@
             obj.title = object.get ('title');
             obj.labelDesc = object.get ('labelDesc');
             ary.push (obj);
-            // label.set ('title', obj.title);
-            // label.set ('labelDesc', obj.labelDesc);
-            // label.save ();
           }
         })
 
@@ -155,33 +135,20 @@
         pro.set ('orgName', $vmc.orgName);
         pro.save ()
           .then (resp => {
-            // $vmc.projects.push ($vmc.projectName);
             $vmc.showProject ();
             let proId = resp.id;
             const Label = Parse.Object.extend ('Label');
-
             let len = $vmc.defaultLabels.length
             for (let i = 0; i < len; i ++) {
               let label = new Label ();
               let object = $vmc.defaultLabels[i];
-              // label.set ('')
-              // console.log (object);
+
               label.set ('title', object.title);
               label.set ('labelDesc', object.labelDesc);
               label.set ('proId', proId);
-              label.save ()
-                .then (resp => {
-                  console.log (resp);
-                })
+              label.save ();
             }
-            
-              
 
-            // gameScore.set("score", 1337);
-            // gameScore.set("playerName", "Sean Plott");
-            // gameScore.set("cheatMode", false);
-
-            // gameScore.save()
             }, (error) => {
               // Execute any logic that should take place if the save fails.
               // error is a Parse.Error with an error code and message.
