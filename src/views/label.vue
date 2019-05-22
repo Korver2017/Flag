@@ -41,34 +41,31 @@
     <ul class="my-3 list-group list-group-flush text-left">
       <li v-for="(label, index) in labels" class="py-3 list-group-item">
 
-        <!-- <div class="row"> -->
-
-          <div class="row" v-if="labels[index].editingLabel === false">
-            <div class="col-4">{{ label.title }}</div>
-            <div class="col-4">{{ label.labelDesc }}</div>
-            <button class="ml-auto mr-3 btn btn-warning" @click="editingLabel (index)">Edit</button>
-            
-            <button v-if="labels[index].editingLabel === false" class="mr-3 btn btn-danger" @click="">Delete</button>
-          </div>
-
-          <div v-if="labels[index].editingLabel === true" class="d-flex justify-content-center form-group text-left">
-
-            <div class="col-3">
-              <label for="labelName">Label Name</label>
-              <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelName">
-            </div>
-            <div class="col-5">
-              <label for="labelDesc">Description</label>
-              <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelDesc">
-            </div>
-            <div class="d-flex align-items-end">
-              <button class="mr-3 btn btn-success" @click="updateLabel (index)">Save Changes</button>
-              <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">Cancel</button>
-            </div>
-
-          </div>
+        <div class="row" v-if="labels[index].editingLabel === false">
+          <div class="col-4">{{ label.title }}</div>
+          <div class="col-4">{{ label.labelDesc }}</div>
+          <button class="ml-auto mr-3 btn btn-warning" @click="editingLabel (index)">Edit</button>
           
-        <!-- </div> -->
+          <button v-if="labels[index].editingLabel === false" class="mr-3 btn btn-danger" @click="deleteLabel (index)">Delete</button>
+        </div>
+
+        <div v-if="labels[index].editingLabel === true" class="d-flex justify-content-center form-group text-left">
+
+          <div class="col-3">
+            <label for="labelName">Label Name</label>
+            <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelName">
+          </div>
+          <div class="col-5">
+            <label for="labelDesc">Description</label>
+            <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelDesc">
+          </div>
+          <div class="d-flex align-items-end">
+            <button class="mr-3 btn btn-success" @click="updateLabel (index)">Save Changes</button>
+            <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">Cancel</button>
+          </div>
+
+        </div>
+          
       </li>
     </ul>
 
@@ -202,6 +199,26 @@
         $vmc.newLabelDesc = '';
         $vmc.labels[index].editingLabel = false;
       },
+      deleteLabel (index) {
+        let $vmc = this;
+
+        let labelId = $vmc.labels[index].labelId;
+
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        query.get (labelId)
+          .then (resp => {
+            if (confirm ('確定要刪除這個 Label 嗎？')) {
+              resp.destroy ()
+                .then (resp => {
+                  $vmc.showLabel ();
+                }, (error) => {
+                  // The delete failed.
+                  // error is a Parse.Error with an error code and message.
+                });
+            }
+          })
+      }
     },
   }
 </script>
