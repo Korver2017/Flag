@@ -1,5 +1,6 @@
 <template>
   <div class="my-5 container">
+    <h3>{{ labels }}</h3>
 
     <h3 class="my-5 text-left">
 
@@ -32,18 +33,42 @@
       </div>
       <div class="d-flex align-items-end">
         <button class="mr-3 btn btn-success" @click="newLabel">Create Label</button>
-        <button class="mr-3 btn btn-danger" @click="cancelLabel">Cancel</button>
+        <button class="mr-3 btn btn-danger" @click="cancelAddLabel">Cancel</button>
       </div>
     </div>
 
 
     <ul class="my-3 list-group list-group-flush text-left">
-      <li v-for="label in labels" class="py-3 list-group-item">
-        <div class="row">
-          <div class="col-4">{{ label.title }}</div>
-          <div class="col-4">{{ label.labelDesc }}</div>
-          <button class="ml-auto mr-3 btn btn-warning" @click="">Edit</button>
-        </div>
+      <li v-for="(label, index) in labels" class="py-3 list-group-item">
+
+        <!-- <div class="row"> -->
+
+          <div class="row" v-if="labels[index].editingLabel === false">
+            <div class="col-4">{{ label.title }}</div>
+            <div class="col-4">{{ label.labelDesc }}</div>
+            <button class="ml-auto mr-3 btn btn-warning" @click="editingLabel (index)">Edit</button>
+            
+            <button v-if="labels[index].editingLabel === false" class="mr-3 btn btn-danger" @click="">Delete</button>
+          </div>
+
+          <div v-if="labels[index].editingLabel === true" class="d-flex justify-content-center form-group text-left">
+
+            <div class="col-3">
+              <label for="labelName">Label Name</label>
+              <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelName">
+            </div>
+            <div class="col-5">
+              <label for="labelDesc">Description</label>
+              <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelDesc">
+            </div>
+            <div class="d-flex align-items-end">
+              <button class="mr-3 btn btn-success" @click="updateLabel (index)">Save Changes</button>
+              <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">Cancel</button>
+            </div>
+
+          </div>
+          
+        <!-- </div> -->
       </li>
     </ul>
 
@@ -62,6 +87,9 @@
         addingLabel: false,
         labelName: '',
         labelDesc:'',
+        // editingLabel: false,
+        newLabelName: '',
+        newLabelDesc: '',
       }
     },
     computed: {
@@ -104,8 +132,12 @@
             for (let i = 0; i < resp.length; i++) {
               let obj = {};
               let object = resp[i];
+              obj.labelId = object.id;
               obj.title = object.get ('title');
               obj.labelDesc = object.get ('labelDesc');
+              obj.editingLabel = false;
+              obj.newLabelName = '';
+              obj.newLabelDesc = '';
               ary.push (obj);
             }
           });
@@ -123,17 +155,52 @@
         label.save ()
           .then (resp => {
             $vmc.showLabel ();
+            $vmc.cancelAddLabel ();
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
             alert ('Failed to create new object, with error code: ' + error.message);
           });
       },
-      cancelLabel () {
+      cancelAddLabel () {
         let $vmc = this;
+
         $vmc.labelName = '';
         $vmc.labelDesc = '';
         $vmc.addingLabel = false;
+      },
+      editingLabel (index) {
+        let $vmc = this;
+        let label = $vmc.labels[index];
+
+        label.editingLabel = true;
+        label.newLabelName = label.title;
+        label.newLabelDesc = label.labelDesc;
+      },
+      updateLabel (index) {
+        let $vmc = this;
+        let labelId = $vmc.labels[index].labelId;
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        query.get (labelId)
+          .then (resp => {
+            resp.set ('title', $vmc.labels[index].newLabelName);
+            resp.set ('labelDesc', $vmc.labels[index].newLabelDesc);
+            resp.save ()
+              .then (resp => {
+                $vmc.showLabel ();
+              });
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
+      cancelUpdateLabel (index) {
+        let $vmc = this;
+
+        $vmc.newLabelName = '';
+        $vmc.newLabelDesc = '';
+        $vmc.labels[index].editingLabel = false;
       },
     },
   }
