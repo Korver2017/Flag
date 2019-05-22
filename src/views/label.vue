@@ -1,6 +1,18 @@
 <template>
   <div class="my-5 container">
 
+    <h3 class="my-5 text-left">
+
+      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+        <a>{{ orgName }}</a>
+      </router-link> / 
+      
+      <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+        <a>{{ proName }}</a>
+      </router-link>
+
+    </h3>
+
     <h1 class="mb-5">Label Component</h1>
 
     <h3>{{ proId }}</h3>
@@ -26,7 +38,13 @@
 
 
     <ul class="my-3 list-group list-group-flush text-left">
-      <li v-for="label in labels" class="py-3 list-group-item">{{ label.title }} {{ label.labelDesc }}</li>
+      <li v-for="label in labels" class="py-3 list-group-item">
+        <div class="row">
+          <div class="col-4">{{ label.title }}</div>
+          <div class="col-4">{{ label.labelDesc }}</div>
+          <button class="ml-auto mr-3 btn btn-warning" @click="">Edit</button>
+        </div>
+      </li>
     </ul>
 
   </div>
@@ -38,6 +56,8 @@
   export default {
     data() {
       return {
+        orgName: '',
+        proName: '',
         labels: [],
         addingLabel: false,
         labelName: '',
@@ -53,9 +73,26 @@
     mounted () {
       let $vmc = this;
       
+      $vmc.showRouteName ();
       $vmc.showLabel ();
     },
     methods: {
+      showRouteName () {
+        let $vmc = this;
+
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+        query.equalTo ('proId', $vmc.proId)
+        query.find ()
+          .then (resp => {
+            let query = new Parse.Query (Issue);
+            query.get (resp[0].id)
+              .then (resp => {
+                $vmc.orgName = resp.get ('orgName');
+                $vmc.proName = resp.get ('proName');
+              })
+          })
+      },
       showLabel () {
         let $vmc = this;
         const Label = Parse.Object.extend ('Label');
@@ -83,11 +120,9 @@
         label.set ('title', $vmc.labelName);
         label.set ('labelDesc', $vmc.labelDesc);
         label.set ('proId', $vmc.proId);
-
         label.save ()
           .then (resp => {
-            // Execute any logic that should take place after the object is saved.
-            alert ('New object created with objectId: ' + resp.id);
+            $vmc.showLabel ();
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
