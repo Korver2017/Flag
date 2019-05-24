@@ -31,7 +31,7 @@ export default {
    *
    */
   state: {
-    authed: false,
+    authed: true,
     username: '',
     input: {
       email: 'korver@protype.tw',
