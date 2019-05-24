@@ -30,30 +30,11 @@
               
             </li>
 
-            <!-- <li class="list-group-item">
-              <div class="row">
-
-                <div class="avatar border border-success"></div>
-
-                <div class="ml-3 text-left">
-                  <p class="infoTitle">wake pushed to master at Tangency/wingbra</p>
-                  <div>
-                    <p class="mb-0">Lorem ipsum dolor sit amet.</p>
-                    <p class="mb-0">Lorem, ipsum dolor.</p>
-                  </div>
-                </div>
-
-                <i style="font-size: 40px" class="ml-auto mr-4 fa fa-exclamation-circle" aria-hidden="true"></i>
-
-              </div>
-              
-            </li> -->
-
           </ul>
 
         </div>
 
-        <div class="px-0 my-3 col-4 mx-2">
+        <div class="px-0 my-3 col-4">
 
           <div style="color: #767676;" class="px-0 btn-group col-12" role="group" aria-label="Basic example">
 
@@ -76,7 +57,7 @@
 
                 <div class="row">
 
-                  <p class="ml-3 mb-0">儲存庫<span class="ml-2 badge badge-secondary">33</span></p>
+                  <p class="ml-3 mb-0">儲存庫<span class="ml-2 badge badge-secondary">{{ projects.length }}</span></p>
 
                   <i class="d-flex align-items-center ml-auto mr-3 fa fa-plus" aria-hidden="true"></i>
 
@@ -92,7 +73,7 @@
 
                 <ul class="nav nav-tabs d-flex justify-content-center">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">所有<span class="ml-2 badge badge-secondary">33</span></a>
+                    <a class="nav-link active" href="#">所有<span class="ml-2 badge badge-secondary">{{ projects.length }}</span></a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#">來源</a>
@@ -111,14 +92,14 @@
               </li>
 
               <!-- <router-link class="list-group-item" to="/" tag="li" active-class="active"> -->
-              <router-link v-for="i in 10" class="d-flex align-items-center list-group-item" to="/" tag="button">
+              <router-link v-for="project in projects" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: project.orgId, proId: project.proId }}" tag="button">
                 <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
 
-                Tangency / wingbra
+                {{ project.orgName }} / {{ project.name }}
 
                 <p class="ml-auto mb-0 d-flex align-items-center">
-                  0 <i style="font-size: 20px;" class="ml-1 fa fa-star" aria-hidden="true"></i>
-
+                  0
+                  <i style="font-size: 20px;" class="ml-1 fa fa-star" aria-hidden="true"></i>
                 </p>
                 
               </router-link>
@@ -285,6 +266,7 @@
           id: this.$store.state.user.input.userId
         }
       },
+
       
     },
 

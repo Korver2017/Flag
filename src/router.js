@@ -9,10 +9,10 @@ export default new Router ({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/dashboard', name: 'dashboard', component: () => import('./views/dashboard.vue'),
+      path: '/signin', name: 'signin', component: () => import('./views/signin.vue'),
     },
     {
-      path: '/signin', name: 'signin', component: () => import('./views/signin.vue'),
+      path: '/dashboard', name: 'dashboard', component: () => import('./views/dashboard.vue'),
     },
     {
       path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
