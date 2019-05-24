@@ -1,9 +1,151 @@
 <template>
-  <div>
+  <div id="wrap">
 
     <template v-if="user.authed">
+
+      <div class="row">
+        <div class="col-7">
+          <div class="my-3 mx-2 tracker border border-success"></div>
+
+          <ul class="py-0 list-group list-group-flush">
+
+            <li v-for="i in 10" class="list-group-item">
+              <div class="row">
+
+                <div class="avatar border border-success"></div>
+
+                <div class="ml-3 text-left">
+                  <p class="infoTitle">wake pushed to master at Tangency/wingbra</p>
+                  <div>
+                    <p class="mb-0">Lorem ipsum dolor sit amet.</p>
+                    <p class="mb-0">Lorem, ipsum dolor.</p>
+                  </div>
+                </div>
+
+                <i style="font-size: 40px; color: #767676;" class="ml-auto mr-4 fa fa-exclamation-circle" aria-hidden="true"></i>
+
+              </div>
+
+
+              
+            </li>
+
+            <!-- <li class="list-group-item">
+              <div class="row">
+
+                <div class="avatar border border-success"></div>
+
+                <div class="ml-3 text-left">
+                  <p class="infoTitle">wake pushed to master at Tangency/wingbra</p>
+                  <div>
+                    <p class="mb-0">Lorem ipsum dolor sit amet.</p>
+                    <p class="mb-0">Lorem, ipsum dolor.</p>
+                  </div>
+                </div>
+
+                <i style="font-size: 40px" class="ml-auto mr-4 fa fa-exclamation-circle" aria-hidden="true"></i>
+
+              </div>
+              
+            </li> -->
+
+          </ul>
+
+        </div>
+
+        <div class="px-0 my-3 col-4 mx-2">
+
+          <div style="color: #767676;" class="px-0 btn-group col-12" role="group" aria-label="Basic example">
+
+            <router-link style="backgroundColor: rgba(0,0,0,.05); color: rgba(0,0,0,.95);" class="py-3 btn btn-success col-6" to="/" tag="button" active-class="active">
+              儲存庫
+            </router-link>
+
+            <router-link style="backgroundColor: #fff; color: rgba(0,0,0,.95);" class="py-3 btn btn-success col-6" to="/" tag="button" active-class="active">
+              組織
+            </router-link>
+
+          </div>
+
+          <div class="my-3">
+
+
+            <ul class="list-group">
+
+              <li class="list-group-item">
+
+                <div class="row">
+
+                  <p class="ml-3 mb-0">儲存庫<span class="ml-2 badge badge-secondary">33</span></p>
+
+                  <i class="d-flex align-items-center ml-auto mr-3 fa fa-plus" aria-hidden="true"></i>
+
+                </div>
+
+              </li>
+
+              <li class="list-group-item">
+
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="搜尋儲存庫..." />
+                </div>
+
+                <ul class="nav nav-tabs d-flex justify-content-center">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">所有<span class="ml-2 badge badge-secondary">33</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">來源</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">複製列表</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">鏡像</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">協同者</a>
+                  </li>
+                </ul>
+
+              </li>
+
+              <!-- <router-link class="list-group-item" to="/" tag="li" active-class="active"> -->
+              <router-link v-for="i in 10" class="d-flex align-items-center list-group-item" to="/" tag="button">
+                <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
+
+                Tangency / wingbra
+
+                <p class="ml-auto mb-0 d-flex align-items-center">
+                  0 <i style="font-size: 20px;" class="ml-1 fa fa-star" aria-hidden="true"></i>
+
+                </p>
+                
+              </router-link>
+
+              <router-link class="d-flex align-items-center list-group-item" to="/" tag="button">
+
+                顯示更多儲存庫...
+                
+              </router-link>
+
+                
+
+                
+                
+              
+            </ul>
+
+          </div>
+
+
+          </div>
+
+        
+
+      </div>
       
-      <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
+      <!-- <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
       <h2 class="nav-item nav-link align-right">Hi, {{ username }}!</h2>
       <h5>Welcome to Flag</h5>
 
@@ -42,11 +184,11 @@
               </div>
           </div>
 
-        </div>
+        </div> -->
 
         <!-- My Issue -->
 
-        <div class="row my-5">
+        <!-- <div class="row my-5">
           <div v-if="issues.length !== 0" class="col-8 mr-auto">
             <h5 class="text-left">My Issues</h5>
               <div class="row">
@@ -78,7 +220,7 @@
 
         </div>
 
-      </div>
+      </div> -->
         
     </template>
 
@@ -384,5 +526,12 @@
 </script>
 
 <style scoped>
-  
+.tracker {
+  height: 150px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+}
 </style>
