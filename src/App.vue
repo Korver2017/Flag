@@ -56,18 +56,7 @@
 
     <hr class="my-0" />
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-
-      <router-link class="navbar-brand nav-item nav-link" to="/">
-        <a>User</a>
-      </router-link>
-      
-    </nav>
-
-    <hr class="my-0" />
-
     <router-view />
-
 
   </div>
 
@@ -86,6 +75,7 @@
   width: 80%;
   margin: 0 auto;
 }
+
 </style>
 
 <style scoped>
