@@ -79,8 +79,15 @@
       <div class="row my-4 d-flex justify-content-between">
 
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-outline-secondary">標籤</button>
-          <button type="button" class="btn btn-outline-secondary">里程碑</button>
+
+          <router-link :to="{ name: 'label', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+            標籤
+          </router-link>
+
+          <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+            里程碑
+          </router-link>
+          
         </div>
 
         <div>
@@ -185,42 +192,14 @@
 
         <template v-for="issue in issues">
 
+          <!-- Opened Issue-List Start-->
 
-
-          <!-- Closed -->
-
-
-
-
-          <router-link style="line-height: 50px" v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
-
-            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
-            <a><h3>{{ issue.name }}</h3></a>
-
-            <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
-
-            <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
-              <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
-            </template>
-            
-          </router-link>
-
-
-
-          <!-- Opened -->
-
-
-
-          <router-link v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active">
-
+          <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active">
 
             <div class="row d-flex align-items-center">
 
               <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
-
               <span class="px-3 py-2 badge badge-primary">#1</span>
-
-              
               <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
               
               <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
@@ -232,14 +211,43 @@
             </div>
 
             <div class="row d-flex align-items-center">
-
               <div>由 Korver 建立</div>
 
-            <div class="ml-auto">
-
-              <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
+              <div class="ml-auto">
+                <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
+              </div>
 
             </div>
+            
+          </router-link>
+
+          <!-- Opened Issue-List End -->
+
+          <!-- Closed Issue-List Start -->
+
+          <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="list-group-item" active-class="active">
+
+            <div class="row d-flex align-items-center">
+
+              <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+
+              <span class="px-3 py-2 badge badge-primary">#1</span>
+              <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
+              
+              <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
+
+              <span v-if="issue.mileTitle !== ''">
+                <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
+              </span>
+
+            </div>
+
+            <div class="row d-flex align-items-center">
+              <div>由 Korver 建立</div>
+
+              <div class="ml-auto">
+                <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
+              </div>
 
             </div>
             
@@ -248,7 +256,6 @@
         </template>
           
       </div>
-
 
       <nav class="my-3 d-flex justify-content-center">
         <ul class="pagination">
@@ -266,27 +273,7 @@
         </ul>
       </nav>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
-
-
-
-
-
-
-
     
 
 
