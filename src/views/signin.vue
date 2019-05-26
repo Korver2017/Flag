@@ -101,8 +101,7 @@
 
         let $vmc = this;
 
-        if ($vmc.email === '' || $vmc.password === '')
-          return alert ('請輸入完整登入資訊');
+        if ($vmc.email === '' || $vmc.password === '') return alert ('請輸入完整登入資訊');
 
         $vmc.$store.dispatch ('user/signin');
         $vmc.$router.push ({ path: '/dashboard' })

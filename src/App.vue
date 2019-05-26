@@ -69,8 +69,8 @@
     <router-view />
 
 
-
   </div>
+
 </template>
 
 <style lang="scss">
@@ -82,13 +82,15 @@
   text-align: center;
 }
 
-.active {
-  background: #eee;
-}
-
 #wrap {
-  width: 85%;
+  width: 80%;
   margin: 0 auto;
+}
+</style>
+
+<style scoped>
+.active {
+  background-color: #eee;
 }
 </style>
 

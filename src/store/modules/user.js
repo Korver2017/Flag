@@ -156,7 +156,7 @@ export default {
         let Account = Parse.Object.extend ('Account');
         let query = new Parse.Query (Account);
 
-        query.equalTo("email", state.input.email);
+        query.equalTo ('email', state.input.email);
         query.find ()
           .then(resp => {
 
@@ -204,7 +204,7 @@ export default {
      * User logOut
      *
      */
-    logOut: function ({commit}) {
+    logOut: function ({ commit }) {
       // if (confirm ('Are you sure to log out?'))
       commit ('authed');
       // else return;

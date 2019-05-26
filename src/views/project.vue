@@ -1,152 +1,452 @@
 <template>
-  <div class="container my-4">
-    <h3 class="my-5 text-left">
 
-      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
-        <a>{{ orgName }}</a>
+  <div>
+
+    <div id="wrap" class="my-3">
+
+      <div class="row my-5">
+
+        <div class="mb-0 d-flex align-items-center">
+
+          <h4 class="text-left">
+
+            <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+              <a>{{ orgName }}</a>
+            </router-link>
+            / {{ proName }}
+
+          </h4>
+
+        </div>
+
+        <div class="ml-auto">
+
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 8
+            </label>
+          </div>
+
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 0
+            </label>
+          </div>
+
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 0
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="#">程式碼</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">問題<span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Wiki</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">活動</a>
+        </li>
+        <li class="ml-auto nav-item">
+          <a class="nav-link" href="#">儲存庫設定</a>
+        </li>
+      </ul>
+
+      <div class="row my-4 d-flex justify-content-between">
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-outline-secondary">標籤</button>
+          <button type="button" class="btn btn-outline-secondary">里程碑</button>
+        </div>
+
+        <div>
+
+          <div class="input-group">
+            <input type="text" class="form-control p-2" placeholder="搜尋..." aria-label="搜尋..." aria-describedby="button-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" id="button-addon2">搜尋</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div>
+
+          <button class="btn btn-success h-100" @click="">建立問題</button>
+          
+        </div>
+
+      </div>
+
+      <hr />
+
+      <div class="row">
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
+            {{ opened.length }} 個開啟中
+          </button>
+          <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
+            {{ closed.length }} 個已關閉
+          </button>
+        </div>
+
+        <div class="row ml-auto">
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              標籤篩選
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              里程碑篩選
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              指派人篩選
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              類型篩選
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              順序
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      
+
+      <!-- Issue List -->
+
+      <div class="mt-3 list-group list-group-flush" v-if="issues.length >= 1">
+
+        <template v-for="issue in issues">
+
+
+
+          <!-- Closed -->
+
+
+
+
+          <router-link style="line-height: 50px" v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+
+            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+            <a><h3>{{ issue.name }}</h3></a>
+
+            <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+            <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
+              <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
+            </template>
+            
+          </router-link>
+
+
+
+          <!-- Opened -->
+
+
+
+          <router-link v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active">
+
+
+            <div class="row d-flex align-items-center">
+
+              <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+
+              <span class="px-3 py-2 badge badge-primary">#1</span>
+
+              
+              <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
+              
+              <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
+
+              <span v-if="issue.mileTitle !== ''">
+                <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
+              </span>
+
+            </div>
+
+            <div class="row d-flex align-items-center">
+
+              <div>由 Korver 建立</div>
+
+            <div class="ml-auto">
+
+              <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
+
+            </div>
+
+            </div>
+            
+          </router-link>
+
+        </template>
+          
+      </div>
+
+
+      <nav class="my-3 d-flex justify-content-center">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">上一頁</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">下一頁</a>
+          </li>
+        </ul>
+      </nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    
+
+
+    
+
+    <hr class="mb-5" />
+
+
+    <div class="container">
+
+      
+      <h3 class="my-5 text-left">
+
+        <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+          <a>{{ orgName }}</a>
+        </router-link>
+        / {{ proName }}
+
+      </h3>
+
+      <div v-if="adding">
+
+        <form class="col-8 mx-auto my-5">
+          <div class="form-group text-left">
+            <label @keyup.enter="submitIssue" for="title">Issue Title</label>
+            <input v-model.trim="title" class="form-control" placeholder="Issue Title" id="title">
+          </div>
+          <div class="form-group text-left">
+            <label @keyup.enter="submitIssue" for="content">Issue Content</label>
+            <textarea v-model="content" placeholder="Issue Content" class="form-control" id="content" rows="10"></textarea>
+          </div>
+          <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Submit</button>
+          <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
+        </form>
+        
+      </div>
+      
+      <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
+      
+      <router-link :to="{ name: 'label', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active">
+        Label
       </router-link>
-       / {{ proName }}
 
-    </h3>
+      <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active"><i class="fa fa-map-signs" aria-hidden="true"></i>
+        Milestone <span class="badge badge-light">{{ milestones.length }}</span>
+      </router-link>
 
-    <div v-if="adding">
-
-      <form class="col-8 mx-auto my-5">
-        <div class="form-group text-left">
-          <label @keyup.enter="submitIssue" for="title">Issue Title</label>
-          <input v-model.trim="title" class="form-control" placeholder="Issue Title" id="title">
-        </div>
-        <div class="form-group text-left">
-          <label @keyup.enter="submitIssue" for="content">Issue Content</label>
-          <textarea v-model="content" placeholder="Issue Content" class="form-control" id="content" rows="10"></textarea>
-        </div>
-        <button @click.prevent="submitIssue" class="mx-3 btn btn-success">Submit</button>
-        <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button>
-      </form>
-      
-    </div>
-    
-    <button class="my-3 btn btn-success" @click="addIssue">Add Issue</button>
-    
-    <router-link :to="{ name: 'label', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active">
-      Label
-    </router-link>
-
-    <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="ml-3 btn btn-secondary" active-class="active"><i class="fa fa-map-signs" aria-hidden="true"></i>
-      Milestone <span class="badge badge-light">{{ milestones.length }}</span>
-    </router-link>
-
-    <div class="rwo text-left">
-      <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
-        Opened <span class="badge badge-light">{{ opened.length }}</span>
-      </button>
-      <button @click="showOpened = false" type="button" class="ml-3 btn btn-secondary">
-        Closed <span class="badge badge-light">{{ closed.length }}</span>
-      </button>
-    </div>
-
-    <!-- Mark-As Dropdown Menu -->
-
-    <div class="row">
-      
-      <div class="dropdown ml-auto mr-3 mb-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Mark as
+      <div class="rwo text-left">
+        <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
+          Opened <span class="badge badge-light">{{ opened.length }}</span>
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="reopenIssue" class="dropdown-item">Open</button>
-          <button @click="closeIssue" class="dropdown-item">Closed</button>
-        </div>
+        <button @click="showOpened = false" type="button" class="ml-3 btn btn-secondary">
+          Closed <span class="badge badge-light">{{ closed.length }}</span>
+        </button>
       </div>
 
-      <!-- Label Dropdown Menu -->
+      <!-- Mark-As Dropdown Menu -->
 
-      <div class="dropdown mr-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Label
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="addLabelTo (label.labelId)" v-for="label in labels" class="dropdown-item">{{ label.title }}</button>
-        </div>
-      </div>
-
-      <!-- Milestone Dropdown Menu -->
-
-      <div class="dropdown mr-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          加入到 Milestone
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="addIssueTo (mile.mileId, mile.title)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</button>
-        </div>
-      </div>
-
-      <!-- Assign-To Dropdown Menu -->
-
-      <div class="dropdown mr-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assign to
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">{{ user.name }}</button>
+      <div class="row">
         
+        <div class="dropdown ml-auto mr-3 mb-3">
+          <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Mark as
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button @click="reopenIssue" class="dropdown-item">Open</button>
+            <button @click="closeIssue" class="dropdown-item">Closed</button>
+          </div>
         </div>
-      </div>
-      
-    </div>
 
-    <!-- Issue List -->
+        <!-- Label Dropdown Menu -->
 
-    <div class="mt-5 list-group" v-if="issues.length >= 1">
+        <div class="dropdown mr-3">
+          <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Label
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button @click="addLabelTo (label.labelId)" v-for="label in labels" class="dropdown-item">{{ label.title }}</button>
+          </div>
+        </div>
 
-      <template v-for="issue in issues">
+        <!-- Milestone Dropdown Menu -->
 
-        <router-link style="line-height: 50px" v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+        <div class="dropdown mr-3">
+          <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            加入到 Milestone
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button @click="addIssueTo (mile.mileId, mile.title)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</button>
+          </div>
+        </div>
 
-          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
-          <a>{{ issue.name }}</a>
+        <!-- Assign-To Dropdown Menu -->
 
-          <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
-
-          <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
-            <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
-          </template>
+        <div class="dropdown mr-3">
+          <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Assign to
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <button v-for="user in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">{{ user.name }}</button>
           
-        </router-link>
-
-        <router-link style="line-height: 50px" v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
-          
-
-          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
-          <a>{{ issue.name }}</a>
-          
-          <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
-
-          <span v-if="issue.mileTitle !== ''">
-            <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
-          </span>
-
-          <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
-            <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
-          </template>
-          
-        </router-link>
-
-      </template>
-
+          </div>
+        </div>
         
+      </div>
+
+      <!-- Issue List -->
+
+      <div class="mt-5 list-group" v-if="issues.length >= 1">
+
+        <template v-for="issue in issues">
+
+          <router-link style="line-height: 50px" v-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+
+            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+            <a>{{ issue.name }}</a>
+
+            <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+            <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
+              <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
+            </template>
+            
+          </router-link>
+
+          <router-link style="line-height: 50px" v-else-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
+            
+
+            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+            <a>{{ issue.name }}</a>
+            
+            <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+            <span v-if="issue.mileTitle !== ''">
+              <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
+            </span>
+
+            <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
+              <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
+            </template>
+            
+          </router-link>
+
+        </template>
+
+          
+      </div>
+
+      
+
+      <div v-else class="card text-left">
+        <h4 class="card-body py-5 font-italic font-weight-lighter">
+          There aren’t any open issues.
+          No description provided.
+        </h4>
+      </div>
+
     </div>
 
-    
-
-    <div v-else class="card text-left">
-      <h4 class="card-body py-5 font-italic font-weight-lighter">
-        There aren’t any open issues.
-        No description provided.
-      </h4>
-    </div>
-
-  </div>
+</div>
     
 
 </template>
@@ -386,6 +686,7 @@
         issue.set ('creatorId', $vmc.$store.state.user.input.userId);
         issue.set ('issueOpened', true);
         issue.set ('milestone', '');
+        issue.set ('mileTitle', '');
         issue.set ('avatarHash', []);
         // issue.set ('userId', []);
         // issue.set ('issueId', )
@@ -603,8 +904,13 @@
 </script>
 
 <style scoped>
-  input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-  };
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+
+.list-group-item {
+  border: 0;
+  border-bottom: 3px dotted rgba(0, 0, 0, .125);
+}
 </style>
