@@ -51,6 +51,11 @@
       }
     },
 
+    created () {
+      
+
+    },
+
 
     /**
      *
@@ -108,6 +113,9 @@
         $vmc.$router.push ({ path: '/dashboard' })
       },
     },
+
+    watch: {
+    }
   }
 </script>
 

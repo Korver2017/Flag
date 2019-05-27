@@ -36,6 +36,7 @@
 </style>
 
 <script>
+  import Parse from "parse";
 
 
   export default {
@@ -124,5 +125,47 @@
       },
 
     },
+
+    watch: {
+      user () {
+        let $vmc = this;
+      
+        // Header
+        let oHeader = { alg: 'HS256', typ: 'JWT' };
+
+        // Payload
+        let oPayload = {};
+
+        let tNow = $vmc.$j.jws.IntDate.get('now');
+        let tEnd = $vmc.$j.jws.IntDate.get('now + 1day');
+
+        oPayload.nbf = tNow;
+        oPayload.iat = tNow;
+        oPayload.exp = tEnd;
+        oPayload.user = $vmc.$store.state.user.username;
+
+        let sHeader = JSON.stringify(oHeader);
+        let sPayload = JSON.stringify(oPayload);
+
+        let Account = Parse.Object.extend ('Account');
+        let query = new Parse.Query (Account);
+        query.equalTo ('username', $vmc.$store.state.user.username);
+        query.find ()
+          .then (resp => {
+            let secret = resp[0].get ('secret');
+
+            let sJWT = $vmc.$j.jws.JWS.sign("HS256", sHeader, sPayload, secret);
+            
+            console.log (sJWT);
+
+
+            // router.push('/dashboard');
+            // The object was retrieved successfully.
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      }
+    }
   }
 </script>

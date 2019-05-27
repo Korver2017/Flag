@@ -66,7 +66,7 @@ export default {
       } else {
         state.authed = data.authed;
         state.username = data.username;
-        router.push ('/dashboard');
+        // router.push ('/dashboard');
       }
       
       // if (state.authed === true) {
@@ -153,50 +153,51 @@ export default {
      *
      */
     signin: function ({ state, commit }) {
-        let Account = Parse.Object.extend ('Account');
-        let query = new Parse.Query (Account);
 
-        query.equalTo("email", state.input.email);
-        query.find ()
-          .then(resp => {
+      let Account = Parse.Object.extend ('Account');
+      let query = new Parse.Query (Account);
 
-            if (resp.length < 1) {
-              alert ('Email 錯誤');
-              return;
-            }
+      query.equalTo ('email', state.input.email);
+      query.find ()
+        .then(resp => {
 
-            query.equalTo ('password', state.input.password);
-            query.find ()
-              .then (resp => {
+          if (resp.length < 1) {
+            alert ('Email 錯誤');
+            return;
+          }
+
+          query.equalTo ('password', state.input.password);
+          query.find ()
+            .then (resp => {
 
 
-                if (resp.length < 1) {
-                  alert ('密碼錯誤');
-                  return;
-                }
+              if (resp.length < 1) {
+                alert ('密碼錯誤');
+                return;
+              }
 
-                // state.authed = true;
-                state.input.userId = resp[0].id;
+              // state.authed = true;
+              state.input.userId = resp[0].id;
 
-                // console.log (state.input.userId);
+              // console.log (state.input.userId);
 
-                let query = new Parse.Query (Account);
-                query.get (state.input.userId)
-                  .then (resp => {
-                    // state.username = resp.get('username');
-                    let data = {};
-                    data.username = resp.get ('username');
-                    data.authed = true;
-                    commit ('authed', data);
-                  });
+              let query = new Parse.Query (Account);
+              query.get (state.input.userId)
+                .then (resp => {
+                  // state.username = resp.get('username');
+                  let data = {};
+                  data.username = resp.get ('username');
+                  data.authed = true;
+                  commit ('authed', data);
+                });
 
-                // alert(`${state.input.email} authed success!`);
-              });
+              // alert(`${state.input.email} authed success!`);
+            });
 
-            // commit('authed');
-      
-    })
-  },
+          // commit('authed');
+          
+        })
+    },
 
     
     /**
