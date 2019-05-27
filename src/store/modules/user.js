@@ -66,7 +66,6 @@ export default {
       } else {
         state.authed = data.authed;
         state.username = data.username;
-        // router.push ('/dashboard');
       }
       
       // if (state.authed === true) {

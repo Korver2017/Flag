@@ -10,6 +10,7 @@ import store from '@/store/index.js';
 import VueMarkdown from "vue-markdown";
 import md5 from "js-md5";
 import jsrsasign from "jsrsasign";
+import jsCookie from "js-cookie";
 
 
 
@@ -23,6 +24,7 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$md5 = md5;
 Vue.prototype.$j = jsrsasign;
+Vue.prototype.$cookie = jsCookie;
 
 
 Vue.use (VueMarkdown);

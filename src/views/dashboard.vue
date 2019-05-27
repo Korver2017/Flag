@@ -189,13 +189,6 @@
       },
 
 
-      logOut () {
-        let $vmc = this;
-        $vmc.$store.dispatch ('user/logOut');
-        $vmc.$router.push ({ path: '/signin' })
-      },
-
-
       /**
        *
        * Display Organization

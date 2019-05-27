@@ -110,7 +110,7 @@
           return alert ('請輸入完整登入資訊');
 
         $vmc.$store.dispatch ('user/signin');
-        $vmc.$router.push ({ path: '/dashboard' })
+        // $vmc.$router.push ({ path: '/dashboard' })
       },
     },
 

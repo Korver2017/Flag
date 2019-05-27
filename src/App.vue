@@ -37,6 +37,7 @@
 
 <script>
   import Parse from "parse";
+  import router from '@/router'
 
 
   export default {
@@ -61,11 +62,31 @@
 
 
     created () {
+      let $vmc = this;
 
+      console.log ($vmc.$store.state.user.authed);
+      console.log ($vmc.$store.state.user.username);
 
-      if (this.$store.state.user.authed === false) {
-        this.$router.push ({ path: '/signin' })
+      if ($vmc.$store.state.user.authed === false) {
+        const Account = Parse.Object.extend ('Account');
+        const query = new Parse.Query (Account);
+        let cookieToken = $vmc.$cookie.get ('token');
+        if (cookieToken.length > 0) {
+          query.equalTo ('token', cookieToken);
+          query.find ()
+            .then (resp => {
+              let obj = resp[0];
+                $vmc.$store.state.user.authed = true;
+                $vmc.$store.state.user.input.userId = obj.id;
+                // $vmc.$store.state.user.username;
+                $vmc.$router.push ('/dashboard');
+              })
+        }
+
+        
       }
+
+
 
 
       /**
@@ -120,8 +141,11 @@
        *
        */
       logOut () {
-        this.$store.dispatch ('user/logOut');
-        this.$router.push ({ path: '/signin' })
+        let $vmc = this;
+        
+        $vmc.$store.dispatch ('user/logOut');
+        $vmc.$router.push ({ path: '/signin' });
+        $vmc.$cookie.remove ('token');
       },
 
     },
@@ -136,30 +160,37 @@
         // Payload
         let oPayload = {};
 
-        let tNow = $vmc.$j.jws.IntDate.get('now');
-        let tEnd = $vmc.$j.jws.IntDate.get('now + 1day');
+        let tNow = $vmc.$j.jws.IntDate.get ('now');
+        let tEnd = $vmc.$j.jws.IntDate.get ('now + 1day');
 
         oPayload.nbf = tNow;
         oPayload.iat = tNow;
         oPayload.exp = tEnd;
         oPayload.user = $vmc.$store.state.user.username;
 
-        let sHeader = JSON.stringify(oHeader);
-        let sPayload = JSON.stringify(oPayload);
+        let sHeader = JSON.stringify (oHeader);
+        let sPayload = JSON.stringify (oPayload);
 
         let Account = Parse.Object.extend ('Account');
         let query = new Parse.Query (Account);
+
+        console.log ($vmc.$store.state.user.username);
+
         query.equalTo ('username', $vmc.$store.state.user.username);
+
+        if (($vmc.$store.state.user.username).length === 0) return;
+        
         query.find ()
           .then (resp => {
-            let secret = resp[0].get ('secret');
+            let obj = resp[0];
+            let secret = obj.get ('secret');
+            let sJWT = $vmc.$j.jws.JWS.sign ('HS256', sHeader, sPayload, secret);
 
-            let sJWT = $vmc.$j.jws.JWS.sign("HS256", sHeader, sPayload, secret);
-            
-            console.log (sJWT);
+            obj.set ('token', sJWT);
+            obj.save ();
 
-
-            // router.push('/dashboard');
+            $vmc.$cookie.set ('token', sJWT);
+            $vmc.$router.push ('/dashboard');
             // The object was retrieved successfully.
           }, (error) => {
             // The object was not retrieved successfully.
