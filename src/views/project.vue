@@ -13,7 +13,9 @@
             <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
               <a>{{ orgName }}</a>
             </router-link>
-            / {{ proName }}
+            / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+              <a>{{ proName }}</a>
+            </router-link>
 
           </h4>
 
@@ -108,15 +110,6 @@
         </div>
 
       </div>
-
-
-
-
-
-
-
-
-
 
       <hr />
 
@@ -283,12 +276,10 @@
       </nav>
 
     </div>
-    
-
 
     
 
-    <hr class="mb-5" />
+    <!-- <hr class="mb-5" />
 
 
     <div class="container">
@@ -339,8 +330,6 @@
         </button>
       </div>
 
-      <!-- Mark-As Dropdown Menu -->
-
       <div class="row">
         
         <div class="dropdown ml-auto mr-3 mb-3">
@@ -353,8 +342,6 @@
           </div>
         </div>
 
-        <!-- Label Dropdown Menu -->
-
         <div class="dropdown mr-3">
           <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Label
@@ -364,8 +351,6 @@
           </div>
         </div>
 
-        <!-- Milestone Dropdown Menu -->
-
         <div class="dropdown mr-3">
           <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             加入到 Milestone
@@ -374,8 +359,6 @@
             <button @click="addIssueTo (mile.mileId, mile.title)" v-for="(mile, index) in milestones" class="dropdown-item">{{ mile.title }}</button>
           </div>
         </div>
-
-        <!-- Assign-To Dropdown Menu -->
 
         <div class="dropdown mr-3">
           <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -388,8 +371,6 @@
         </div>
         
       </div>
-
-      <!-- Issue List -->
 
       <div class="mt-5 list-group" v-if="issues.length >= 1">
 
@@ -440,7 +421,7 @@
         </h4>
       </div>
 
-    </div>
+    </div> -->
 
 </div>
     
