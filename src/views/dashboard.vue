@@ -13,7 +13,6 @@
     
     <div id="wrap">
 
-
       <template v-if="user.authed">
 
         <div class="row">

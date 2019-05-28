@@ -1,5 +1,127 @@
 <template>
-  <div class="my-5 container">
+  <div id="wrap" class="my-3">
+
+        <div class="row my-4">
+
+          <div class="mb-0 d-flex align-items-center">
+
+            <h4 class="text-left">
+
+              <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+                <a>{{ orgName }}</a>
+              </router-link>
+              / {{ proName }}
+
+            </h4>
+
+          </div>
+
+          <div class="ml-auto">
+
+            <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="border border-dark btn">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
+              </label>
+              <label class="border border-dark btn">
+                <input type="radio" name="options" id="option2" autocomplete="off"> 8
+              </label>
+            </div>
+
+            <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="border border-dark btn">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
+              </label>
+              <label class="border border-dark btn">
+                <input type="radio" name="options" id="option2" autocomplete="off"> 0
+              </label>
+            </div>
+
+            <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="border border-dark btn">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
+              </label>
+              <label class="border border-dark btn">
+                <input type="radio" name="options" id="option2" autocomplete="off"> 0
+              </label>
+            </div>
+
+          </div>
+
+        </div>
+
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" href="#">程式碼</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">問題<span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Wiki</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">活動</a>
+          </li>
+          <li class="ml-auto nav-item">
+            <a class="nav-link" href="#">儲存庫設定</a>
+          </li>
+        </ul>
+
+        <div class="row my-4 d-flex justify-content-between">
+
+          <div class="btn-group" role="group" aria-label="Basic example">
+
+            <router-link :to="{ name: 'label', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+              標籤
+            </router-link>
+
+            <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+              里程碑
+            </router-link>
+            
+          </div>
+
+          <div>
+            <button class="btn btn-success h-100" @click="">建立標籤</button>
+          </div>
+
+        </div>
+
+        <ul class="list-group list-group-flush">
+
+          <li class="list-group-item">
+            <div class="row d-flex align-items-center">
+              <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ labels.length }}個標籤</span></h4>
+              <div class="ml-auto mr-4">排序</div>
+            </div>
+          </li>
+
+          <li v-for="label in labels" class="list-group-item">
+            <div class="row d-flex align-items-center">
+              <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ label.title }}</span></h4>
+              <div class="ml-5">
+                {{ label.labelDesc }}
+              </div>
+              <div class="ml-auto mr-5">0 個開啟的問題</div>
+              <div>
+                <button class="mr-3 btn btn-success" @click="">編輯</button>
+                <button class="mr-3 btn btn-danger" @click="">刪除</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+
+  </div>
+
+
+
+  <!-- <div class="my-5 container">
 
     <h3 class="my-5 text-left">
 
@@ -64,7 +186,7 @@
       </li>
     </ul>
 
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -87,7 +209,11 @@
     computed: {
       proId () {
         return this.$route.params.proId; 
-      }
+      },
+
+      issues () {
+        return this.$route.params.issues;
+      },
     },
 
     mounted () {
