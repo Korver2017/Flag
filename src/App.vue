@@ -63,10 +63,12 @@
 
     created () {
       let $vmc = this;
+
       let cookieToken = $vmc.$cookie.get ('token');
 
       if (cookieToken === undefined || '') {
-        $vmc.$router.push ('/dashboard');
+        $vmc.$router.push ('/signin');
+        console.log ('qq');
         return;
       }
       else {

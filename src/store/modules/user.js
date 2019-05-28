@@ -38,8 +38,8 @@ export default {
     authed: false,
     username: '',
     input: {
-      email: 'korver@protype.tw',
-      password: '6666',
+      email: '',
+      password: '',
       userId: '',
     }
   },
