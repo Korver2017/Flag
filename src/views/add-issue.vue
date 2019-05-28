@@ -92,24 +92,6 @@
           
         </div>
 
-        <div>
-
-          <div class="input-group">
-            <input type="text" class="form-control p-2" placeholder="搜尋..." aria-label="搜尋..." aria-describedby="button-addon2">
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="button" id="button-addon2">搜尋</button>
-            </div>
-          </div>
-
-        </div>
-
-        <div>
-          <!-- <button class="btn btn-success h-100" @click="issueAdding = true">建立問題</button> -->
-          <router-link class="btn btn-success" :to="{ name: 'addIssue' }" tag="button" active-class="active">
-            建立問題
-          </router-link>
-        </div>
-
       </div>
 
       <hr />
