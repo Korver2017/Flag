@@ -7,7 +7,7 @@
 
       <form class="col-10 mx-auto my-5">
         <div class="form-group text-left">
-          <label @keyup.enter="signin" for="email"></label>
+          <label @keyup.enter="signin" for="email">Email</label>
           <input v-model="email" class="form-control" placeholder="Your Email" id="email" autofocus>
         </div>
         <div class="form-group text-left">
@@ -49,6 +49,10 @@
       return {
         state: false,
       }
+    },
+
+    created () {
+
     },
 
 
@@ -104,9 +108,12 @@
         if ($vmc.email === '' || $vmc.password === '') return alert ('請輸入完整登入資訊');
 
         $vmc.$store.dispatch ('user/signin');
-        $vmc.$router.push ({ path: '/dashboard' })
+        // $vmc.$router.push ({ path: '/dashboard' })
       },
     },
+
+    watch: {
+    }
   }
 </script>
 

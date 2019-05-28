@@ -261,10 +261,11 @@
 
 
     created () {
-
-      if (this.$store.state.user.authed === false) {
-        this.$router.push ({ path: '/signin' })
-      }
+      // if (this.$store.state.user.authed === false) {
+      //   this.$router.push ('/signin');
+        
+      //   console.log ('jj');
+      // }
     },
 
 
@@ -325,13 +326,6 @@
           //   let query = new Parse.Query (Account);
           //   query.set ('avatarHash', $vmc.avatarHash);
           // });
-      },
-
-
-      logOut () {
-        let $vmc = this;
-        $vmc.$store.dispatch ('user/logOut');
-        $vmc.$router.push ({ path: '/signin' })
       },
 
 

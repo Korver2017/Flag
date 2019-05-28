@@ -2,6 +2,10 @@
 
 import Parse from "parse";
 import router from '@/router.js';
+
+import $j from "jsrsasign";
+import $cookie from "js-cookie";
+
 /**
  *
  * User
@@ -55,7 +59,6 @@ export default {
      *
      */
     authed (state, data) {
-      // console.log (data);
 
       if (state.authed === true) {
         state.authed = false;
@@ -66,7 +69,6 @@ export default {
       } else {
         state.authed = data.authed;
         state.username = data.username;
-        router.push ('/dashboard');
       }
       
       // if (state.authed === true) {
@@ -153,50 +155,69 @@ export default {
      *
      */
     signin: function ({ state, commit }) {
-        let Account = Parse.Object.extend ('Account');
-        let query = new Parse.Query (Account);
+      let $vmc = this;
+      let Account = Parse.Object.extend ('Account');
+      let query = new Parse.Query (Account);
 
-        query.equalTo ('email', state.input.email);
-        query.find ()
-          .then(resp => {
+      query.equalTo ('email', state.input.email);
+      query.find ()
+        .then (resp => {
 
-            if (resp.length < 1) {
-              alert ('Email 錯誤');
-              return;
-            }
+          if (resp.length < 1) {
+            alert ('Email 錯誤');
+            return;
+          }
 
-            query.equalTo ('password', state.input.password);
-            query.find ()
-              .then (resp => {
+          query.equalTo ('password', state.input.password);
+          query.find ()
+            .then (resp => {
 
+              if (resp.length < 1) {
+                alert ('密碼錯誤');
+                return;
+              }
 
-                if (resp.length < 1) {
-                  alert ('密碼錯誤');
-                  return;
-                }
+              state.input.userId = resp[0].id;
 
-                // state.authed = true;
-                state.input.userId = resp[0].id;
+              // Header
+              let oHeader = { alg: 'HS256', typ: 'JWT' };
 
-                // console.log (state.input.userId);
+              // Payload
+              let oPayload = {};
 
-                let query = new Parse.Query (Account);
-                query.get (state.input.userId)
-                  .then (resp => {
-                    // state.username = resp.get('username');
-                    let data = {};
-                    data.username = resp.get ('username');
-                    data.authed = true;
-                    commit ('authed', data);
-                  });
+              let tNow = $j.jws.IntDate.get('now');
+              let tEnd = $j.jws.IntDate.get('now + 1day');
 
-                // alert(`${state.input.email} authed success!`);
-              });
+              oPayload.nbf = tNow;
+              oPayload.iat = tNow;
+              oPayload.exp = tEnd;
+              oPayload.user = state.username;
 
-            // commit('authed');
-      
-    })
-  },
+              let sHeader = JSON.stringify(oHeader);
+              let sPayload = JSON.stringify(oPayload);
+
+              let query = new Parse.Query (Account);
+              query.get (state.input.userId)
+                .then(resp => {
+                  let secret = resp.get('secret');
+                  let sJWT = $j.jws.JWS.sign('HS256', sHeader, sPayload, secret);
+
+                  resp.set('token', sJWT);
+                  resp.save();
+
+                  $cookie.set('token', sJWT);
+                  let data = {};
+                  data.username = resp.get ('username');
+                  data.authed = true;
+                  commit ('authed', data);
+
+                  router.push ('/dashboard');
+                });
+
+            });
+          
+        })
+    },
 
     
     /**

@@ -29,7 +29,7 @@
 
         </div>
 
-        <div class="navbar-nav ml-auto mr-3">
+        <div class="d-flex align-items-center navbar-nav ml-auto mr-3">
 
 
           <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
@@ -40,9 +40,26 @@
             建立
           </router-link>
 
-          <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
+          <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
             設定檔和設置
-          </router-link>
+          </router-link> -->
+
+          <div class="dropdown">
+            <a class="border-0 btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img style="width: 25px; height: 25px;" class="rounded" :src="'https://www.gravatar.com/avatar/' + userData.avatarHash" alt="">
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <li class="dropdown-item">已登入用戶 {{ userData.username.toUpperCase () }}</li>
+              <hr />
+              <a class="dropdown-item" href="#">個人訊息</a>
+              <a class="dropdown-item" href="#">標記星號</a>
+              <a class="dropdown-item" href="#">設定</a>
+              <a class="dropdown-item" href="#">說明</a>
+              <hr />
+              <a @click="logOut" class="dropdown-item">登出</a>
+            </div>
+          </div>
 
           
         </div>
@@ -85,6 +102,8 @@
 </style>
 
 <script>
+  import Parse from "parse";
+  import router from '@/router'
 
 
   export default {
@@ -104,39 +123,49 @@
 
     data () {
       return {
+        userData: '',
+        token: undefined,
       }
     },
 
 
     created () {
+      let $vmc = this;
 
+      $vmc.token = $vmc.$cookie.get ('token');
 
-      if (this.$store.state.user.authed === false) {
-        this.$router.push ({ path: '/signin' })
+      if ($vmc.token === undefined || '') {
+        $vmc.$router.push ('/signin');
+        return;
       }
+      else {
+        console.log ('jj');
+        const Account = Parse.Object.extend ('Account');
+        const query = new Parse.Query (Account);
 
+        query.equalTo ('token', $vmc.token);
+        query.find ()
+          .then (resp => {
+            let object = resp[0];
+            let obj = {};
+            
+            $vmc.$store.state.user.authed = true;
+            $vmc.$store.state.user.input.userId = object.id;
 
-      /**
-       *
-       * Add User
-       *
-       */
-      // let Account = Parse.Object.extend ("Account");
-      // let account = new Account ();
+            query.get (object.id)
+              .then (resp => {
+                obj.avatarHash = resp.get ('avatarHash');
+                obj.username = resp.get ('username');
+                $vmc.userData = obj;
+                console.log ($vmc.userData);
+              })
+              .then (resp => {
+                $vmc.$router.push ('/dashboard');
+              })
 
-      // account.set ('username', 'k');
-      // account.set ('password', 'k123456');
-      // account.set ('email', 'k@protype.tw');
-
-      // account.save()
-      //   .then((account) => {
-      //     alert('New object created with objectId: ' + account.id);
-      //   }, (error) => {
-      //     // Execute any logic that should take place if the save fails.
-      //     // error is a Parse.Error with an error code and message.
-      //     alert('Failed to create new object, with error code: ' + error.message);
-      //   });
-
+            
+          })
+      }
     },
 
 
@@ -155,6 +184,27 @@
     },
 
 
+    mounted () {
+      // let $vmc = this;
+      // let ary = [];
+      // let Account = Parse.Object.extend ('Account');
+      // let query = new Parse.Query (Account);
+      // console.log ($vmc.$store.state.user.username);
+      // query.equalTo ('username', $vmc.$store.state.user.username);
+      // query.find ()
+      //   .then (resp => {
+      //     let obj = {};
+      //     let object = resp[0];
+      //     obj.name = object.get ('username');
+      //     obj.avatarHash = object.get ('avatarHash');
+
+      //     ary.push (obj);
+      //   });
+
+      // $vmc.userData = ary;
+    },
+
+
     /**
      *
      * Methods
@@ -168,10 +218,48 @@
        *
        */
       logOut () {
-        this.$store.dispatch ('user/logOut');
-        this.$router.push ({ path: '/signin' })
+        let $vmc = this;
+        
+        $vmc.$cookie.remove ('token');
+        $vmc.$store.dispatch ('user/logOut');
+        $vmc.$router.push ('/signin');
       },
 
     },
+
+    watch: {
+      user () {
+        let $vmc = this;
+
+        if ($vmc.user.authed === true) {
+          $vmc.token = $vmc.$cookie.get ('token');
+          const Account = Parse.Object.extend ('Account');
+          const query = new Parse.Query (Account);
+
+          query.equalTo ('token', $vmc.token);
+          query.find ()
+            .then (resp => {
+              let object = resp[0];
+              let obj = {};
+              
+              // $vmc.$store.state.user.authed = true;
+              // $vmc.$store.state.user.input.userId = object.id;
+
+              query.get (object.id)
+                .then (resp => {
+                  obj.avatarHash = resp.get ('avatarHash');
+                  obj.username = resp.get ('username');
+                  $vmc.userData = obj;
+                })
+                .then (resp => {
+                  $vmc.$router.push ('/dashboard');
+                })
+
+              
+            })
+        }
+        
+      }
+    }
   }
 </script>
