@@ -58,9 +58,9 @@
         <li class="nav-item">
           <a class="nav-link" href="#">程式碼</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#">問題<span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
-        </li>
+        <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
+          <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
+        </router-link>
         <li class="nav-item">
           <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
         </li>

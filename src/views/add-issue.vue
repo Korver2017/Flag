@@ -56,9 +56,11 @@
       <li class="nav-item">
         <a class="nav-link" href="#">程式碼</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link active" href="#">問題<span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
-      </li>
+
+      <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
+        <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
+      </router-link>
+
       <li class="nav-item">
         <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
       </li>
@@ -97,13 +99,13 @@
 
       <div class="row">
 
-        <div class="col-8">
+        <div class="col-9">
 
           <div class="row">
     
             <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
 
-            <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded ml-3 col-10">
+            <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded ml-3 col-11">
               
               <div class="form-group text-left">
                 <label @keyup.enter="submitIssue" for="title"></label>
@@ -131,11 +133,33 @@
 
             </form>
 
+          
+         </div>
+
         </div>
+
+
+
+        <div class="col-3">
+
+
+          <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
+            <li class="list-group-item">
+              <input type="text" class="form-control" placeholder="未指定分支或標籤">
+            </li>
+            <li class="pb-5 list-group-item">標籤</li>
+            <li class="pb-5 list-group-item">里程碑</li>
+            <li class="pb-5 list-group-item">指派成員</li>
+          </ul>
+
+          
+        </div>
+
+
+        
 
       </div>
 
-    </div>
 
 
 
@@ -418,6 +442,7 @@
             $vmc.content = '';
             $vmc.showIssue ();
             $vmc.issueAdding = false;
+            $vmc.$router.push ({ name: 'project' });
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
@@ -626,8 +651,4 @@ input[type="checkbox"] {
   height: 20px;
 }
 
-.list-group-item {
-  border: 0;
-  border-bottom: 3px dotted rgba(0, 0, 0, .125);
-}
 </style>
