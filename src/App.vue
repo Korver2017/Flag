@@ -63,53 +63,26 @@
 
     created () {
       let $vmc = this;
+      let cookieToken = $vmc.$cookie.get ('token');
 
-      console.log ($vmc.$store.state.user.authed);
-      console.log ($vmc.$store.state.user.username);
-
-      if ($vmc.$store.state.user.authed === false) {
+      if (cookieToken === undefined || '') {
+        $vmc.$router.push ('/dashboard');
+        return;
+      }
+      else {
         const Account = Parse.Object.extend ('Account');
         const query = new Parse.Query (Account);
-        let cookieToken = $vmc.$cookie.get ('token');
-        if (cookieToken.length > 0) {
-          query.equalTo ('token', cookieToken);
-          query.find ()
-            .then (resp => {
+
+        query.equalTo ('token', cookieToken);
+        query.find ()
+          .then (resp => {
               let obj = resp[0];
-                $vmc.$store.state.user.authed = true;
-                $vmc.$store.state.user.input.userId = obj.id;
-                // $vmc.$store.state.user.username;
-                $vmc.$router.push ('/dashboard');
-              })
-        }
-
-        
+              
+              $vmc.$store.state.user.authed = true;
+              $vmc.$store.state.user.input.userId = obj.id;
+              $vmc.$router.push ('/dashboard');
+          });
       }
-
-
-
-
-      /**
-       *
-       * Add User
-       *
-       */
-      // let Account = Parse.Object.extend ("Account");
-      // let account = new Account ();
-
-      // account.set ('username', 'k');
-      // account.set ('password', 'k123456');
-      // account.set ('email', 'k@protype.tw');
-
-      // account.save()
-      //   .then((account) => {
-      //     alert('New object created with objectId: ' + account.id);
-      //   }, (error) => {
-      //     // Execute any logic that should take place if the save fails.
-      //     // error is a Parse.Error with an error code and message.
-      //     alert('Failed to create new object, with error code: ' + error.message);
-      //   });
-
     },
 
 
@@ -143,60 +116,14 @@
       logOut () {
         let $vmc = this;
         
-        $vmc.$store.dispatch ('user/logOut');
-        $vmc.$router.push ({ path: '/signin' });
         $vmc.$cookie.remove ('token');
+        $vmc.$store.dispatch ('user/logOut');
+        $vmc.$router.push ('/signin');
       },
 
     },
 
     watch: {
-      user () {
-        let $vmc = this;
-      
-        // Header
-        let oHeader = { alg: 'HS256', typ: 'JWT' };
-
-        // Payload
-        let oPayload = {};
-
-        let tNow = $vmc.$j.jws.IntDate.get ('now');
-        let tEnd = $vmc.$j.jws.IntDate.get ('now + 1day');
-
-        oPayload.nbf = tNow;
-        oPayload.iat = tNow;
-        oPayload.exp = tEnd;
-        oPayload.user = $vmc.$store.state.user.username;
-
-        let sHeader = JSON.stringify (oHeader);
-        let sPayload = JSON.stringify (oPayload);
-
-        let Account = Parse.Object.extend ('Account');
-        let query = new Parse.Query (Account);
-
-        console.log ($vmc.$store.state.user.username);
-
-        query.equalTo ('username', $vmc.$store.state.user.username);
-
-        if (($vmc.$store.state.user.username).length === 0) return;
-        
-        query.find ()
-          .then (resp => {
-            let obj = resp[0];
-            let secret = obj.get ('secret');
-            let sJWT = $vmc.$j.jws.JWS.sign ('HS256', sHeader, sPayload, secret);
-
-            obj.set ('token', sJWT);
-            obj.save ();
-
-            $vmc.$cookie.set ('token', sJWT);
-            $vmc.$router.push ('/dashboard');
-            // The object was retrieved successfully.
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
-      }
     }
   }
 </script>

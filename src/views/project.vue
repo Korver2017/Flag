@@ -486,7 +486,6 @@
               let object = $vmc.checked[i];
               
               resp.addUnique ('issueId', object);
-              console.log (object);
             }
             
             resp.save ()
