@@ -50,7 +50,7 @@
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li class="dropdown-item">已登入用戶 {{ userData.username.toUpperCase () }}</li>
+              <li class="dropdown-item">已登入用戶 {{ userData.username }}</li>
               <hr />
               <a class="dropdown-item" href="#">個人訊息</a>
               <a class="dropdown-item" href="#">標記星號</a>
@@ -59,6 +59,7 @@
               <hr />
               <a @click="logOut" class="dropdown-item">登出</a>
             </div>
+
           </div>
 
           
@@ -123,49 +124,74 @@
 
     data () {
       return {
-        userData: '',
+        userData: {},
+        userId: '',
         token: undefined,
       }
     },
 
 
     created () {
+
       let $vmc = this;
 
       $vmc.token = $vmc.$cookie.get ('token');
+      
 
       if ($vmc.token === undefined || '') {
+
         $vmc.$router.push ('/signin');
         return;
       }
       else {
-        console.log ('jj');
+        let payload = $vmc.$j.jws.JWS.readSafeJSONString($vmc.$base64.decode ($vmc.token.split(".")[1]));
+        
+        $vmc.userId = payload.userId;
+        
         const Account = Parse.Object.extend ('Account');
         const query = new Parse.Query (Account);
-
-        query.equalTo ('token', $vmc.token);
-        query.find ()
+        
+        query.get ($vmc.userId)
           .then (resp => {
-            let object = resp[0];
             let obj = {};
-            
-            $vmc.$store.state.user.authed = true;
-            $vmc.$store.state.user.input.userId = object.id;
-
-            query.get (object.id)
-              .then (resp => {
-                obj.avatarHash = resp.get ('avatarHash');
-                obj.username = resp.get ('username');
-                $vmc.userData = obj;
-                console.log ($vmc.userData);
-              })
-              .then (resp => {
-                $vmc.$router.push ('/dashboard');
-              })
-
-            
+            obj.avatarHash = resp.get ('avatarHash');
+            obj.username = resp.get ('username');
+            $vmc.userData = obj;
           })
+        
       }
+      // else {
+      //   console.log ('app create');
+      //   const Account = Parse.Object.extend ('Account');
+      //   const query = new Parse.Query (Account);
+
+      //   query.equalTo ('token', $vmc.token);
+      //   query.find ()
+      //     .then (resp => {
+      //       let object = resp[0];
+      //       let obj = {};
+            
+      //       // $vmc.$store.state.user.authed = true;
+      //       // $vmc.$store.state.user.input.userId = object.id;
+
+      //       query.get (object.id)
+      //         .then (resp => {
+      //           obj.avatarHash = resp.get ('avatarHash');
+      //           obj.username = resp.get ('username');
+      //           obj.uerId = object.id;
+
+      //           $vmc.$store.state.user.userId = object.id;
+      //           console.log ($vmc.$store.state.user.userId);
+      //           $vmc.userData = obj;
+      //           console.log ($vmc.userData);
+      //         })
+      //         .then (resp => {
+      //           $vmc.$router.push ('/dashboard');
+      //         })
+
+            
+      //     })
+      // }
     },
 
 
@@ -178,6 +204,7 @@
       user () {
         return {
           authed: this.$store.state.user.authed,
+          userId: this.$store.state.user.userId,
         }
       },
       
@@ -185,6 +212,8 @@
 
 
     mounted () {
+
+
       // let $vmc = this;
       // let ary = [];
       // let Account = Parse.Object.extend ('Account');
@@ -222,44 +251,12 @@
         
         $vmc.$cookie.remove ('token');
         $vmc.$store.dispatch ('user/logOut');
-        $vmc.$router.push ('/signin');
+        // $vmc.$router.push ('/signin');
       },
 
     },
 
     watch: {
-      user () {
-        let $vmc = this;
-
-        if ($vmc.user.authed === true) {
-          $vmc.token = $vmc.$cookie.get ('token');
-          const Account = Parse.Object.extend ('Account');
-          const query = new Parse.Query (Account);
-
-          query.equalTo ('token', $vmc.token);
-          query.find ()
-            .then (resp => {
-              let object = resp[0];
-              let obj = {};
-              
-              // $vmc.$store.state.user.authed = true;
-              // $vmc.$store.state.user.input.userId = object.id;
-
-              query.get (object.id)
-                .then (resp => {
-                  obj.avatarHash = resp.get ('avatarHash');
-                  obj.username = resp.get ('username');
-                  $vmc.userData = obj;
-                })
-                .then (resp => {
-                  $vmc.$router.push ('/dashboard');
-                })
-
-              
-            })
-        }
-        
-      }
     }
   }
 </script>

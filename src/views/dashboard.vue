@@ -13,7 +13,7 @@
     
     <div id="wrap">
 
-      <template v-if="user.authed">
+      <!-- <template v-if="user.authed"> -->
 
         <div class="row">
           <div class="col-7">
@@ -215,7 +215,7 @@
 
         </div> -->
           
-      </template>
+      <!-- </template> -->
 
       
       
@@ -226,7 +226,6 @@
 </template>
 
 <script>
-
 
   // Import
   import Parse from "parse";
@@ -256,16 +255,52 @@
         projects: [],
         issues: [],
         assigneeList: [],
+        userData: '',
+        token: '',
+        payload: ''
       }
     },
 
 
     created () {
-      // if (this.$store.state.user.authed === false) {
-      //   this.$router.push ('/signin');
-        
-      //   console.log ('jj');
-      // }
+      let $vmc = this;
+
+      $vmc.token = $vmc.$cookie.get ('token');
+
+      let payload = $vmc.$j.jws.JWS.readSafeJSONString($vmc.$base64.decode ($vmc.token.split(".")[1]));
+
+      $vmc.userId = payload.userId;
+
+      console.log ('dashboard');
+
+      
+
+      const Account = Parse.Object.extend ('Account');
+      const query = new Parse.Query (Account);
+
+      query.equalTo ('token', $vmc.token);
+      query.find ()
+        .then (resp => {
+          let object = resp[0];
+          let obj = {};
+          
+          // $vmc.$store.state.user.authed = true;
+          // $vmc.$store.state.user.input.userId = object.id;
+
+          query.get (object.id)
+            .then (resp => {
+              obj.avatarHash = resp.get ('avatarHash');
+              obj.username = resp.get ('username');
+              obj.uerId = object.id;
+
+              $vmc.$store.state.user.userId = object.id;
+              console.log ($vmc.$store.state.user.userId);
+              $vmc.userData = obj;
+              console.log ($vmc.userData);
+            })
+
+          
+        })
     },
 
 
@@ -279,7 +314,7 @@
         return {
           authed: this.$store.state.user.authed,
           email: this.$store.state.user.input.email,
-          id: this.$store.state.user.input.userId
+          id: this.$store.state.user.userId,
         }
       },
 
@@ -315,7 +350,7 @@
         let ary = [];
         let Account = Parse.Object.extend ('Account');
         let query = new Parse.Query (Account);
-        query.get ($vmc.user.id)
+        query.get ($vmc.userId)
           .then (resp => {
             $vmc.avatarHash = $vmc.$md5 (resp.get ('email'));
             $vmc.username = resp.get ('username');
@@ -339,7 +374,8 @@
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
-        query.equalTo ('memberId', $vmc.user.id);
+        console.log ($vmc.userId);
+        query.equalTo ('memberId', $vmc.userId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
@@ -371,7 +407,7 @@
           , org = new Org ();
 
         org.set ('name', $vmc.orgName);
-        org.set ('memberId', $vmc.$store.state.user.input.userId);
+        org.set ('memberId', $vmc.payload);
 
         org.save ()
           .then (resp => {
@@ -390,7 +426,8 @@
         let ary = [];
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
-        query.equalTo ('memberId', $vmc.user.id);
+        console.log ($vmc.userId);
+        query.equalTo ('memberId', $vmc.userId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
@@ -412,6 +449,7 @@
 
                   $vmc.projects = ary;
                 });
+
             }
 
           })

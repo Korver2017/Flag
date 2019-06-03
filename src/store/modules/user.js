@@ -37,10 +37,10 @@ export default {
   state: {
     authed: false,
     username: '',
+    userId: '',
     input: {
       email: 'korver@protype.tw',
       password: '6666',
-      userId: '',
     }
   },
 
@@ -66,6 +66,7 @@ export default {
         state.input.email = '';
         state.input.password = '';
         state.input.userId = '';
+        router.push ('/signin')
       } else {
         state.authed = data.authed;
         state.username = data.username;
@@ -177,7 +178,7 @@ export default {
                 return;
               }
 
-              state.input.userId = resp[0].id;
+              state.userId = resp[0].id;
 
               // Header
               let oHeader = { alg: 'HS256', typ: 'JWT' };
@@ -187,18 +188,21 @@ export default {
 
               let tNow = $j.jws.IntDate.get('now');
               let tEnd = $j.jws.IntDate.get('now + 1day');
+              let userId = state.userId;
 
               oPayload.nbf = tNow;
               oPayload.iat = tNow;
               oPayload.exp = tEnd;
-              oPayload.user = state.username;
+              oPayload.userId = userId;
 
               let sHeader = JSON.stringify(oHeader);
               let sPayload = JSON.stringify(oPayload);
 
               let query = new Parse.Query (Account);
-              query.get (state.input.userId)
+              query.get (state.userId)
                 .then(resp => {
+                
+                  
                   let secret = resp.get('secret');
                   let sJWT = $j.jws.JWS.sign('HS256', sHeader, sPayload, secret);
 
@@ -210,6 +214,8 @@ export default {
                   data.username = resp.get ('username');
                   data.authed = true;
                   commit ('authed', data);
+
+                  console.log ('leave user.js');
 
                   router.push ('/dashboard');
                 });
@@ -228,6 +234,7 @@ export default {
     logOut: function ({ commit }) {
       // if (confirm ('Are you sure to log out?'))
       commit ('authed');
+      router.push('/signin');
       // else return;
     },    
   }
