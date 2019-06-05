@@ -38,6 +38,7 @@ export default {
     authed: false,
     username: '',
     userId: '',
+    avatarHash: '',
     input: {
       email: 'korver@protype.tw',
       password: '6666',
@@ -70,64 +71,11 @@ export default {
       } else {
         state.authed = data.authed;
         state.username = data.username;
+        state.userId = data.userId;
+        state.avatarHash = data.avatarHash;
       }
       
-      // if (state.authed === true) {
-      //   state.authed = false;
-      //   state.username = '';
-      //   state.input.email = 'wake@protype.tw';
-      //   state.input.password = '6666';
-      //   state.input.userId = '';
-      //   alert ('cleaning');
-      // } else {
-      //   alert ('authing')
-      //   let Account = Parse.Object.extend ("Account");
-      //   let query = new Parse.Query (Account);
-        
-      //   query.equalTo ("email", state.input.email);
-      //   console.log (state.input.email);
-      //   query.find ()
-      //     .then (resp => {
-
-      //       if (resp.length < 1) {
-      //         alert ('Email 錯誤');
-      //         return;
-      //       }
-
-      //       query.equalTo ("password", state.input.password);
-      //       query.find()
-      //         .then (resp => {
-
-
-      //           if (resp.length < 1) {
-      //             alert ('密碼錯誤');
-      //             return;
-      //           }
-
-      //           state.authed = true;
-      //           state.input.userId = resp[0].id;
-
-      //           console.log (state.input.userId);
-
-      //           let query = new Parse.Query(Account);
-      //           query.get (state.input.userId)
-      //             .then (resp => {
-      //               state.username = resp.get ('username');
-      //             });
-
-      //           alert (`${state.input.email} authed success!`);
-      //         });
-      //     })
-      //   }
     },
-
-
-    // logOut (state) {
-    //   state.authed = false;
-    //   state.input.email = '';
-    //   state.input.password = '';
-    //   state.input.userId = '';
-    // },
 
 
     /**
@@ -178,8 +126,6 @@ export default {
                 return;
               }
 
-              state.userId = resp[0].id;
-
               // Header
               let oHeader = { alg: 'HS256', typ: 'JWT' };
 
@@ -188,18 +134,18 @@ export default {
 
               let tNow = $j.jws.IntDate.get('now');
               let tEnd = $j.jws.IntDate.get('now + 1day');
-              let userId = state.userId;
+              let id = resp[0].id;
 
               oPayload.nbf = tNow;
               oPayload.iat = tNow;
               oPayload.exp = tEnd;
-              oPayload.userId = userId;
+              // oPayload.userId = userId;
 
               let sHeader = JSON.stringify(oHeader);
               let sPayload = JSON.stringify(oPayload);
 
               let query = new Parse.Query (Account);
-              query.get (state.userId)
+              query.get (id)
                 .then(resp => {
                 
                   
@@ -210,12 +156,15 @@ export default {
                   resp.save();
 
                   $cookie.set('token', sJWT);
+
                   let data = {};
+
                   data.username = resp.get ('username');
                   data.authed = true;
-                  commit ('authed', data);
+                  data.userId = id;
+                  data.avatarHash = resp.get ('avatarHash');
 
-                  console.log ('leave user.js');
+                  commit ('authed', data);
 
                   router.push ('/dashboard');
                 });
@@ -223,6 +172,30 @@ export default {
             });
           
         })
+    },
+
+
+    autoSignin: function ({ commit }, token) {
+      let $vmc = this;
+
+      let Account = Parse.Object.extend ('Account');
+      let query = new Parse.Query (Account);
+
+      query.equalTo ('token', token);
+      query.find ()
+        .then (resp => {
+          for (let i = 0; i < resp.length; i ++) {
+            let object = resp[i];
+            let data = {};
+
+            data.username = object.get ('username');
+            data.authed = true;
+            data.userId = object.id;
+            data.avatarHash = object.get ('avatarHash');
+
+            commit ('authed', data);
+          }
+        });
     },
 
     

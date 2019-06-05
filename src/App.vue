@@ -1,6 +1,7 @@
 <template>
   <div id="app">
 
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
 
       <router-link class="navbar-brand nav-item nav-link" to="/dashboard">
@@ -46,11 +47,11 @@
 
           <div class="dropdown">
             <a class="border-0 btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <img style="width: 25px; height: 25px;" class="rounded" :src="'https://www.gravatar.com/avatar/' + userData.avatarHash" alt="">
+              <img style="width: 25px; height: 25px;" class="rounded" :src="'https://www.gravatar.com/avatar/' + user.avatarHash" alt="">
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li class="dropdown-item">已登入用戶 {{ userData.username }}</li>
+              <li class="dropdown-item">已登入用戶 {{ user.username }}</li>
               <hr />
               <a class="dropdown-item" href="#">個人訊息</a>
               <a class="dropdown-item" href="#">標記星號</a>
@@ -74,7 +75,7 @@
 
     <hr class="my-0" />
 
-    <router-view />
+    <router-view  />
 
   </div>
 
@@ -124,9 +125,8 @@
 
     data () {
       return {
-        userData: {},
-        userId: '',
-        token: undefined,
+        token: '',
+        username: '',
       }
     },
 
@@ -136,62 +136,17 @@
       let $vmc = this;
 
       $vmc.token = $vmc.$cookie.get ('token');
-      
 
       if ($vmc.token === undefined || '') {
 
         $vmc.$router.push ('/signin');
         return;
+
+      } else {
+
+        $vmc.$store.dispatch ('user/autoSignin', $vmc.token);
+
       }
-      else {
-        let payload = $vmc.$j.jws.JWS.readSafeJSONString($vmc.$base64.decode ($vmc.token.split(".")[1]));
-        
-        $vmc.userId = payload.userId;
-        
-        const Account = Parse.Object.extend ('Account');
-        const query = new Parse.Query (Account);
-        
-        query.get ($vmc.userId)
-          .then (resp => {
-            let obj = {};
-            obj.avatarHash = resp.get ('avatarHash');
-            obj.username = resp.get ('username');
-            $vmc.userData = obj;
-          })
-        
-      }
-      // else {
-      //   console.log ('app create');
-      //   const Account = Parse.Object.extend ('Account');
-      //   const query = new Parse.Query (Account);
-
-      //   query.equalTo ('token', $vmc.token);
-      //   query.find ()
-      //     .then (resp => {
-      //       let object = resp[0];
-      //       let obj = {};
-            
-      //       // $vmc.$store.state.user.authed = true;
-      //       // $vmc.$store.state.user.input.userId = object.id;
-
-      //       query.get (object.id)
-      //         .then (resp => {
-      //           obj.avatarHash = resp.get ('avatarHash');
-      //           obj.username = resp.get ('username');
-      //           obj.uerId = object.id;
-
-      //           $vmc.$store.state.user.userId = object.id;
-      //           console.log ($vmc.$store.state.user.userId);
-      //           $vmc.userData = obj;
-      //           console.log ($vmc.userData);
-      //         })
-      //         .then (resp => {
-      //           $vmc.$router.push ('/dashboard');
-      //         })
-
-            
-      //     })
-      // }
     },
 
 
@@ -205,6 +160,8 @@
         return {
           authed: this.$store.state.user.authed,
           userId: this.$store.state.user.userId,
+          username: this.$store.state.user.username,
+          avatarHash: this.$store.state.user.avatarHash,
         }
       },
       
@@ -212,25 +169,6 @@
 
 
     mounted () {
-
-
-      // let $vmc = this;
-      // let ary = [];
-      // let Account = Parse.Object.extend ('Account');
-      // let query = new Parse.Query (Account);
-      // console.log ($vmc.$store.state.user.username);
-      // query.equalTo ('username', $vmc.$store.state.user.username);
-      // query.find ()
-      //   .then (resp => {
-      //     let obj = {};
-      //     let object = resp[0];
-      //     obj.name = object.get ('username');
-      //     obj.avatarHash = object.get ('avatarHash');
-
-      //     ary.push (obj);
-      //   });
-
-      // $vmc.userData = ary;
     },
 
 
@@ -257,6 +195,9 @@
     },
 
     watch: {
+      user () {
+        // console.log (this.user);
+      }
     }
   }
 </script>

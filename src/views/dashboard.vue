@@ -248,10 +248,10 @@
 
     data () {
       return {
-        username: '',
+        // username: '',
         orgName: '',
         orgs: [],
-        avatarHash: '',
+        // avatarHash: '',
         projects: [],
         issues: [],
         assigneeList: [],
@@ -263,44 +263,43 @@
 
 
     created () {
-      let $vmc = this;
+      // let $vmc = this;
 
-      $vmc.token = $vmc.$cookie.get ('token');
+      // $vmc.token = $vmc.$cookie.get ('token');
 
-      let payload = $vmc.$j.jws.JWS.readSafeJSONString($vmc.$base64.decode ($vmc.token.split(".")[1]));
+      // let payload = $vmc.$j.jws.JWS.readSafeJSONString($vmc.$base64.decode ($vmc.token.split(".")[1]));
 
-      $vmc.userId = payload.userId;
-
-      console.log ('dashboard');
+      // $vmc.userId = payload.userId;
 
       
 
-      const Account = Parse.Object.extend ('Account');
-      const query = new Parse.Query (Account);
+      // const Account = Parse.Object.extend ('Account');
+      // const query = new Parse.Query (Account);
 
-      query.equalTo ('token', $vmc.token);
-      query.find ()
-        .then (resp => {
-          let object = resp[0];
-          let obj = {};
+      // query.equalTo ('token', $vmc.token);
+      // query.find ()
+      //   .then (resp => {
+      //     let object = resp[0];
+      //     let obj = {};
           
-          // $vmc.$store.state.user.authed = true;
-          // $vmc.$store.state.user.input.userId = object.id;
+      //     // $vmc.$store.state.user.authed = true;
+      //     // $vmc.$store.state.user.input.userId = object.id;
 
-          query.get (object.id)
-            .then (resp => {
-              obj.avatarHash = resp.get ('avatarHash');
-              obj.username = resp.get ('username');
-              obj.uerId = object.id;
+      //     query.get (object.id)
+      //       .then (resp => {
+      //         obj.avatarHash = resp.get ('avatarHash');
+      //         obj.username = resp.get ('username');
+      //         obj.uerId = object.id;
 
-              $vmc.$store.state.user.userId = object.id;
-              console.log ($vmc.$store.state.user.userId);
-              $vmc.userData = obj;
-              console.log ($vmc.userData);
-            })
+      //         $vmc.$store.state.user.userId = object.id;
+      //         $vmc.userData = obj;
+
+      //         $vmc.$emit ('updateData', $vmc.userData);
+              
+      //       })
 
           
-        })
+      //   })
     },
 
 
@@ -314,7 +313,8 @@
         return {
           authed: this.$store.state.user.authed,
           email: this.$store.state.user.input.email,
-          id: this.$store.state.user.userId,
+          userId: this.$store.state.user.userId,
+          avatarHash: this.$store.state.user.avatarHash,
         }
       },
 
@@ -346,17 +346,17 @@
        *
        */
       showUsername () {
-        let $vmc = this;
-        let ary = [];
-        let Account = Parse.Object.extend ('Account');
-        let query = new Parse.Query (Account);
-        query.get ($vmc.userId)
-          .then (resp => {
-            $vmc.avatarHash = $vmc.$md5 (resp.get ('email'));
-            $vmc.username = resp.get ('username');
-            resp.set ('avatarHash', $vmc.avatarHash);
-            return resp.save ();
-          })
+        // let $vmc = this;
+        // let ary = [];
+        // let Account = Parse.Object.extend ('Account');
+        // let query = new Parse.Query (Account);
+        // query.get ($vmc.userId)
+        //   .then (resp => {
+        //     $vmc.user.avatarHash = $vmc.$md5 (resp.get ('email'));
+        //     $vmc.username = resp.get ('username');
+        //     resp.set ('avatarHash', $vmc.user.avatarHash);
+        //     return resp.save ();
+        //   })
           // .then (resp => {
           //   let query = new Parse.Query (Account);
           //   query.set ('avatarHash', $vmc.avatarHash);
@@ -374,8 +374,8 @@
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
-        console.log ($vmc.userId);
-        query.equalTo ('memberId', $vmc.userId);
+        // console.log ($vmc.user.userId);
+        query.equalTo ('memberId', $vmc.user.userId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
@@ -426,8 +426,8 @@
         let ary = [];
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
-        console.log ($vmc.userId);
-        query.equalTo ('memberId', $vmc.userId);
+        // console.log ($vmc.user.userId);
+        query.equalTo ('memberId', $vmc.user.userId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
@@ -462,7 +462,7 @@
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
-        query.equalTo ('memberId', $vmc.user.id);
+        query.equalTo ('memberId', $vmc.user.userId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
