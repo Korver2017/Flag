@@ -97,12 +97,47 @@
 
 
 
+
+          <modal width="800" height="auto" name="editLabel">
+
+            <h5 class="p-3 font-weight-bold">編輯標籤</h5>
+
+            <hr />
+
+            <div class="ml-3 row">
+
+              <div class="col-3 input-group">
+                <input type="text" class="form-control" aria-label="example">
+              </div>
+
+              <div class="col-6 input-group">
+                <input type="text" class="form-control" aria-label="example" placeholder="描述">
+              </div>
+
+            </div>
+
+            <hr />
+
+            <div class="mb-3 text-right">
+              <button class="mr-3 btn btn-danger" @click="">取消操作</button>
+              <button class="mr-3 btn btn-success" @click="">更新</button>
+            </div>
+
+          </modal>
+
+
+          <button @click="show ()">show me!</button>
+
+
+
+
+
+
+
+
           <div v-if="addingLabel === false">
             <button class="btn btn-success h-100" @click="addingLabel = true">建立標籤</button>
           </div>
-
-
-          
             
           <div v-else class="rounded my-3 p-3 input-group border border-secondary">
             <input v-model="labelName" type="text" class="col-3 mr-5 form-control p-2" placeholder="標籤名稱" aria-label="example">
@@ -111,20 +146,6 @@
             <button class="ml-auto btn btn-outline-primary mr-3" @click="cancelAddLabel">取消</button>
             <button class="btn btn-success" @click="newLabel">建立標籤</button>
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         </div>
 
@@ -258,6 +279,13 @@
       $vmc.showLabel ();
     },
     methods: {
+      show () {
+        this.$modal.show('editLabel');
+      },
+      hide () {
+        this.$modal.hide('editLabel');
+      },
+
       showRouteName () {
         let $vmc = this;
 
