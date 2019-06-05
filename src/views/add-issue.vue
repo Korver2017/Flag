@@ -147,10 +147,73 @@
             <li class="list-group-item">
               <input type="text" class="form-control" placeholder="未指定分支或標籤">
             </li>
-            <li class="pb-5 list-group-item">標籤</li>
-            <li class="pb-5 list-group-item">里程碑</li>
-            <li class="pb-5 list-group-item">指派成員</li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <li class="list-group-item">
+                <div class="dropdown">
+                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    標籤
+                  </a>
+
+
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    
+                    <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
+                  </div>
+
+                  <template v-for="(label, index) in labels">
+                    <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
+
+                  </template>
+
+                  
+
+                  
+                  
+
+                  
+
+                  
+                
+
+                </div>
+
+                
+
+              </li>
+
+
+
+
+
+            <li class="pb-3 list-group-item">里程碑</li>
+            <li class="pb-3 list-group-item">指派成員</li>
           </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           
         </div>
@@ -278,6 +341,67 @@
 
     methods: {
 
+      showLabel () {
+        let $vmc = this;
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        let ary = [];
+
+        console.log ($vmc.proId);
+
+        query.equalTo ('proId', $vmc.proId);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+              
+              obj.labelId = object.id;
+              obj.title = object.get ('title');
+              obj.labelDesc = object.get ('labelDesc');
+              obj.issueId = object.get ('issueId');
+              obj.added = false;
+
+              ary.push (obj);
+            }
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+
+        $vmc.labels = ary;
+
+      },
+
+      toggleLabel (added, labelId, index) {
+        let $vmc = this;
+
+        console.log (added, labelId, index);
+        
+        $vmc.labels[index].added = !$vmc.labels[index].added;
+
+        // if ($vmc.labels[index].added === true) {
+        //   let Label = Parse.Object.extend ("Label");
+        //   let query = new Parse.Query (Label);
+        
+        //   query.get (labelId)
+        //     .then (resp => {
+        //       resp.addUnique ('issueId', $vmc.issueId);
+        //       resp.save ();
+        //     });
+        // }
+        // else {
+        //   let Label = Parse.Object.extend ("Label");
+        //   let query = new Parse.Query (Label);
+        //   query.get (labelId)
+        //     .then (resp => {
+        //       resp.remove ("issueId", $vmc.issueId);
+        //       resp.save ();
+        //     });
+        // }
+          
+      },
+
 
       showUser () {
         let $vmc = this;
@@ -383,32 +507,7 @@
       },
 
 
-      showLabel () {
-        let $vmc = this;
-        let Label = Parse.Object.extend ('Label');
-        let query = new Parse.Query (Label);
-        let ary = [];
-
-        query.equalTo ('proId', $vmc.proId);
-        query.find ()
-          .then (resp => {
-            for (let i = 0; i < resp.length; i ++) {
-              let obj = {};
-              let object = resp[i];
-              
-              obj.labelId = object.id;
-              obj.title = object.get ('title');
-              obj.labelDesc = object.get ('labelDesc');
-              obj.issueId = object.get ('issueId');
-              ary.push (obj);
-            }
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
-
-        $vmc.labels = ary;
-      },
+      
       
 
       addIssue () {
@@ -438,11 +537,33 @@
 
         issue.save ()
           .then (resp => {
-            $vmc.title = '';
-            $vmc.content = '';
-            $vmc.showIssue ();
-            $vmc.issueAdding = false;
-            $vmc.$router.push ({ name: 'project' });
+            let issueId = resp.id;
+            console.log (issueId);
+
+            let Label = Parse.Object.extend ("Label");
+            let query = new Parse.Query (Label);
+            console.log ($vmc.proId);
+            query.equalTo ('proId', $vmc.proId)
+            query.find ()
+              .then (resp => {
+                console.log (issueId);
+                for (let i = 0; i < resp.length; i ++) {
+                  let object = resp[0];
+                  // object.addUnique ('issueId')
+                  // console.log (object.get ('title'));
+
+                  // object.addUnique ('issueId', [issueId]);
+                  // object.save ();
+
+                }
+              })
+              .then (resp => {
+                $vmc.title = '';
+                $vmc.content = '';
+                $vmc.showIssue ();
+                $vmc.issueAdding = false;
+                $vmc.$router.push ({ name: 'project' });
+              })
           }, (error) => {
             // Execute any logic that should take place if the save fails.
             // error is a Parse.Error with an error code and message.
