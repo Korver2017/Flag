@@ -80,7 +80,7 @@
 
         <div class="btn-group" role="group" aria-label="Basic example">
 
-          <router-link :to="{ name: 'label', params: { proId: proId }}" tag="button" class="btn btn-outline-secondary" active-class="active">
+          <router-link :to="{ name: 'label-list', params: { proId: proId }}" tag="button" class="btn btn-outline-secondary" active-class="active">
             標籤
           </router-link>
 

@@ -8,7 +8,7 @@
 
         <h4 class="text-left">
 
-          <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+          <router-link :to="{ name: 'organization' }" tag="a" active-class="active">
             <a>{{ orgName }}</a>
           </router-link>
           / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
@@ -80,11 +80,11 @@
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <router-link :to="{ name: 'label', params: { proId: proId, issues: issues } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'label-list', params: { proId: proId, issues: issues } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           標籤
         </router-link>
 
-        <router-link :to="{ name: 'milestone', params: { proId: proId, orgId: orgId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           里程碑
         </router-link>
         
@@ -103,7 +103,7 @@
 
       <div>
         <!-- <button class="btn btn-success h-100" @click="issueAdding = true">建立問題</button> -->
-        <router-link class="btn btn-success" :to="{ name: 'addIssue' }" tag="button" active-class="active">
+        <router-link class="btn btn-success" :to="{ name: 'add-issue' }" tag="button" active-class="active">
           建立問題
         </router-link>
       </div>

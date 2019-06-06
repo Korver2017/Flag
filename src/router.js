@@ -21,7 +21,7 @@ export default new Router ({
       path: '/:orgId/:proId', name: 'project', component: () => import ('./views/project.vue'),
     },
     {
-      path: '/:orgId/:proId/issues/new', name: 'addIssue', component: () => import ('./views/add-issue.vue'),
+      path: '/:orgId/:proId/issues/new', name: 'add-issue', component: () => import ('./views/add-issue.vue'),
     },
     {
       path: '/:orgId/:proId/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
@@ -33,7 +33,7 @@ export default new Router ({
       path: '/:orgId/:proId/milestone/:mileId', name: 'milestone-detail', component: () => import('./views/milestone-detail.vue'),
     },
     {
-      path: '/:orgId/:proId/label', name: 'label', component: () => import('./views/label.vue'),
+      path: '/:orgId/:proId/label-list', name: 'label-list', component: () => import('./views/label.vue'),
     },
   ]
 });

@@ -10,7 +10,9 @@
               <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
                 <a>{{ orgName }}</a>
               </router-link>
-              / {{ proName }}
+              / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+                <a>{{ proName }}</a>
+              </router-link>
 
             </h4>
 
@@ -80,7 +82,7 @@
 
           <div class="btn-group" role="group" aria-label="Basic example">
 
-            <router-link :to="{ name: 'label', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+            <router-link :to="{ name: 'label-list', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
               標籤
             </router-link>
 
@@ -254,7 +256,9 @@
   import Parse from 'parse';
 
   export default {
-    name: 'label',
+
+
+    name: 'label-list',
     
     data() {
       return {
