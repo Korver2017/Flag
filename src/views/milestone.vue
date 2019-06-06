@@ -1,4 +1,6 @@
 <template>
+  <div>
+
       <div id="wrap" class="my-3">
 
       <div class="row my-4">
@@ -120,164 +122,27 @@
 
 
       <h3 v-for="milestone in milestones">
-        {{ milestone }}
+        {{ milestones }}
       </h3>
 
-
-      <template v-for="milestone in milestones">
 
         <div class="row">
 
           <div class="btn-group" role="group" aria-label="Basic example">
             <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-              123 個開啟中
+              {{ mileOpened }} 個開啟中
             </button>
             <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-              123 個已關閉
+              {{ mileClosed }} 個已關閉
             </button>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-          <div class="row ml-auto">
-
-            <div class="dropdown mx-3">
-              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                標籤篩選
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
-
-            <div class="dropdown mx-3">
-              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                里程碑篩選
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
-
-            <div class="dropdown mx-3">
-              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                指派人篩選
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
-
-            <div class="dropdown mx-3">
-              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                類型篩選
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
-
-            <div class="dropdown mx-3">
-              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                順序
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </div>
-
-          </div>
-
-
         </div>
-
-      
-      </template>
-
 
     </div>
 
 
-  <!-- <div class="container my-4">
-
-    <h3 class="my-5 text-left">
-
-      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
-        <a>{{ orgName }}</a>
-      </router-link> / 
-      
-      <router-link :to="{ name: 'project'}" tag="a" active-class="active">
-        <a>{{ proName }}</a>
-      </router-link>
-
-    </h3>
-
-    
-
-    <div class="rwo text-left mb-5">
-      <div class="row">
-        <div>
-          <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
-            Open <span class="badge badge-light">{{ mileOpened }}</span>
-          </button>
-          <button @click="showOpened = false" type="button" class="ml-3 btn btn-secondary">
-            Closed <span class="badge badge-light">{{ mileClosed }}</span>
-          </button>
-        </div>
-
-        <button v-if="addingMile === false" class="ml-auto btn btn-success" @click="addingMile = true">Add Milestone</button>
-
-        <div v-else class="form-group text-right col-4 ml-auto">
-
-          <form class="mx-auto my-5">
-
-            <div class="form-group text-left">
-
-              <label>Milestone Title</label>
-              <input v-model.trim="mileTitle" class="mb-3 form-control">
-
-              <label>Due Date (Optional)</label>
-              <date-picker v-model="date" :config="options"></date-picker>
-
-              <label class="mt-3" for="description">Description</label>
-              <textarea v-model="mileDesc" class="form-control mb-3" rows="10" id="description"></textarea>
-
-              <button class="mx-1 btn btn-success" @click.prevent="addMilestone">Submit</button>
-              <button class="mx-1 btn btn-danger" @click.prevent="cancelAddMile">Cancel</button>
-
-            </div>
-
-          </form>
-          
-        </div>
-
-      </div>
-
-    </div>
-
+  <div class="container my-4">
     
     <ul v-for="(mile, index) in milestones" class="list-group list-group-flush">
 
@@ -423,7 +288,11 @@
 
     </ul>
     
-  </div> -->
+  </div>
+
+  </div>
+
+
 </template>
 
 <script>
@@ -527,6 +396,23 @@
             // error is a Parse.Error with an error code and message.
           });
       },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       
       showMile () {
