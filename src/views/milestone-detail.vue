@@ -1,107 +1,249 @@
 <template>
-  <div class="container my-4">
-    
-    <h3 class="my-5 text-left">
 
-      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
-        <a>{{ orgName }}</a>
-      </router-link>
-       / 
-      <router-link :to="{ name: 'project'}" tag="a" active-class="active">
-        <a>{{ proName }}</a>
-      </router-link>
+<div>
 
-      <h1 class="my-3">{{ mileTitle }}</h1>
+<div id="wrap" class="my-3">
 
-    </h3>
-    
 
-    <!-- Mark-As Dropdown Menu -->
+  <h3>{{ mileId }}</h3>
 
-    <div class="row">
 
-      <div class="rwo text-left mb-5">
+      <div class="row my-4">
 
-        <button @click="showOpened = true" type="button" class="ml-3 btn btn-info">
-          Open <span class="badge badge-light">{{ opened.length }}</span>
-        </button>
-        <button @click="showOpened = false" type="button" class="ml-3 btn btn-secondary">
-          Closed <span class="badge badge-light">{{ closed.length }}</span>
-        </button>
+        <div class="mb-0 d-flex align-items-center">
 
-      </div>
-      
-      <div class="dropdown ml-auto mr-3 mb-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Mark as
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="reopenIssue" class="dropdown-item">Open</button>
-          <button @click="closeIssue" class="dropdown-item">Closed</button>
+          <h4 class="text-left">
+
+            <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+              <a>{{ orgName }}</a>
+            </router-link>
+            / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+              <a>{{ proName }}</a>
+            </router-link>
+
+          </h4>
+
         </div>
-      </div>
 
-      <!-- Milestone Dropdown Menu -->
+        <div class="ml-auto">
 
-      <div class="dropdown mr-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          加入到 Milestone
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button @click="addIssueTo (mile.mileId)" v-for="(mile, index) in milestones" class="dropdown-item">
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 8
+            </label>
+          </div>
 
-            {{ mile.title }}
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 0
+            </label>
+          </div>
 
-            <template v-if="mileId === mile.mileId">
-              <i class="ml-2 fa fa-check" aria-hidden="true"></i>
-            </template>
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 0
+            </label>
+          </div>
 
-          </button>
         </div>
+
       </div>
 
-      <!-- Assign-To Dropdown Menu -->
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="#">程式碼</a>
+        </li>
+        <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
+          <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
+        </router-link>
+        <li class="nav-item">
+          <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Wiki</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">活動</a>
+        </li>
+        <li class="ml-auto nav-item">
+          <a class="nav-link" href="#">儲存庫設定</a>
+        </li>
+      </ul>
 
-      <div class="dropdown mr-3">
-        <button :disabled="checking === false" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assign to
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <button v-for="(user, index) in users" @click="assignTo (user.assigneeId, user.avatarHash)" class="dropdown-item">
+      <div class="row my-4 d-flex justify-content-between">
 
-            {{ user.name }}
-            <!-- <i class="ml-2 fa fa-check" aria-hidden="true"></i> -->
-            
-          </button>
+        <h4>{{ mileTitle }}</h4>
+
+        <router-link class="ml-auto mr-2 btn btn-secondary" :to="{ name: 'milestone-detail' }" tag="button" active-class="active">
+          編輯里程碑
+        </router-link>
+
+        <router-link class="btn btn-success" :to="{ name: 'milestone-detail' }" tag="button" active-class="active">
+          建立問題
+        </router-link>
+
+      </div>
+
+      <div class="row mt-3">
+
+        <h5>{{ percentage }}% Completed</h5>
         
+      </div>
+
+      <hr />
+
+      <div class="row">
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
+            {{ opened.length }} 個開啟中
+          </button>
+          <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
+            {{ closed.length }} 個已關閉
+          </button>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div v-if="checked.length === 0" class="row ml-auto">
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          標籤篩選
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
         </div>
       </div>
-      
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          里程碑篩選
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          指派人篩選
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          類型篩選
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          順序
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div>
+
     </div>
 
-    <h3 class="text-left">{{ percentage }}% Complete</h3>
+    <div v-else class="row ml-auto">
 
-    <!-- Issue List -->
+      <div class="dropdown mx-3">
+        <button @click="closeIssue" class="btn btn-outline-danger">
+          關閉
+        </button>
+      </div>
 
-    <div class="progress">
-      <div class="progress-bar bg-success" role="progressbar" :style="{ width: percentage + '%' }" aria-valuemin="0" aria-valuemax="100"></div>
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          標籤
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a @click="addLabelTo (label.labelId)" v-for="label in labels" class="dropdown-item" href="#">{{ label.title }}</a>
+        </div>
+      </div>
+
+      <div class="dropdown mx-3">
+        <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          負責人
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a @click="assignTo (user.assigneeId, user.avatarHash)" v-for="user in users" class="dropdown-item" href="#">{{ user.name }}</a>
+        </div>
+      </div>
+
     </div>
 
-    <div class="mt-5 list-group" v-if="issues.length >= 1">
 
-        <li v-if="issue.issueOpened === true && showOpened === true" v-for="issue in issues" style="line-height: 50px" tag="li" type="li" class="clearfix text-left list-group-item list-group-item-action" active-class="active">
 
-          <input class="mr-3" type="checkbox" :value="{ issueId: issue.issueId, assigneeId: issue.assigneeId }" v-model="checked">
 
-          <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="a" active-class="active">
-            <a>{{ issue.name }}</a>
-          </router-link>
-          
 
-          <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
+
+
+
+
+
+
+
+        
+
+      </div>
+
+      <ul class="mt-5 list-group list-group-flush" v-if="issues.length >= 1">
+
+        <li v-if="issue.issueOpened === true && showOpened === true" v-for="issue in issues" s tag="li" type="li" class="d-flex align-items-center list-group-item text-left" active-class="active">
+
+
+            <input class="mr-3" type="checkbox" :value="{ issueId: issue.issueId, assigneeId: issue.assigneeId }" v-model="checked">
+
+            <router-link :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="a" active-class="active">
+              <a>{{ issue.name }}</a>
+            </router-link>
+            
+
+            <span v-for="label in issue.labels" class="py-2 px-3 ml-3 badge badge-primary">{{ label }}</span>
 
           <template v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash">
-            <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-3 float-right rounded" alt="">
+            <img :src="'https://www.gravatar.com/avatar/' + hash" style="width: 50px" class="ml-auto float-right rounded" alt="">
           </template>
           
         </li>
@@ -122,9 +264,18 @@
           
         </li>
 
+      </ul>
+
     </div>
 
+
+
+
+
+
+
   </div>
+
     
 
 </template>
@@ -157,6 +308,7 @@
         orgName: '',
         orgId: '',
         percentage: 0,
+        labels: [],
       }
     },
 
@@ -196,10 +348,64 @@
       $vmc.showProName ();
       $vmc.showIssue ();
       $vmc.showMilestone ();
+      $vmc.showLabel ();
     },
 
 
     methods: {
+      addLabelTo (labelId) {
+        let $vmc = this;
+
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        let ary = [];
+
+        query.get (labelId)
+          .then (resp => {
+            for (let i = 0; i < $vmc.checked.length; i ++) {
+              
+              resp.addUnique ('issueId', $vmc.checked[i].issueId);
+              
+            }
+            
+            resp.save ()
+              .then (resp => {
+                $vmc.showIssue ();
+              });
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
+      
+
+      showLabel () {
+        let $vmc = this;
+        let Label = Parse.Object.extend ('Label');
+        let query = new Parse.Query (Label);
+        let ary = [];
+
+        query.equalTo ('proId', $vmc.proId);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+              
+              obj.labelId = object.id;
+              obj.title = object.get ('title');
+              obj.labelDesc = object.get ('labelDesc');
+              obj.issueId = object.get ('issueId');
+              ary.push (obj);
+            }
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+
+        $vmc.labels = ary;
+      },
+      
       showIssue () {
         let $vmc = this;
         let ary = [];
@@ -351,6 +557,17 @@
       },
 
 
+
+
+
+
+
+
+
+
+
+
+
       showMilestone () {
         let $vmc = this;
         let Mile = Parse.Object.extend ('Milestone');
@@ -369,6 +586,22 @@
           });
         $vmc.milestones = ary;
       },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
       addIssueTo (mileId) {

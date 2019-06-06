@@ -80,11 +80,11 @@
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <router-link :to="{ name: 'label', params: { proId: proId, issues: issues, } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'label', params: { proId: proId, issues: issues } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           標籤
         </router-link>
 
-        <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'milestone', params: { proId: proId, orgId: orgId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           里程碑
         </router-link>
         

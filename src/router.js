@@ -27,7 +27,7 @@ export default new Router ({
       path: '/:orgId/:proId/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
     },
     {
-      path: '/:orgId/:proId/milestones', name: 'milestone', component: () => import('./views/milestone.vue'),
+      path: '/:orgId/:proId/milestone', name: 'milestone', component: () => import('./views/milestone.vue'),
     },
     {
       path: '/:orgId/:proId/milestone/:mileId', name: 'milestone-detail', component: () => import('./views/milestone-detail.vue'),
