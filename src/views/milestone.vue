@@ -92,8 +92,7 @@
         </div>
 
         <div>
-          <!-- <button class="btn btn-success h-100" @click="issueAdding = true">建立問題</button> -->
-          <router-link class="btn btn-success" :to="{ name: 'addIssue' }" tag="button" active-class="active">
+          <router-link class="btn btn-success" :to="{ name: 'milestone-detail' }" tag="button" active-class="active">
             新的里程碑
           </router-link>
         </div>
@@ -102,61 +101,54 @@
 
       <hr />
 
+      <div class="row">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <h3 v-for="milestone in milestones">
-        {{ milestones }}
-      </h3>
-
-
-        <div class="row">
-
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-              {{ mileOpened }} 個開啟中
-            </button>
-            <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-              {{ mileClosed }} 個已關閉
-            </button>
-          </div>
-
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
+            {{ mileOpened }} 個開啟中
+          </button>
+          <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
+            {{ mileClosed }} 個已關閉
+          </button>
         </div>
+
+      </div>
 
     </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
   <div class="container my-4">
+
+    
+
+      <h3 v-for="milestone in milestones">
+        {{ milestones }}
+      </h3>
     
     <ul v-for="(mile, index) in milestones" class="list-group list-group-flush">
 
-      <li v-if="mile.mileOpened === true && showOpened === true" class="py-5 text-left list-group-item">
+      <li v-if="mile.mileOpened === true && showOpened === true" class="text-left list-group-item">
 
         <div v-if="milestones[index].mileEditing === false">
 
-          <router-link :to="{ name: 'milestone-detail', params: { mileId: mile.mileId, mileTitle: mile.title }}" class="text-decoration-none" tag="a" active-class="active">
-            <h3 class="my-3">{{ mile.title }}</h3>
-          </router-link>
-
           <div class="row">
-
+            
             <div class="col-6">
+
+            <router-link :to="{ name: 'milestone-detail', params: { mileId: mile.mileId, mileTitle: mile.title }}" class="text-decoration-none" tag="a" active-class="active">
+              <h3 class="">{{ mile.title }}</h3>
+            </router-link>
 
               <p v-if="milestones[index].dueDate !== ''">Due Date by {{ milestones[index].dueDate }}</p>
               <p v-if="milestones[index].mileDesc !== ''">{{ milestones[index].mileDesc }}</p>
@@ -165,21 +157,11 @@
 
             <div class="col-6">
 
-              <div class="mx-auto row">
-                <p class="mx-2">{{ mile.percentage }}% Complete</p>
-                <p class="mx-2">{{ mile.open }} open</p>
-                <p class="mx-2">{{ mile.closed }} closed</p>
-              </div>
-
               <div class="progress">
                 <div class="progress-bar bg-success" role="progressbar" :style="{ width: mile.percentage + '%'}" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
 
-            </div>
-
-            <div class="text-right mb-5 ml-auto mr-5">
-
-              <div class="text-right mt-3">
+              <div class="mt-2 text-right">
 
                 <button v-if="milestones[index].mileEditing === false" class="mr-3 btn btn-success" @click.prevent="milestones[index].mileEditing = true">Edit</button>
                 <button v-if="milestones[index].mileOpened === true && milestones[index].mileEditing === false" class="mr-3 btn btn-warning" @click.prevent="closeMilestone (index)">Close</button>
