@@ -40,8 +40,8 @@ export default {
     userId: '',
     avatarHash: '',
     input: {
-      email: 'korver@protype.tw',
-      password: '6666',
+      email: '',
+      password: '',
     }
   },
 
@@ -204,7 +204,7 @@ export default {
      *
      */
     logOut: function ({ commit }) {
-      
+
       commit ('authed');
       router.push('/signin');
     },    
