@@ -188,15 +188,11 @@
         
         $vmc.$cookie.remove ('token');
         $vmc.$store.dispatch ('user/logOut');
-        // $vmc.$router.push ('/signin');
       },
 
     },
 
     watch: {
-      user () {
-        // console.log (this.user);
-      }
     }
   }
 </script>

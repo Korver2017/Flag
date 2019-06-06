@@ -204,10 +204,9 @@ export default {
      *
      */
     logOut: function ({ commit }) {
-      // if (confirm ('Are you sure to log out?'))
+      
       commit ('authed');
       router.push('/signin');
-      // else return;
     },    
   }
 }
