@@ -66,7 +66,6 @@ export default {
         state.username = '';
         state.input.email = '';
         state.input.password = '';
-        state.input.userId = '';
         router.push ('/signin')
       } else {
         state.authed = data.authed;

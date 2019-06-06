@@ -248,10 +248,8 @@
 
     data () {
       return {
-        // username: '',
         orgName: '',
         orgs: [],
-        // avatarHash: '',
         projects: [],
         issues: [],
         assigneeList: [],
@@ -312,9 +310,9 @@
       user () {
         return {
           authed: this.$store.state.user.authed,
-          email: this.$store.state.user.input.email,
+          // email: this.$store.state.user.input.email,
           userId: this.$store.state.user.userId,
-          avatarHash: this.$store.state.user.avatarHash,
+          // avatarHash: this.$store.state.user.avatarHash,
         }
       },
 
