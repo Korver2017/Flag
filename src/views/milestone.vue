@@ -1,5 +1,227 @@
 <template>
-  <div class="container my-4">
+      <div id="wrap" class="my-3">
+
+      <div class="row my-4">
+
+        <div class="mb-0 d-flex align-items-center">
+
+          <h4 class="text-left">
+
+            <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+              <a>{{ orgName }}</a>
+            </router-link>
+            / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+              <a>{{ proName }}</a>
+            </router-link>
+
+          </h4>
+
+        </div>
+
+        <div class="ml-auto">
+
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 8
+            </label>
+          </div>
+
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 0
+            </label>
+          </div>
+
+          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
+            </label>
+            <label class="border border-dark btn">
+              <input type="radio" name="options" id="option2" autocomplete="off"> 0
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="#">程式碼</a>
+        </li>
+        <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
+          <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
+        </router-link>
+        <li class="nav-item">
+          <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Wiki</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">活動</a>
+        </li>
+        <li class="ml-auto nav-item">
+          <a class="nav-link" href="#">儲存庫設定</a>
+        </li>
+      </ul>
+
+      <div class="row my-4 d-flex justify-content-between">
+
+        <div class="btn-group" role="group" aria-label="Basic example">
+
+          <router-link :to="{ name: 'label', params: { proId: proId }}" tag="button" class="btn btn-outline-secondary" active-class="active">
+            標籤
+          </router-link>
+
+          <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+            里程碑
+          </router-link>
+          
+        </div>
+
+        <div>
+          <!-- <button class="btn btn-success h-100" @click="issueAdding = true">建立問題</button> -->
+          <router-link class="btn btn-success" :to="{ name: 'addIssue' }" tag="button" active-class="active">
+            新的里程碑
+          </router-link>
+        </div>
+
+      </div>
+
+      <hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <h3 v-for="milestone in milestones">
+        {{ milestone }}
+      </h3>
+
+
+      <template v-for="milestone in milestones">
+
+        <div class="row">
+
+          <div class="btn-group" role="group" aria-label="Basic example">
+            <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
+              123 個開啟中
+            </button>
+            <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
+              123 個已關閉
+            </button>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+
+          <div class="row ml-auto">
+
+            <div class="dropdown mx-3">
+              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                標籤篩選
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+
+            <div class="dropdown mx-3">
+              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                里程碑篩選
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+
+            <div class="dropdown mx-3">
+              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                指派人篩選
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+
+            <div class="dropdown mx-3">
+              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                類型篩選
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+
+            <div class="dropdown mx-3">
+              <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                順序
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+
+      
+      </template>
+
+
+    </div>
+
+
+  <!-- <div class="container my-4">
 
     <h3 class="my-5 text-left">
 
@@ -201,7 +423,7 @@
 
     </ul>
     
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -321,8 +543,6 @@
             $vmc.mileClosed = 0;
             for (let i = 0; i < resp.length; i ++) {
               let object = resp[i];
-
-
               
               if (object.get ('mileOpened')) {
                 $vmc.mileOpened += 1;

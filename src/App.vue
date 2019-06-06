@@ -132,7 +132,6 @@
 
 
     created () {
-
       let $vmc = this;
 
       $vmc.token = $vmc.$cookie.get ('token');

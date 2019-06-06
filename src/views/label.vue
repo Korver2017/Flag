@@ -98,35 +98,8 @@
 
 
 
-          <modal width="800" height="auto" name="editLabel">
-
-            <h5 class="p-3 font-weight-bold">編輯標籤</h5>
-
-            <hr />
-
-            <div class="ml-3 row">
-
-              <div class="col-3 input-group">
-                <input type="text" class="form-control" aria-label="example">
-              </div>
-
-              <div class="col-6 input-group">
-                <input type="text" class="form-control" aria-label="example" placeholder="描述">
-              </div>
-
-            </div>
-
-            <hr />
-
-            <div class="mb-3 text-right">
-              <button class="mr-3 btn btn-danger" @click="">取消操作</button>
-              <button class="mr-3 btn btn-success" @click="">更新</button>
-            </div>
-
-          </modal>
 
 
-          <button @click="show ()">show me!</button>
 
 
 
@@ -158,7 +131,7 @@
             </div>
           </li>
 
-          <li v-for="label in labels" class="list-group-item">
+          <li v-for="(label, index) in labels" class="list-group-item">
             <div class="row d-flex align-items-center">
               <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ label.title }}</span></h4>
               <div class="ml-5">
@@ -166,8 +139,37 @@
               </div>
               <div class="ml-auto mr-5">0 個開啟的問題</div>
               <div>
-                <button class="mr-3 btn btn-success" @click="">編輯</button>
-                <button class="mr-3 btn btn-danger" @click="">刪除</button>
+
+                <button class="mr-3 btn btn-success" @click="editingLabel (index)">編輯</button>
+
+                <modal width="800" height="auto" :name="'modal' + index">
+
+                  <h5 class="p-3 font-weight-bold">編輯標籤</h5>
+
+                  <hr />
+
+                  <div class="ml-3 row">
+
+                    <div class="col-3 input-group">
+                      <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-label="example">
+                    </div>
+
+                    <div class="col-6 input-group">
+                      <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-label="example" placeholder="描述">
+                    </div>
+
+                  </div>
+
+                  <hr />
+
+                  <div class="mb-3 text-right">
+                    <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">取消操作</button>
+                    <button class="mr-3 btn btn-success" @click="updateLabel (index)">更新</button>
+                  </div>
+
+                </modal>
+                
+                <button class="mr-3 btn btn-danger" @click="deleteLabel (index)">刪除</button>
               </div>
             </div>
           </li>
@@ -249,6 +251,8 @@
   import Parse from 'parse';
 
   export default {
+    name: 'label',
+    
     data() {
       return {
         orgName: '',
@@ -257,7 +261,6 @@
         addingLabel: false,
         labelName: '',
         labelDesc:'',
-        // editingLabel: false,
         newLabelName: '',
         newLabelDesc: '',
       }
@@ -267,8 +270,13 @@
         return this.$route.params.proId; 
       },
 
+      issueId () {
+        return this.$route.params.issueId;
+      },
+
       issues () {
-        return this.$route.params.issues;
+        // return this.$route.params.issues;
+        return 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
       },
     },
 
@@ -279,11 +287,11 @@
       $vmc.showLabel ();
     },
     methods: {
-      show () {
-        this.$modal.show('editLabel');
+      show (index) {
+        this.$modal.show ('modal' + index);
       },
-      hide () {
-        this.$modal.hide('editLabel');
+      hide (index) {
+        this.$modal.hide ('modal' + index);
       },
 
       showRouteName () {
@@ -349,14 +357,35 @@
         $vmc.labelDesc = '';
         $vmc.addingLabel = false;
       },
+
+
+
+
+
+
+
+
+
+
       editingLabel (index) {
         let $vmc = this;
         let label = $vmc.labels[index];
 
-        label.editingLabel = true;
-        label.newLabelName = label.title;
-        label.newLabelDesc = label.labelDesc;
+        $vmc.labels[index].newLabelName = $vmc.labels[index].title;
+        $vmc.show (index);
       },
+
+
+
+
+
+
+
+
+
+
+
+      
       updateLabel (index) {
         let $vmc = this;
         let labelId = $vmc.labels[index].labelId;
@@ -381,6 +410,7 @@
         $vmc.newLabelName = '';
         $vmc.newLabelDesc = '';
         $vmc.labels[index].editingLabel = false;
+        $vmc.hide (index);
       },
       deleteLabel (index) {
         let $vmc = this;

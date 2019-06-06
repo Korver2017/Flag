@@ -117,6 +117,12 @@
 
 
 
+
+
+
+
+
+
       <div class="row">
 
         <div class="btn-group" role="group" aria-label="Basic example">
@@ -128,7 +134,7 @@
           </button>
         </div>
 
-        <div class="row ml-auto">
+        <div v-if="checked.length === 0" class="row ml-auto">
 
           <div class="dropdown mx-3">
             <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -187,8 +193,58 @@
 
         </div>
 
+        <div v-else class="row ml-auto">
+
+          <div class="dropdown mx-3">
+            <button @click="closeIssue" class="btn btn-outline-danger">
+              關閉
+            </button>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              標籤
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a @click="addLabelTo (label.labelId)" v-for="label in labels" class="dropdown-item" href="#">{{ label.title }}</a>
+            </div>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              里程碑
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a @click="addIssueTo (mile.mileId, mile.title)" v-for="mile in milestones" class="dropdown-item" href="#">{{ mile.title }}</a>
+            </div>
+          </div>
+
+          <div class="dropdown mx-3">
+            <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              負責人
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a @click="assignTo (user.assigneeId, user.avatarHash)" v-for="user in users" class="dropdown-item" href="#">{{ user.name }}</a>
+            </div>
+          </div>
+
+        </div>
+
 
       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       
 
@@ -280,7 +336,7 @@
       </nav>
 
     </div>
-    </div>
+  </div>
 
     
 
@@ -546,8 +602,6 @@
                       obj.assigneeId = object;
                       obj.avatarHash = resp.get ('avatarHash');
                       obj.email = resp.get ('email');
-
-                      // obj.avatarHash = $vmc.$md5 (email);
                       ary.push (obj);
                     });
                 }
@@ -784,6 +838,8 @@
 
 
       addIssueTo (mileId, mileTitle) {
+        console.log (mileId, mileTitle);
+        
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
