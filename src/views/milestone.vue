@@ -91,9 +91,9 @@
         </div>
 
         <div>
-          <!-- <router-link tag="button" active-class="active">
+          <router-link :to="{ name: 'new-milestone', params: { orgId: orgId, proId: proId } }" tag="button" class="btn btn-success" active-class="active">
             新的里程碑
-          </router-link> -->
+          </router-link>
         </div>
 
       </div>
@@ -156,6 +156,22 @@
             </div>
 
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           <div v-else class="col-8 mx-auto form-group text-left">
 
@@ -276,7 +292,6 @@
 
 
     components: {
-      // DatetimePicker,
       datePicker
     },
 
@@ -448,32 +463,32 @@
       },
 
 
-      addMilestone () {
-        let $vmc = this;
+      // addMilestone () {
+      //   let $vmc = this;
 
-        const Mile = Parse.Object.extend ('Milestone');
-        const mile = new Mile ();
+      //   const Mile = Parse.Object.extend ('Milestone');
+      //   const mile = new Mile ();
 
-        mile.set ('title', $vmc.mileTitle);
-        mile.set ('proId', $vmc.proId);
-        mile.set ('orgId', $vmc.orgId);
-        mile.set ('mileOpened', true);
-        mile.set ('dueDate', $vmc.date);
-        mile.set ('mileDesc', $vmc.mileDesc);
+      //   mile.set ('title', $vmc.mileTitle);
+      //   mile.set ('proId', $vmc.proId);
+      //   mile.set ('orgId', $vmc.orgId);
+      //   mile.set ('mileOpened', true);
+      //   mile.set ('dueDate', $vmc.date);
+      //   mile.set ('mileDesc', $vmc.mileDesc);
 
-        mile.save ()
-          .then (resp => {
-            $vmc.mileTitle = '';
-            $vmc.showMile ();
-            $vmc.cancelAddMile ();
-            // $vmc.showMile ();
-            // Execute any logic that should take place after the object is saved.
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert ('Failed to create new object, with error code: ' + error.message);
-          });
-      },
+      //   mile.save ()
+      //     .then (resp => {
+      //       $vmc.mileTitle = '';
+      //       $vmc.showMile ();
+      //       $vmc.cancelAddMile ();
+      //       // $vmc.showMile ();
+      //       // Execute any logic that should take place after the object is saved.
+      //     }, (error) => {
+      //       // Execute any logic that should take place if the save fails.
+      //       // error is a Parse.Error with an error code and message.
+      //       alert ('Failed to create new object, with error code: ' + error.message);
+      //     });
+      // },
 
 
       cancelAddMile () {

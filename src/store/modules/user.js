@@ -40,8 +40,8 @@ export default {
     userId: '',
     avatarHash: '',
     input: {
-      email: '',
-      password: '',
+      email: 'korver@protype.tw',
+      password: '6666',
     }
   },
 
