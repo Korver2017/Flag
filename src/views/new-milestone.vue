@@ -190,7 +190,7 @@
       return {
         date: null,
         options: {
-          format: 'YYYY/MM/DD',
+          format: 'YYYY-MM-DD',
           inline: true,
         },
         addingMile: false,

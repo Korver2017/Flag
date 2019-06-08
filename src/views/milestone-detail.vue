@@ -17,7 +17,7 @@
             <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
               <a>{{ orgName }}</a>
             </router-link>
-            / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+            / <router-link :to="{ name: 'project' }" tag="a" active-class="active">
               <a>{{ proName }}</a>
             </router-link>
 
@@ -62,7 +62,7 @@
         <li class="nav-item">
           <a class="nav-link" href="#">程式碼</a>
         </li>
-        <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
+        <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
           <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
         </router-link>
         <li class="nav-item">
@@ -97,6 +97,8 @@
       </div>
 
       <div class="row mt-3">
+
+        <h5 class="mr-3">{{ dueDate }}</h5>
 
         <h5>{{ percentage }}% Completed</h5>
         
@@ -188,29 +190,39 @@
     <div v-else class="row ml-auto">
 
       <div class="dropdown mx-3">
+
         <button @click="closeIssue" class="btn btn-outline-danger">
           關閉
         </button>
+
       </div>
 
       <div class="dropdown mx-3">
+
         <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           標籤
         </button>
+
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a @click="addLabelTo (label.labelId)" v-for="label in labels" class="dropdown-item" href="#">{{ label.title }}</a>
         </div>
+
       </div>
 
       <div class="dropdown mx-3">
+
         <button class="btn btn-outline-white dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           負責人
         </button>
+
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
           <a @click="assignTo (user.assigneeId, user.avatarHash)" v-for="user in users" class="dropdown-item" href="#">{{ user.name }}</a>
         </div>
+
       </div>
 
+    </div>
+    
     </div>
 
 
@@ -221,14 +233,78 @@
 
 
 
+    <div class="mt-3 list-group list-group-flush" v-if="issues.length >= 1">
 
+      <template v-for="issue in issues">
 
+        <!-- Opened Issue-List Start-->
 
+        <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active">
+
+          <div class="row d-flex align-items-center">
+
+            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+            <span class="px-3 py-2 badge badge-primary">#1</span>
+            <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
+            
+            <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
+
+            <span v-if="issue.mileTitle !== ''">
+              <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
+            </span>
+
+          </div>
+
+          <div class="row d-flex align-items-center">
+            <div>由 Korver 建立</div>
+
+            <div class="ml-auto">
+              <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
+            </div>
+
+          </div>
+          
+        </router-link>
+
+        <!-- Opened Issue-List End -->
+
+        <!-- Closed Issue-List Start -->
+
+        <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="list-group-item" active-class="active">
+
+          <div class="row d-flex align-items-center">
+
+            <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+
+            <span class="px-3 py-2 badge badge-primary">#1</span>
+            <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
+            
+            <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
+
+            <span v-if="issue.mileTitle !== ''">
+              <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
+            </span>
+
+          </div>
+
+          <div class="row d-flex align-items-center">
+            <div>由 Korver 建立</div>
+
+            <div class="ml-auto">
+              <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
+            </div>
+
+          </div>
+          
+        </router-link>
+
+      </template>
         
+    </div>
 
-      </div>
 
-      <ul class="mt-5 list-group list-group-flush" v-if="issues.length >= 1">
+
+      <!-- <ul class="mt-5 list-group list-group-flush" v-if="issues.length >= 1">
 
         <li v-if="issue.issueOpened === true && showOpened === true" v-for="issue in issues" s tag="li" type="li" class="d-flex align-items-center list-group-item text-left" active-class="active">
 
@@ -264,14 +340,9 @@
           
         </li>
 
-      </ul>
+      </ul> -->
 
     </div>
-
-
-
-
-
 
 
   </div>
@@ -298,7 +369,6 @@
         proName: '',
         issues: [],
         username: this.$store.state.user.username,
-        // labels: [],
         checked: [],
         opened: [],
         closed: [],
@@ -309,6 +379,8 @@
         orgId: '',
         percentage: 0,
         labels: [],
+        dueDate: '',
+
       }
     },
 
@@ -407,6 +479,9 @@
       },
       
       showIssue () {
+
+        console.log ('issue');
+        
         let $vmc = this;
         let ary = [];
         const Issue = Parse.Object.extend ('Issue');
@@ -420,14 +495,16 @@
             for (let i = 0; i < resp.length; i ++) {
               let obj = {};
               let object = resp[i];
+
               obj.name = object.get ('name');
               obj.issueId = object.id;
               obj.avatarHash = object.get ('avatarHash');
-              obj.assigneeId = object.get ('assigneeId');
+              obj.mileTitle = object.get ('mileTitle');
 
               let arry = [];
               let Label = Parse.Object.extend ('Label');
               let query = new Parse.Query (Label);
+
               query.equalTo ('issueId', object.id);
               query.find ()
                 .then (resp => {
@@ -439,11 +516,13 @@
 
               obj.labels = arry;
               obj.issueOpened = object.get ('issueOpened');
+
               if (obj.issueOpened === true) {
                 $vmc.opened.push (object.id);
               } else {
                 $vmc.closed.push (object.id);
               }
+
               ary.push (obj);
             }
           })
@@ -572,19 +651,28 @@
         let $vmc = this;
         let Mile = Parse.Object.extend ('Milestone');
         let query = new Parse.Query (Mile);
-        let ary = [];
-        query.equalTo ('proId', $vmc.proId);
-        query.find ()
+        query.get ($vmc.mileId)
           .then (resp => {
-            for (let i = 0; i < resp.length; i++) {
-              let obj = {};
-              let object = resp[i];
-              obj.mileId = object.id;
-              obj.title = object.get ('title');
-              ary.push (obj)
-            }
-          });
-        $vmc.milestones = ary;
+            $vmc.dueDate = resp.get ('dueDate');
+          })
+
+
+
+        
+        // let ary = [];
+        // query.equalTo ('proId', $vmc.proId);
+        // query.find ()
+        //   .then (resp => {
+        //     for (let i = 0; i < resp.length; i++) {
+        //       let obj = {};
+        //       let object = resp[i];
+        //       obj.mileId = object.id;
+        //       obj.title = object.get ('title');
+        //       $vmc.dueDate = object.get ('dueDate');
+        //       ary.push (obj)
+        //     }
+        //   });
+        // $vmc.milestones = ary;
       },
 
 
@@ -644,34 +732,59 @@
 
 
       assignTo (assigneeId, avatarHash) {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        let ary = [];
-        let query = new Parse.Query (Issue);
-        let checkedIds = $vmc.checked.map (item => item.issueId);
-        query.containedIn ('objectId', checkedIds);
-        query.find ()
-          .then (resp => {
-            for (let i = 0; i < resp.length; i ++) {
-              let obj = {};
-              let object = resp[i];
-              let query = new Parse.Query (Issue);
-              query.get (object.id)
-                .then (resp => {
-                  resp.addUnique ('avatarHash', avatarHash);
-                  resp.addUnique ('assigneeId', assigneeId);
-                  // obj.assignee = userId;
-                  // obj.avatarHash = avatarHash;
-                  // resp.addUnique ('assignee', obj);
-                  resp.save ()
-                    .then (() => {
-                      $vmc.showIssue ();
-                      $vmc.checked = [];
-                    })
-                })
 
-            }
-          })
+        console.log (assigneeId, avatarHash);
+        
+        let $vmc = this;
+        let ary = [];
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+
+
+        console.log ($vmc.checked);
+
+        for (let i = 0; i < $vmc.checked.length; i ++) {
+          let object = $vmc.checked[i];
+          let query = new Parse.Query (Issue);
+
+          query.get (object)
+            .then (resp => {
+                resp.addUnique ('avatarHash', avatarHash);
+                resp.addUnique ('assigneeId', assigneeId);
+
+                console.log (assigneeId, avatarHash);
+                
+                resp.save ()
+                  .then (() => {
+                    $vmc.showIssue ();
+                    $vmc.checked = [];
+                  })
+              })
+        }
+        
+        // query.containedIn ('objectId', checkedIds);
+        // query.find ()
+        //   .then (resp => {
+        //     for (let i = 0; i < resp.length; i ++) {
+        //       let obj = {};
+        //       let object = resp[i];
+        //       let query = new Parse.Query (Issue);
+        //       query.get (object.id)
+        //         .then (resp => {
+        //           resp.addUnique ('avatarHash', avatarHash);
+        //           resp.addUnique ('assigneeId', assigneeId);
+
+        //           console.log (assigneeId, avatarHash);
+                  
+        //           resp.save ()
+        //             .then (() => {
+        //               $vmc.showIssue ();
+        //               $vmc.checked = [];
+        //             })
+        //         })
+
+        //     }
+        //   })
 
       },
 

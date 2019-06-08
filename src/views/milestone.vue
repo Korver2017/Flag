@@ -319,7 +319,7 @@
       return {
         date: '',
         options: {
-          format: 'DD/MM/YYYY',
+          format: 'DD-MM-YYYY',
           useCurrent: false,
         },
         addingMile: false,
