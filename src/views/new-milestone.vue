@@ -216,24 +216,26 @@
     computed: {
 
       orgId () {
+        return this.$route.params.orgId;
       },
 
       proId () {
+        return this.$route.params.proId;
       },
 
     },
 
 
     mounted () {
+      this.showRouteName ();
     },
 
     methods: {
       
       showRouteName () {
         let $vmc = this;
-
-        let Mile = Parse.Object.extend ('Milestone');
-        let query = new Parse.Query (Mile);
+        let Project = Parse.Object.extend ('Project');
+        let query = new Parse.Query (Project);
 
         query.get ($vmc.proId)
           .then (resp => {
