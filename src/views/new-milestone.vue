@@ -2,8 +2,6 @@
   <div>
     <div id="wrap" class="my-3">
 
-      <h3>{{ orgId }} | {{ proId }}</h3>
-
       <div class="row my-4">
 
         <div class="mb-0 d-flex align-items-center">
@@ -24,30 +22,39 @@
         <div class="ml-auto">
 
           <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+
             <label class="border border-dark btn">
               <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
             </label>
+
             <label class="border border-dark btn">
               <input type="radio" name="options" id="option2" autocomplete="off"> 8
             </label>
+
           </div>
 
           <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+
             <label class="border border-dark btn">
               <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
             </label>
+
             <label class="border border-dark btn">
               <input type="radio" name="options" id="option2" autocomplete="off"> 0
             </label>
+
           </div>
+
 
           <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
             <label class="border border-dark btn">
               <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
             </label>
+
             <label class="border border-dark btn">
               <input type="radio" name="options" id="option2" autocomplete="off"> 0
             </label>
+
           </div>
 
         </div>
@@ -55,27 +62,35 @@
       </div>
 
       <ul class="nav nav-tabs">
+
         <li class="nav-item">
           <a class="nav-link" href="#">程式碼</a>
         </li>
+
         <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
           <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
         </router-link>
+
         <li class="nav-item">
           <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" href="#">Wiki</a>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" href="#">活動</a>
         </li>
+
         <li class="ml-auto nav-item">
           <a class="nav-link" href="#">儲存庫設定</a>
         </li>
+
       </ul>
 
       <div class="row my-4 d-flex justify-content-between">
@@ -101,13 +116,6 @@
       </div>
 
       <hr />
-
-
-
-
-
-
-
 
       <div class="text-left">
         <h3>新的里程碑</h3>
@@ -141,19 +149,23 @@
           <form class="text-left">
 
             <div class="form-group">
-              <label for="expireDate">截止日期（可選）</label>
+              <label for="expireDate">截止日期（可選）</label> <button class="mb-2 btn btn-warning" @click.prevent="date = null">清除</button>
               <input v-model="date" type="text" class="col-6 form-control" id="expireDate">
             </div>
 
             <date-picker class="col-8 p-2 border border-secondary" name="date" v-model="date" :config="options"></date-picker>
 
-
           </form>
 
         </div>
 
-        
+      </div>
+      
+      <hr class="my-4" />
 
+      <div class="text-right">
+        <button class="btn btn-success" @click="addMilestone">建立里程碑</button>
+      
       </div>
 
     </div>
@@ -185,7 +197,6 @@
         date: null,
         options: {
           format: 'YYYY/MM/DD',
-          // useCurrent: false,
           inline: true,
         },
         addingMile: false,
@@ -205,21 +216,34 @@
     computed: {
 
       orgId () {
-        return this.$route.params.orgId; 
       },
 
       proId () {
-        return this.$route.params.proId; 
       },
+
     },
 
 
     mounted () {
-      let $vmc = this;
-    
     },
 
     methods: {
+      
+      showRouteName () {
+        let $vmc = this;
+
+        let Mile = Parse.Object.extend ('Milestone');
+        let query = new Parse.Query (Mile);
+
+        query.get ($vmc.proId)
+          .then (resp => {
+            $vmc.orgName = resp.get ('orgName');
+            $vmc.proName = resp.get ('name');
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
 
       addMilestone () {
         let $vmc = this;
@@ -237,8 +261,7 @@
         mile.save ()
           .then (resp => {
             $vmc.mileTitle = '';
-            $vmc.showMile ();
-            $vmc.cancelAddMile ();
+            $vmc.$router.push ('/milestone');
             // $vmc.showMile ();
             // Execute any logic that should take place after the object is saved.
           }, (error) => {

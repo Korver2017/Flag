@@ -91,7 +91,7 @@
         </div>
 
         <div>
-          <router-link :to="{ name: 'new-milestone', params: { orgId: orgId, proId: proId } }" tag="button" class="btn btn-success" active-class="active">
+          <router-link :to="{ name: 'new-milestone', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="button" class="btn btn-success" active-class="active">
             新的里程碑
           </router-link>
         </div>
