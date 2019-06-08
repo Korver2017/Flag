@@ -152,9 +152,14 @@
 
                 <div class="mt-2 text-right">
 
-                  <button v-if="milestones[index].mileEditing === false" class="mr-3 btn btn-success" @click.prevent="milestones[index].mileEditing = true">Edit</button>
+                  <router-link class="mr-3 btn btn-success" :to="{ name: 'edit-milestone', params: { mileId: milestones[index].mileId } }" tag="button" active-class="active">
+                    Edit
+                  </router-link>
+
                   <button v-if="milestones[index].mileOpened === true && milestones[index].mileEditing === false" class="mr-3 btn btn-warning" @click.prevent="closeMilestone (index)">Close</button>
+
                   <button v-else-if="milestones[index].mileOpened === false && milestones[index].mileEditing === false" class="mr-3 btn btn-primary" @click.prevent="reopenMilestone (index)">Reopen</button>
+
                   <button v-if="milestones[index].mileEditing === false" class="mr-3 btn btn-danger" @click="deleteMile (index)">Delete</button>
 
                 </div>

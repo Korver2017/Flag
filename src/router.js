@@ -36,6 +36,9 @@ export default new Router ({
       path: '/:orgId/:proId/milestone/new', name: 'new-milestone', component: () => import('./views/new-milestone.vue'),
     },
     {
+      path: '/:orgId/:proId/milestone/:mileId/edit', name: 'edit-milestone', component: () => import('./views/edit-milestone.vue'),
+    },
+    {
       path: '/:orgId/:proId/label-list', name: 'label-list', component: () => import('./views/label.vue'),
     },
   ]
