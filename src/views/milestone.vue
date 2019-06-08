@@ -121,8 +121,6 @@
 
         <li v-if="mile.mileOpened === true && showOpened === true" class="text-left list-group-item">
 
-          <div v-if="milestones[index].mileEditing === false">
-
             <div class="row">
               
               <div class="col-6">
@@ -153,14 +151,14 @@
                 <div class="mt-2 text-right">
 
                   <router-link class="mr-3 btn btn-success" :to="{ name: 'edit-milestone', params: { mileId: milestones[index].mileId } }" tag="button" active-class="active">
-                    Edit
+                    編輯
                   </router-link>
 
-                  <button v-if="milestones[index].mileOpened === true && milestones[index].mileEditing === false" class="mr-3 btn btn-warning" @click.prevent="closeMilestone (index)">Close</button>
+                  <button v-if="milestones[index].mileOpened === true && milestones[index].mileEditing === false" class="mr-3 btn btn-warning" @click.prevent="closeMilestone (index)">關閉</button>
 
-                  <button v-else-if="milestones[index].mileOpened === false && milestones[index].mileEditing === false" class="mr-3 btn btn-primary" @click.prevent="reopenMilestone (index)">Reopen</button>
+                  <button v-else-if="milestones[index].mileOpened === false && milestones[index].mileEditing === false" class="mr-3 btn btn-primary" @click.prevent="reopenMilestone (index)">重新開啟</button>
 
-                  <button v-if="milestones[index].mileEditing === false" class="mr-3 btn btn-danger" @click="deleteMile (index)">Delete</button>
+                  <button v-if="milestones[index].mileEditing === false" class="mr-3 btn btn-danger" @click="deleteMile (index)">刪除</button>
 
                 </div>
 
@@ -168,55 +166,63 @@
 
             </div>
 
-          </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <div v-else class="col-8 mx-auto form-group text-left">
-
-            <label>Milestone Title</label>
-            <input v-model.trim="milestones[index].title" class="mb-3 form-control">
-
-            <label>Due Date (Optional)</label>
-            <date-picker v-model="milestones[index].dueDate" :config="options"></date-picker>
-
-            <label class="mt-3" for="description">Description</label>
-            <textarea v-model="milestones[index].mileDesc" class="form-control mb-3" rows="10" id="description"></textarea>
-
-            <div class="text-center">
-
-              <button class="mx-1 btn btn-success" @click.prevent="updateMile (index)">Update</button>
-              <button class="mx-1 btn btn-danger" @click.prevent="cancelEditing (index)">Cancel</button>
-
-            </div>
-
-          </div>
 
         </li>
 
         <li v-if="mile.mileOpened === false && showOpened === false" class="py-5 text-left list-group-item">
 
-          <div v-if="milestones[index].mileEditing === false">
+                      <div class="row">
+              
+              <div class="col-6">
+
+                <router-link v-if="milestones" :to="{ name: 'milestone-detail', params: { mileId: mile.mileId } }" class="text-decoration-none" tag="a" active-class="active">
+                  <h3 class="">{{ mile.title }}</h3>
+                </router-link>
+
+                <div class="row text-left">
+
+                  <div v-if="milestones[index].dueDate !== '' || undefined || null" class="mr-3">{{ milestones[index].dueDate }}</div>
+                  
+                  <!-- <p v-if="milestones[index].mileDesc !== ''">{{ milestones[index].mileDesc }}</p> -->
+
+                  <div class="mr-3">{{ milestones[index].open }} 個開啟中</div>
+                  <div class="">{{ milestones[index].closed }} 個已關閉</div>
+
+                </div>
+
+              </div>
+
+              <div class="col-6">
+
+                <div class="progress">
+                  <div class="progress-bar bg-success" role="progressbar" :style="{ width: mile.percentage + '%'}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <div class="mt-2 text-right">
+
+                  <router-link class="mr-3 btn btn-success" :to="{ name: 'edit-milestone', params: { mileId: milestones[index].mileId } }" tag="button" active-class="active">
+                    編輯
+                  </router-link>
+
+                  <button v-if="milestones[index].mileOpened === true && milestones[index].mileEditing === false" class="mr-3 btn btn-warning" @click.prevent="closeMilestone (index)">關閉</button>
+
+                  <button v-else-if="milestones[index].mileOpened === false && milestones[index].mileEditing === false" class="mr-3 btn btn-primary" @click.prevent="reopenMilestone (index)">重新開啟</button>
+
+                  <button v-if="milestones[index].mileEditing === false" class="mr-3 btn btn-danger" @click="deleteMile (index)">刪除</button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          <!-- <div v-if="milestones[index].mileEditing === false"> -->
 
             <!-- <router-link v-if="milestones" :to="{ name: 'milestone-detail', params: { mileId: mile.mileId, mileTitle: mile.title }}" class="text-decoration-none" tag="a" active-class="active">
               <h3 class="my-3">{{ mile.title }}</h3>
             </router-link> -->
 
-            <div class="row">
+            <!-- <div class="row">
 
               <div class="col-6">
 
@@ -274,7 +280,7 @@
 
             </div>
 
-          </div>
+          </div> -->
 
         </li>
 
