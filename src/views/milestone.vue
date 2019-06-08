@@ -127,12 +127,20 @@
               
               <div class="col-6">
 
-              <router-link v-if="milestones" :to="{ name: 'milestone-detail', params: { mileId: mile.mileId } }" class="text-decoration-none" tag="a" active-class="active">
-                <h3 class="">{{ mile.title }}</h3>
-              </router-link>
+                <router-link v-if="milestones" :to="{ name: 'milestone-detail', params: { mileId: mile.mileId } }" class="text-decoration-none" tag="a" active-class="active">
+                  <h3 class="">{{ mile.title }}</h3>
+                </router-link>
 
-                <p v-if="milestones[index].dueDate !== ''">Due Date by {{ milestones[index].dueDate }}</p>
-                <p v-if="milestones[index].mileDesc !== ''">{{ milestones[index].mileDesc }}</p>
+                <div class="row text-left">
+
+                  <div v-if="milestones[index].dueDate !== '' || undefined || null" class="mr-3">{{ milestones[index].dueDate }}</div>
+                  
+                  <!-- <p v-if="milestones[index].mileDesc !== ''">{{ milestones[index].mileDesc }}</p> -->
+
+                  <div class="mr-3">{{ milestones[index].open }} 個開啟中</div>
+                  <div class="">{{ milestones[index].closed }} 個已關閉</div>
+
+                </div>
 
               </div>
 
@@ -376,24 +384,6 @@
             // error is a Parse.Error with an error code and message.
           });
       },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       
       showMile () {
         let $vmc = this;

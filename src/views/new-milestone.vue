@@ -107,12 +107,6 @@
           
         </div>
 
-        <div>
-          <router-link :to="{ name: 'new-milestone' }" tag="button" class="btn btn-success" active-class="active">
-            新的里程碑
-          </router-link>
-        </div>
-
       </div>
 
       <hr />
@@ -132,7 +126,7 @@
 
             <div class="form-group">
               <label for="mileTitle">標題</label>
-              <input type="text" class="form-control" id="mileTitle" placeholder="標題">
+              <input v-model="mileTitle" type="text" class="form-control" id="mileTitle" placeholder="標題">
             </div>
 
             <div class="form-group">
@@ -256,6 +250,8 @@
         mile.set ('title', $vmc.mileTitle);
         mile.set ('proId', $vmc.proId);
         mile.set ('orgId', $vmc.orgId);
+        mile.set ('proName', $vmc.proName);
+        mile.set ('orgName', $vmc.orgName);
         mile.set ('mileOpened', true);
         mile.set ('dueDate', $vmc.date);
         mile.set ('mileDesc', $vmc.mileDesc);
@@ -263,7 +259,7 @@
         mile.save ()
           .then (resp => {
             $vmc.mileTitle = '';
-            $vmc.$router.push ('/milestone');
+            $vmc.$router.push ({ name: 'milestone' });
             // $vmc.showMile ();
             // Execute any logic that should take place after the object is saved.
           }, (error) => {
