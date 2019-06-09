@@ -1,124 +1,107 @@
 <template>
-    <div id="wrap" class="my-3">
+  <div id="wrap" class="my-3">
 
-      <div class="row my-4">
+    <div class="row my-4">
 
-        <div class="mb-0 d-flex align-items-center">
+      <div class="mb-0 d-flex align-items-center">
 
-          <h4 class="text-left">
+        <h4 class="text-left">
 
-            <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
-              <a>{{ orgName }}</a>
-            </router-link>
-            / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
-              <a>{{ proName }}</a>
-            </router-link>
+          <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
+            <a>{{ orgName }}</a>
+          </router-link>
+          / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+            <a>{{ proName }}</a>
+          </router-link>
 
-          </h4>
+        </h4>
 
+      </div>
+
+      <div class="ml-auto">
+
+        <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="border border-dark btn">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
+          </label>
+          <label class="border border-dark btn">
+            <input type="radio" name="options" id="option2" autocomplete="off"> 8
+          </label>
         </div>
 
-        <div class="ml-auto">
+        <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="border border-dark btn">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
+          </label>
+          <label class="border border-dark btn">
+            <input type="radio" name="options" id="option2" autocomplete="off"> 0
+          </label>
+        </div>
 
-          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="border border-dark btn">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
-            </label>
-            <label class="border border-dark btn">
-              <input type="radio" name="options" id="option2" autocomplete="off"> 8
-            </label>
-          </div>
-
-          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="border border-dark btn">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
-            </label>
-            <label class="border border-dark btn">
-              <input type="radio" name="options" id="option2" autocomplete="off"> 0
-            </label>
-          </div>
-
-          <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="border border-dark btn">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
-            </label>
-            <label class="border border-dark btn">
-              <input type="radio" name="options" id="option2" autocomplete="off"> 0
-            </label>
-          </div>
-
+        <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="border border-dark btn">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
+          </label>
+          <label class="border border-dark btn">
+            <input type="radio" name="options" id="option2" autocomplete="off"> 0
+          </label>
         </div>
 
       </div>
 
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link" href="#">程式碼</a>
-        </li>
-        <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
-          <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
+    </div>
+
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="#">程式碼</a>
+      </li>
+      <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
+        <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
+      </router-link>
+      <li class="nav-item">
+        <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Wiki</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">活動</a>
+      </li>
+      <li class="ml-auto nav-item">
+        <a class="nav-link" href="#">儲存庫設定</a>
+      </li>
+    </ul>
+
+    <div class="row my-4 d-flex justify-content-between">
+
+      <div class="btn-group" role="group" aria-label="Basic example">
+
+        <router-link :to="{ name: 'label-list', params: { proId: proId }}" tag="button" class="btn btn-outline-secondary" active-class="active">
+          標籤
         </router-link>
-        <li class="nav-item">
-          <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Wiki</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">活動</a>
-        </li>
-        <li class="ml-auto nav-item">
-          <a class="nav-link" href="#">儲存庫設定</a>
-        </li>
-      </ul>
 
-      <div class="row my-4 d-flex justify-content-between">
-
-        <div class="btn-group" role="group" aria-label="Basic example">
-
-          <router-link :to="{ name: 'label-list', params: { proId: proId }}" tag="button" class="btn btn-outline-secondary" active-class="active">
-            標籤
-          </router-link>
-
-          <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
-            里程碑
-          </router-link>
-          
-        </div>
-
-        <div>
-          <router-link :to="{ name: 'new-milestone', params: { orgId: orgId, proId: proId } }" tag="button" class="btn btn-success" active-class="active">
-            新的里程碑
-          </router-link>
-        </div>
-
+        <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+          里程碑
+        </router-link>
+        
       </div>
 
-      <hr />
+      <div>
+        <router-link :to="{ name: 'new-milestone', params: { orgId: orgId, proId: proId } }" tag="button" class="btn btn-success" active-class="active">
+          新的里程碑
+        </router-link>
+      </div>
+
+    </div>
+
+    <hr />
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- Comment Area Begin -->
+    
 
     <div class="row text-left">
 
@@ -151,7 +134,7 @@
 
       <div v-if="titleEditing === false" class="ml-auto mt-3">
 
-       <button class="btn btn-outline-success ml-5" @click="titleEditing = true">編輯</button>
+        <button class="btn btn-outline-success ml-5" @click="titleEditing = true">編輯</button>
       
       </div>
 
@@ -163,16 +146,11 @@
 
       </div>
 
-
-
-       
-
-
     </div>
 
     <hr />
     
-    <div class="row">
+    <div class="row mx-auto">
 
       <div>
     
@@ -187,35 +165,50 @@
           <div class="py-2 pl-3 d-flex align-items-center bg-secondary text-white">
             <div class="font-weight-bold">{{ creator }} 評論</div>
 
-            <button v-if="editing === false && creatorId === userId" class="ml-auto mr-5 btn btn-warning" @click="editIssueContent">編輯</button>
+            <button v-if="editing === false && creatorId === userId" class="ml-auto mr-3 btn btn-warning" @click="editIssueContent">編輯</button>
+          </div>
+
+          <div class="col-12 rounded" v-if="editing === true" style="border: 1px solid rgba(34,36,38,.15);">
+
+            <form class="col-12 mt-3 mx-auto">
+
+              <ul class="mb-2 nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">Write</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Preview</a>
+                </li>
+              </ul>
+              
+              <div class="form-group text-left">
+
+                <textarea v-model="content" class="form-control" id="content" rows="10"></textarea>
+                
+              </div>
+
+              <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
+
+              <div class="text-right my-4">
+              
+                <button @click.prevent="cancelEdit" class="btn btn-outline-primary">取消</button>
+              
+                <button @click.prevent="newContent" class="mx-3 btn btn-success">儲存</button>
+
+              </div>
+
+            </form>
+
           </div>
 
 
+          <div v-else>
 
+            <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
 
+            <div v-else class="p-4 border border-success text-left font-italic">尚未有任何內容</div>
 
-
-
-
-
-
-          
-
-          <!-- <form v-if="editing === true" class="mx-auto my-5">
-
-            <div class="form-group text-left">
-              <label for="stashIssueContent">Comment</label>
-              <textarea v-model="stashIssueContent" placeholder="Comment Here" class="form-control" id="stashIssueContent" rows="10"></textarea>
-            </div>
-
-            <button @click.prevent="newComment" class="mx-3 btn btn-success">Submit</button>
-            <button @click.prevent="cancelEdit" class="mx-3 btn btn-danger">Cancel</button>
-
-          </form> -->
-
-
-          <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
-          <div v-else class="p-4 border border-success text-left font-italic">尚未有任何內容</div>
+          </div>
 
 
         <!-- Comment -->
@@ -249,6 +242,45 @@
 
         </div>
 
+      </div>
+
+      <div>
+
+
+        <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
+          <li class="list-group-item">
+            <input type="text" class="form-control" placeholder="未指定分支或標籤">
+          </li>
+
+
+            <li class="list-group-item">
+              <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  標籤
+                </a>
+
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  
+                  <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
+                </div>
+
+                <template v-for="(label, index) in labels">
+                  <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
+
+                </template>
+              
+
+              </div>
+
+            </li>
+
+          <li class="pb-3 list-group-item">里程碑</li>
+          <li class="pb-3 list-group-item">指派成員</li>
+        </ul>
+
+        
+      </div>
 
 
 
@@ -258,6 +290,10 @@
 
 
 
+
+      
+      
+      
       <div class="row">
 
         <div class="col-9">
@@ -286,36 +322,6 @@
                 <textarea v-model="commentText" class="form-control" id="content" rows="10"></textarea>
               </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
 
               <div>
@@ -329,7 +335,7 @@
             </form>
 
           
-         </div>
+        </div>
 
         </div>
 
@@ -374,6 +380,63 @@
         </div>
 
       </div>
+      
+
+
+
+
+
+
+
+
+
+
+
+      <!-- <div class="col-3">
+
+
+        <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
+          <li class="list-group-item">
+            <input type="text" class="form-control" placeholder="未指定分支或標籤">
+          </li>
+
+
+            <li class="list-group-item">
+              <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  標籤
+                </a>
+
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  
+                  <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
+                </div>
+
+                <template v-for="(label, index) in labels">
+                  <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
+
+                </template>
+              
+
+              </div>
+
+            </li>
+
+          <li class="pb-3 list-group-item">里程碑</li>
+          <li class="pb-3 list-group-item">指派成員</li>
+        </ul>
+
+        
+      </div> -->
+
+
+
+
+
+
+
+      
 
 
         <form class="mx-auto my-5">
@@ -398,7 +461,6 @@
       
     </div>
 
-  </div>
     
 
 </template>
@@ -675,13 +737,12 @@
 
       newContent () {
         let $vmc = this;
-        $vmc.content = $vmc.stashIssueContent;
-
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
         query.get ($vmc.issueId)
           .then (resp => {
             resp.set ('content', $vmc.content);
+            $vmc.showIssueInfo ();
             return resp.save ();
           })
         
@@ -692,8 +753,13 @@
 
       cancelEdit () {
         let $vmc = this;
-        $vmc.stashIssueContent = $vmc.content;
-        $vmc.editing = false;
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+        query.get ($vmc.issueId)
+          .then (resp => {
+            $vmc.content = resp.get ('content');
+            $vmc.editing = false;
+          });
       },
 
 
