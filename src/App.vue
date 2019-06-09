@@ -95,6 +95,14 @@
   margin: 0 auto;
 }
 
+.border-light-theme {
+  border: 1px solid #d4d4d5;
+}
+
+.bg-light-theme {
+  background-color: #f7f7f7;
+}
+
 </style>
 
 <style scoped>

@@ -162,13 +162,15 @@
 
         <div>
 
-          <div class="py-2 pl-3 d-flex align-items-center bg-secondary text-white">
+          <div class="py-2 pl-3 d-flex align-items-center bg-light-theme  border-light-theme border-bottom-0">
+
             <div class="font-weight-bold">{{ creator }} 評論</div>
 
             <button v-if="editing === false && creatorId === userId" class="ml-auto mr-3 btn btn-warning" @click="editIssueContent">編輯</button>
+
           </div>
 
-          <div class="col-12 rounded" v-if="editing === true" style="border: 1px solid rgba(34,36,38,.15);">
+          <div class="col-12 border-light-theme" v-if="editing === true">
 
             <form class="col-12 mt-3 mx-auto">
 
@@ -204,9 +206,9 @@
 
           <div v-else>
 
-            <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
+            <vue-markdown v-if="content.length > 0" class="p-4 border text-left" :source="content"></vue-markdown>
 
-            <div v-else class="p-4 border border-success text-left font-italic">尚未有任何內容</div>
+            <div v-else class="p-4 border text-left font-italic">尚未有任何內容</div>
 
           </div>
 
@@ -282,185 +284,15 @@
         
       </div>
 
-
-
-
-
-
-
-
-
-
-      
-      
-      
-      <div class="row">
-
-        <div class="col-9">
-
-          <div class="row">
-
-            <div class="col-1">
-    
-              <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
-
-            </div>
-
-            <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded ml-3 col-11">
-
-              <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#">Write</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Preview</a>
-                </li>
-              </ul>
-              
-              <div class="form-group text-left">
-                <label for="content"></label>
-                <textarea v-model="commentText" class="form-control" id="content" rows="10"></textarea>
-              </div>
-
-              <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
-
-              <div>
-              
-                <button @click.prevent="" class="mx-3 btn btn-danger">關閉</button>
-              
-                <button @click.prevent="addComment" class="ml-auto my-3 btn btn-success">評論</button>
-
-              </div>
-
-            </form>
-
-          
-        </div>
-
-        </div>
-
-
-
-        <div class="col-3">
-
-
-          <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
-            <li class="list-group-item">
-              <input type="text" class="form-control" placeholder="未指定分支或標籤">
-            </li>
-
-
-              <li class="list-group-item">
-                <div class="dropdown">
-                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    標籤
-                  </a>
-
-
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    
-                    <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
-                  </div>
-
-                  <template v-for="(label, index) in labels">
-                    <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
-
-                  </template>
-                
-
-                </div>
-
-              </li>
-
-            <li class="pb-3 list-group-item">里程碑</li>
-            <li class="pb-3 list-group-item">指派成員</li>
-          </ul>
-
-          
-        </div>
-
-      </div>
-      
-
-
-
-
-
-
-
-
-
-
-
-      <!-- <div class="col-3">
-
-
-        <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
-          <li class="list-group-item">
-            <input type="text" class="form-control" placeholder="未指定分支或標籤">
-          </li>
-
-
-            <li class="list-group-item">
-              <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  標籤
-                </a>
-
-
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  
-                  <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
-                </div>
-
-                <template v-for="(label, index) in labels">
-                  <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
-
-                </template>
-              
-
-              </div>
-
-            </li>
-
-          <li class="pb-3 list-group-item">里程碑</li>
-          <li class="pb-3 list-group-item">指派成員</li>
-        </ul>
-
-        
-      </div> -->
-
-
-
-
-
-
-
-      
-
-
-        <form class="mx-auto my-5">
-
-          <div class="form-group text-left">
-            <label for="content">New Comment</label>
-            <textarea v-model="commentText" placeholder="Comment Here" class="form-control" id="content" rows="10"></textarea>
-          </div>
-          <button @click.prevent="addComment" class="mx-3 btn btn-success">Add Comment</button>
-
-        </form>
-        
-      </div>
-    
-      <!-- Toggle Label -->
-
-      <div class="col-3">
-
-        <button v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="my-3 d-block btn btn-primary">{{ label.title }}</button>
-
-      </div>
-      
     </div>
 
+
+    <!-- Initial Comment End -->
+
+    
+
+
+  </div>
     
 
 </template>
