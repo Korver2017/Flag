@@ -170,80 +170,210 @@
 
     </div>
 
-
-    <!-- <div v-else class="row">
-
-      <input @keyup.enter="changeTitle" v-model="stashTitle" type="text" class="col-6 form-control" placeholder="New Title" aria-label="New Title" aria-describedby="button-addon2">
-
-      <button @click="changeTitle" class="ml-3 btn btn-success" type="button" id="button-addon2">Submit</button>
-      <button @click="cancelChange" class="ml-3 btn btn-danger" type="button" id="button-addon2">Cancel</button>
-      
-    </div> -->
-
-    
-    <!-- <div class="row">
-      <span v-for="label in labels" class="py-2 px-3 mx-1 badge badge-primary" v-if="label.added === true">{{ label.title }}</span>
-    </div> -->
     <hr />
     
     <div class="row">
 
+      <div>
+    
+        <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
+
+      </div>
+
       <div class="col-9">
 
-        <div class="row mb-3">
-          <p class="text-left mb-0">
-            Commented by <span class="font-weight-bold">{{ creator }}</span>
-          </p>
+        <div>
 
-          <button v-if="editing === false && creatorId === userId" class="ml-auto mr-5 btn btn-warning" @click="editIssueContent">Edit</button>
-        </div>
+          <div class="py-2 pl-3 d-flex align-items-center bg-secondary text-white">
+            <div class="font-weight-bold">{{ creator }} 評論</div>
 
-        <form v-if="editing === true" class="mx-auto my-5">
-
-          <div class="form-group text-left">
-            <label @keyup.enter="newContent" for="stashIssueContent">Comment</label>
-            <textarea v-model="stashIssueContent" placeholder="Comment Here" class="form-control" id="stashIssueContent" rows="10"></textarea>
+            <button v-if="editing === false && creatorId === userId" class="ml-auto mr-5 btn btn-warning" @click="editIssueContent">編輯</button>
           </div>
 
-          <button @click.prevent="newContent" class="mx-3 btn btn-success">Submit</button>
-          <button @click.prevent="cancelEdit" class="mx-3 btn btn-danger">Cancel</button>
-
-        </form>
 
 
-        <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
-        <p v-else class="p-4 border border-success text-left font-italic">No description provided.</p>
+
+
+
+
+
+
+
+          
+
+          <!-- <form v-if="editing === true" class="mx-auto my-5">
+
+            <div class="form-group text-left">
+              <label for="stashIssueContent">Comment</label>
+              <textarea v-model="stashIssueContent" placeholder="Comment Here" class="form-control" id="stashIssueContent" rows="10"></textarea>
+            </div>
+
+            <button @click.prevent="newComment" class="mx-3 btn btn-success">Submit</button>
+            <button @click.prevent="cancelEdit" class="mx-3 btn btn-danger">Cancel</button>
+
+          </form> -->
+
+
+          <vue-markdown v-if="content.length > 0" class="p-4 border border-success text-left" :source="content"></vue-markdown>
+          <div v-else class="p-4 border border-success text-left font-italic">尚未有任何內容</div>
 
 
         <!-- Comment -->
 
 
-        <div class="mt-5" v-for="(comment, index) in comments">
-          <div class="row mb-3">
-            <p class="text-left mb-0">
-              Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
-            </p>
-            <div v-if="comment.userId === userId" class="row ml-auto mr-5">
-              <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
-              <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
+          <div class="mt-5" v-for="(comment, index) in comments">
+            <div class="row mb-3">
+              <p class="text-left mb-0">
+                Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
+              </p>
+              <div v-if="comment.userId === userId" class="row ml-auto mr-5">
+                <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
+                <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
+              </div>
             </div>
+
+            <vue-markdown v-if="comment.commentEditing === false" class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
+
+            <form v-else class="mx-auto my-5">
+
+              <div class="form-group text-left">
+                <label for="commentContent">Edit Comment</label>
+                <textarea v-model="stashComment" placeholder="Comment Here" class="form-control" id="commentContent" rows="10"></textarea>
+              </div>
+              <button @click.prevent="editedComment (comment.commentId, index)" class="mx-3 btn btn-success">Submit</button>
+              <button @click.prevent="cancelEditComment (index)" class="mx-3 btn btn-danger">Cancel</button>
+
+            </form>
+
           </div>
-
-          <vue-markdown v-if="comment.commentEditing === false" class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
-
-          <form v-else class="mx-auto my-5">
-
-            <div class="form-group text-left">
-              <label for="commentContent">Edit Comment</label>
-              <textarea v-model="stashComment" placeholder="Comment Here" class="form-control" id="commentContent" rows="10"></textarea>
-            </div>
-            <button @click.prevent="editedComment (comment.commentId, index)" class="mx-3 btn btn-success">Submit</button>
-            <button @click.prevent="cancelEditComment (index)" class="mx-3 btn btn-danger">Cancel</button>
-
-          </form>
 
         </div>
 
+
+
+
+
+
+
+
+
+
+      <div class="row">
+
+        <div class="col-9">
+
+          <div class="row">
+
+            <div class="col-1">
+    
+              <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
+
+            </div>
+
+            <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded ml-3 col-11">
+
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">Write</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Preview</a>
+                </li>
+              </ul>
+              
+              <div class="form-group text-left">
+                <label for="content"></label>
+                <textarea v-model="commentText" class="form-control" id="content" rows="10"></textarea>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
+
+              <div>
+              
+                <button @click.prevent="" class="mx-3 btn btn-danger">關閉</button>
+              
+                <button @click.prevent="addComment" class="ml-auto my-3 btn btn-success">評論</button>
+
+              </div>
+
+            </form>
+
+          
+         </div>
+
+        </div>
+
+
+
+        <div class="col-3">
+
+
+          <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
+            <li class="list-group-item">
+              <input type="text" class="form-control" placeholder="未指定分支或標籤">
+            </li>
+
+
+              <li class="list-group-item">
+                <div class="dropdown">
+                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    標籤
+                  </a>
+
+
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    
+                    <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
+                  </div>
+
+                  <template v-for="(label, index) in labels">
+                    <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
+
+                  </template>
+                
+
+                </div>
+
+              </li>
+
+            <li class="pb-3 list-group-item">里程碑</li>
+            <li class="pb-3 list-group-item">指派成員</li>
+          </ul>
+
+          
+        </div>
+
+      </div>
 
 
         <form class="mx-auto my-5">
@@ -306,8 +436,8 @@
         updateLabelTitle: '',
         editing: false,
         stashIssueContent : '',
-        orgData: '',
-        proData: '',
+        orgName: '',
+        proName: '',
         issueOpened: '',
         titleEditing: false,
       }
@@ -319,6 +449,11 @@
 
 
     computed: {
+      avatarHash () {
+        return this.$store.state.user.avatarHash;
+      },
+
+
       userId () {
         return this.$store.state.user.input.userId;
       },
