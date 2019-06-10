@@ -37,9 +37,28 @@
             訊息
           </router-link>
 
-          <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
+          <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
             建立
-          </router-link>
+          </!-->
+
+          <div class="dropdown">
+            <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              建立
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <router-link class="dropdown-item" to="/project/create" tag="a" active-class="active">
+                <a>新增儲存庫</a>
+              </router-link>
+
+              <router-link class="dropdown-item" to="/org/create" tag="a" active-class="active">
+                <a>新增組織</a>
+              </router-link>
+            </div>
+          </div>
+
+
+
 
           <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
             設定檔和設置
