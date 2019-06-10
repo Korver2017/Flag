@@ -46,19 +46,25 @@
           </router-link> -->
 
           <div class="dropdown">
-            <a class="border-0 btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+            <a class="border-0 btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <img style="width: 25px; height: 25px;" class="rounded" :src="'https://www.gravatar.com/avatar/' + user.avatarHash" alt="">
             </a>
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li class="dropdown-item">已登入用戶 {{ user.username }}</li>
-              <hr />
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+
+              <li class="pb-2 d-flex align-items-center justify-content-center">已登入用戶 {{ user.username }}</li>
+
+              <hr class="my-0" />
+
               <a class="dropdown-item" href="#">個人訊息</a>
               <a class="dropdown-item" href="#">標記星號</a>
               <a class="dropdown-item" href="#">設定</a>
               <a class="dropdown-item" href="#">說明</a>
-              <hr />
-              <a @click="logOut" class="dropdown-item">登出</a>
+
+              <hr class="my-0" />
+
+              <button @click="logOut" class="pt-2 dropdown-item">登出</button>
             </div>
 
           </div>

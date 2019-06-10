@@ -13,10 +13,9 @@ export default new Router ({
     },
     {
       path: '/dashboard', name: 'dashboard', component: () => import('./views/dashboard.vue'),
-      children: [
-        // { path: '', component: () => import('./views/project-list.vue') },
-        { path: 'project-list', component: () => import('./views/project-list.vue')  },
-      ]
+    },
+    {
+      path: '/add-organization', name: 'add-organization', component: () => import('./views/add-organization.vue'),
     },
     {
       path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),

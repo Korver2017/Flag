@@ -3,9 +3,37 @@
   <div>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
 
-      <router-link class="navbar-brand nav-item nav-link" to="/">
-        <a>User</a>
-      </router-link>
+      <div class="dropdown">
+        
+          <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
+            <img class="rounded" style="width: 30px; height: 30px" :src="'https://www.gravatar.com/avatar/' + user.avatarHash" alt="">
+
+            <span class="mx-2">{{ user.username }}</span>
+
+          </a>
+
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          
+          <li class="pb-2 d-flex align-items-center justify-content-center">切換控制面板用戶</li>
+
+          <hr class="mt-0" />
+
+          <a v-for="org in orgs" class="dropdown-item" href="#">{{ org.name }}</a>
+
+          <hr class="mb-0" />
+
+          <router-link class="dropdown-item" to="/add-organization" tag="button" active-class="active">
+            新增組織
+          </router-link>
+
+        </div>
+
+        
+        
+      </div>
       
     </nav>
 
@@ -102,7 +130,7 @@
 
                 </li>
 
-                <router-link v-for="project in projects" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: project.orgId, proId: project.proId }}" tag="button">
+                <router-link v-if="projects" v-for="project in projects" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: project.orgId, proId: project.proId }}" tag="button">
                   <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
 
                   {{ project.orgName }} / {{ project.name }}
@@ -140,7 +168,9 @@
 
                 </li>
 
-                <router-link v-for="org in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'project'}" tag="button">
+                <!-- <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: org.orgId, proId: org.proId } }" tag="button"> -->
+
+                <li v-for="org in orgs" class="d-flex align-items-center list-group-item">
 
                   <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
                   
@@ -150,15 +180,17 @@
                     0
                     <i style="font-size: 20px;" class="ml-1 fa fa-star" aria-hidden="true"></i>
                   </p>
-              
-                </router-link>
+
+                </li>
+
+                <!-- </router-link> -->
 
               </ul>
 
             </div>
 
           </div>
-          
+
         </div>
         
         <!-- <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
@@ -337,7 +369,8 @@
           authed: this.$store.state.user.authed,
           // email: this.$store.state.user.input.email,
           userId: this.$store.state.user.userId,
-          // avatarHash: this.$store.state.user.avatarHash,
+          avatarHash: this.$store.state.user.avatarHash,
+          username: this.$store.state.user.username,
         }
       },
 
