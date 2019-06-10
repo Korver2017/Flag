@@ -50,18 +50,17 @@
 
             <div style="color: #767676;" class="px-0 btn-group col-12" role="group" aria-label="Basic example">
 
-              <router-link style="backgroundColor: rgba(0,0,0,.05); color: rgba(0,0,0,.95);" class="py-3 btn btn-success col-6" to="/" tag="button" active-class="active">
+              <button @click="switchToRepo" class="py-3 btn btn-outline-secondary col-6">
                 儲存庫
-              </router-link>
+              </button>
 
-              <router-link style="backgroundColor: #fff; color: rgba(0,0,0,.95);" class="py-3 btn btn-success col-6" to="/" tag="button" active-class="active">
+              <button @click="switchToOrg" class="py-3 btn btn-outline-secondary col-6">
                 組織
-              </router-link>
+              </button>
 
             </div>
 
-            <div class="my-3">
-
+            <div v-if="showRepoList === true" class="my-3">
 
               <ul class="list-group">
 
@@ -103,7 +102,6 @@
 
                 </li>
 
-                <!-- <router-link class="list-group-item" to="/" tag="li" active-class="active"> -->
                 <router-link v-for="project in projects" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: project.orgId, proId: project.proId }}" tag="button">
                   <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
 
@@ -122,20 +120,45 @@
                   
                 </router-link>
 
-                  
-
-                  
-                  
-                
               </ul>
 
             </div>
 
+            <div v-if="showOrgList === true" class="my-3">
+
+              <ul class="list-group">
+
+                <li class="list-group-item">
+
+                  <div class="row">
+
+                    <p class="ml-3 mb-0">我的組織<span class="ml-2 badge badge-secondary">{{ orgs.length }}</span></p>
+
+                    <i class="d-flex align-items-center ml-auto mr-3 fa fa-plus" aria-hidden="true"></i>
+
+                  </div>
+
+                </li>
+
+                <router-link v-for="org in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'project'}" tag="button">
+
+                  <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
+                  
+                  {{ org.name }}
+
+                  <p class="ml-auto mb-0 d-flex align-items-center">
+                    0
+                    <i style="font-size: 20px;" class="ml-1 fa fa-star" aria-hidden="true"></i>
+                  </p>
+              
+                </router-link>
+
+              </ul>
 
             </div>
 
+          </div>
           
-
         </div>
         
         <!-- <img v-if="avatarHash.length > 0" class="rounded-circle mt-5" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
@@ -255,7 +278,9 @@
         assigneeList: [],
         userData: '',
         token: '',
-        payload: ''
+        payload: '',
+        showRepoList: true,
+        showOrgList: false,
       }
     },
 
@@ -337,6 +362,20 @@
      */
     methods: {
 
+      switchToRepo () {
+        let $vmc = this;
+
+        $vmc.showRepoList = true;
+        $vmc.showOrgList = false;
+      },
+
+      switchToOrg () {
+        let $vmc = this;
+
+        $vmc.showRepoList = false;
+        $vmc.showOrgList = true;
+      },
+
 
       /**
        *
@@ -359,6 +398,7 @@
           //   let query = new Parse.Query (Account);
           //   query.set ('avatarHash', $vmc.avatarHash);
           // });
+
       },
 
 

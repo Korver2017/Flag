@@ -117,7 +117,8 @@
             <button class="btn btn-success h-100" @click="addingLabel = true">建立標籤</button>
           </div>
             
-          <div v-else class="rounded my-3 p-3 input-group border border-secondary">
+          <div v-else class="rounded my-3 p-3 input-group border-light-theme">
+
             <input v-model="labelName" type="text" class="col-3 mr-5 form-control p-2" placeholder="標籤名稱" aria-label="example">
             <input v-model="labelDesc" type="text" class="col-4 form-control p-2" placeholder="描述" aria-label="example">
 

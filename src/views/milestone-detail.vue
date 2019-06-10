@@ -435,9 +435,10 @@
         query.get (labelId)
           .then (resp => {
             for (let i = 0; i < $vmc.checked.length; i ++) {
-              
-              resp.addUnique ('issueId', $vmc.checked[i].issueId);
-              
+              let object = $vmc.checked[i];
+
+              resp.addUnique ('issueId', object);
+              console.log (object);
             }
             
             resp.save ()
@@ -479,8 +480,6 @@
       },
       
       showIssue () {
-
-        console.log ('issue');
         
         let $vmc = this;
         let ary = [];
