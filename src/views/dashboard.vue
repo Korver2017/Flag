@@ -99,7 +99,13 @@
 
                     <p class="ml-3 mb-0">儲存庫<span class="ml-2 badge badge-secondary">{{ projects.length }}</span></p>
 
-                    <i class="d-flex align-items-center ml-auto mr-3 fa fa-plus" aria-hidden="true"></i>
+                    <div class="d-flex align-items-center ml-auto mr-3">
+
+                      <router-link to="/project/create" tag="a" active-class="active">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </router-link>
+
+                    </div>
 
                   </div>
 
