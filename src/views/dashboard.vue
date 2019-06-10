@@ -21,6 +21,7 @@
 
           <hr class="mt-0" />
 
+          <a class="dropdown-item" href="#">{{ user.username }}</a>
           <a v-for="org in orgs" class="dropdown-item" href="#">{{ org.name }}</a>
 
           <hr class="mb-0" />
@@ -162,7 +163,14 @@
 
                     <p class="ml-3 mb-0">我的組織<span class="ml-2 badge badge-secondary">{{ orgs.length }}</span></p>
 
-                    <i class="d-flex align-items-center ml-auto mr-3 fa fa-plus" aria-hidden="true"></i>
+                    <div class="d-flex align-items-center ml-auto mr-3">
+
+                      <router-link to="/project/create" tag="a" active-class="active">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                      </router-link>
+
+                    </div>
+                    
 
                   </div>
 
