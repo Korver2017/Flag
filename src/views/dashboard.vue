@@ -25,7 +25,7 @@
 
           <hr class="mb-0" />
 
-          <router-link class="dropdown-item" to="/add-organization" tag="button" active-class="active">
+          <router-link class="dropdown-item" to="/org/create" tag="button" active-class="active">
             新增組織
           </router-link>
 
@@ -394,7 +394,6 @@
      *
      */
     methods: {
-
       switchToRepo () {
         let $vmc = this;
 

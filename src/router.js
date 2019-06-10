@@ -15,7 +15,7 @@ export default new Router ({
       path: '/dashboard', name: 'dashboard', component: () => import('./views/dashboard.vue'),
     },
     {
-      path: '/add-organization', name: 'add-organization', component: () => import('./views/add-organization.vue'),
+      path: '/org/create', name: 'add-organization', component: () => import('./views/add-organization.vue'),
     },
     {
       path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
