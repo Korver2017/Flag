@@ -40,8 +40,8 @@ export default {
     userId: '',
     avatarHash: '',
     input: {
-      email: 'korver@protype.tw',
-      password: '6666',
+      email: '',
+      password: '',
     }
   },
 
@@ -64,6 +64,8 @@ export default {
       if (state.authed === true) {
         state.authed = false;
         state.username = '';
+        state.userId = '',
+        state.avatarHash = '',
         state.input.email = '';
         state.input.password = '';
         router.push ('/signin')

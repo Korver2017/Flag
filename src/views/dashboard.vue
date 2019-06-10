@@ -171,7 +171,7 @@
 
                     <div class="d-flex align-items-center ml-auto mr-3">
 
-                      <router-link to="/project/create" tag="a" active-class="active">
+                      <router-link to="/org/create" tag="a" active-class="active">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                       </router-link>
 
