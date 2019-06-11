@@ -182,9 +182,11 @@
 
                 </li>
 
-                <!-- <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: org.orgId, proId: org.proId } }" tag="button"> -->
+                <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'organization', params: { orgId: org.orgId } }" tag="button">
 
-                <li v-for="org in orgs" class="d-flex align-items-center list-group-item">
+                  {{ org.name }}
+
+                <!-- <li v-for="org in orgs" class="d-flex align-items-center list-group-item">
 
                   <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
                   
@@ -195,9 +197,9 @@
                     <i style="font-size: 20px;" class="ml-1 fa fa-star" aria-hidden="true"></i>
                   </p>
 
-                </li>
+                </li> -->
 
-                <!-- </router-link> -->
+                </router-link>
 
               </ul>
 
