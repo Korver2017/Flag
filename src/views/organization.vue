@@ -1,18 +1,94 @@
 <template>
 
-  <div class="container mt-4">
-    
-    <h1>{{ orgName }}</h1>
+  <div>
 
-    <div class="row col-6 mx-auto my-5">
-      <input @keyup.enter="newProject" v-model.trim="projectName" type="text" class="form-control col-8" placeholder="New Project" aria-describedby="button-addon2">
-      <button class="btn btn-success" @click="newProject">New Project</button>
+    <div id="wrap">
+    
+      <h1 class="my-4 text-left">{{ orgName }}</h1>
+
     </div>
 
-    <div v-for="project in projects" class="list-group-flush">
-      <router-link class="py-3 text-left list-group-item list-group-item-action" :to="{ name: 'project', params: { proId: project.proId, orgId: orgId }}" tag="button" active-class="active">
-         <h5>{{ project.name }}</h5>
-      </router-link>
+    <hr />
+
+    <div id="wrap">
+
+      <div class="col-8">
+
+        <div class="text-right">
+
+          <!-- <button class="text-right btn btn-success" @click="newProject">新增儲存庫</button> -->
+
+          <router-link class="btn btn-success" to="/project/create" tag="button" active-class="active">
+            新增儲存庫
+          </router-link>
+      
+        </div>
+
+        <hr />
+
+        <div class="row">
+
+          <div class="input-group col-10">
+
+            <input type="text" class="form-control p-2" placeholder="搜尋..." aria-label="搜尋" aria-describedby="button-addon2">
+
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="button" id="button-addon2">搜尋</button>
+            </div>
+
+          </div>
+          
+
+          <div class="dropdown">
+
+            <a class="border-0 btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              排序
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+
+              <a class="dropdown-item" href="#">最近更新</a>
+              <a class="dropdown-item" href="#">最近更新</a>
+              <a class="dropdown-item" href="#">最近更新</a>
+              <a class="dropdown-item" href="#">最近更新</a>
+              
+            </div>
+
+          </div>
+
+          <h3>{{ projects }}</h3>
+
+        </div>
+
+        <ul class="list-group list-group-flush">
+
+          <router-link v-for="project in projects" class="text-left pb-5 list-group-item" :to="{ name: 'project', params: { orgId: orgId, proId: project.proId} }" tag="li">
+
+            <h3>
+              <a class="text-decoration-none">{{ project.name }}</a>
+            </h3>
+            
+          </router-link>
+
+        </ul>
+
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="col-4">
+
+      </div>
+
     </div>
 
   </div>

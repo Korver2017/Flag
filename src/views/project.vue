@@ -343,7 +343,7 @@
         milestones: [],
         users: [],
         orgName: '',
-        orgId: '',
+        // orgId: '',
         // proId: '',
         mileTitle: '',
       }
@@ -351,8 +351,13 @@
 
 
     computed: {
+
+      orgId () {
+        return this.$route.params.orgId;
+      },
+      
       proId () {
-        return  this.$route.params.proId;
+        return this.$route.params.proId;
       },
 
 
