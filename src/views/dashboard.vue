@@ -176,7 +176,6 @@
                       </router-link>
 
                     </div>
-                    
 
                   </div>
 

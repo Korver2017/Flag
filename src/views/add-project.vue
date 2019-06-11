@@ -9,64 +9,65 @@
 
       <div class="border-light-theme">
 
-          <form v-if="orgs.length > 0">
-          
-            <div class="col-8 form-group mx-auto mt-5">
-
-              <div class="row d-flex align-items-center justify-content-end">
-
-                <div>
-              
-                  <label for="name">擁有者</label>
-
-                </div>
-
-                <div class="col-8 input-group mb-3">
-
-                  <select v-model="selected" class="custom-select" id="inputGroupSelect01">
-
-                    <option :value="user.username">{{ user.username }}</option>
-                    <option v-for="org in orgs" :value="org">{{ org.orgName }}</option>
-
-                  </select>
-
-                </div>
-
-              </div>
-
-              <div class="row d-flex align-items-center justify-content-end">
-
-                <div>
-              
-                  <label for="name">儲存庫名稱</label>
-
-                </div>
-
-                <div class="col-8 input-group mb-3">
-                  <input v-model="projectName" type="text" class="form-control" id="repo">
-                </div>
-
-                <small class="form-text text-muted d-flex justify-content-end">好的儲存庫名稱通常是簡短的、好記的、且獨特的。</small>
-
-              </div>
-
-              
-            </div>
-            
-          </form>
-
-        </div>
-
-        <div class="my-5">
-
-          <button class="mx-2 btn btn-success" @click.prevent="addProject">建立儲存庫</button>
-          <button class="mx-2 btn btn-secondary" @click.prevent="">取消</button>
-          
-        </div>
+        <form v-if="orgs.length > 0">
         
+          <div class="col-8 form-group mx-auto mt-5">
+
+            <div class="row d-flex align-items-center justify-content-end">
+
+              <div>
+            
+                <label for="name">擁有者</label>
+
+              </div>
+
+              <div class="col-8 input-group mb-3">
+
+                <select v-model="selected" class="custom-select" id="inputGroupSelect01">
+
+                  <option :value="user.username">{{ user.username }}</option>
+                  <option v-for="org in orgs" :value="org">{{ org.orgName }}</option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+            <div class="row d-flex align-items-center justify-content-end">
+
+              <div>
+            
+                <label for="name">儲存庫名稱</label>
+
+              </div>
+
+              <div class="col-8 input-group mb-3">
+                <input v-model="projectName" type="text" class="form-control" id="repo">
+              </div>
+
+              <small class="form-text text-muted d-flex justify-content-end">好的儲存庫名稱通常是簡短的、好記的、且獨特的。</small>
+
+            </div>
+
+            
+          </div>
+          
+        </form>
+
       </div>
 
+      <div class="my-5">
+
+        <button class="mx-2 btn btn-success" @click.prevent="addProject">建立儲存庫</button>
+        <button class="mx-2 btn btn-secondary" @click.prevent="">取消</button>
+        
+      </div>
+        
+
     </div>
+
+  </div>
     
 </template>
 
