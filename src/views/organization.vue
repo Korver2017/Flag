@@ -10,7 +10,7 @@
 
     <hr />
 
-    <div id="wrap">
+    <div id="wrap" class="row">
 
       <div class="col-8">
 
@@ -26,7 +26,7 @@
 
         <hr />
 
-        <div class="row">
+        <div class="row my-4">
 
           <div class="input-group col-10">
 
@@ -56,8 +56,6 @@
 
           </div>
 
-          <h3>{{ projects }}</h3>
-
         </div>
 
         <ul class="list-group list-group-flush">
@@ -74,18 +72,59 @@
 
       </div>
 
+      <div class="col-4 text-left">
 
+        <div class="py-3 bg-light-theme border-light-theme border-bottom-0">
 
+          <div class="row px-4">
+          
+            <h5 class="mb-0 pl-2">組織成員</h5>
 
+            <div class="ml-auto mr-4">{{ users.length }}</div>
 
+          </div>
+          
+        </div>
 
+        <div class="border-light-theme">
 
+          <div class="ml-2">
 
+            <img v-for="user in users" style="width: 60px; height: 60px;" class="rounded my-4 mx-2" :src="'https://www.gravatar.com/avatar/' + user.avatarHash" alt="">
 
+          </div>
+          
+        </div>
 
+        <div class="mt-5 py-3 bg-light-theme border-light-theme border-bottom-0">
 
+          <div class="row px-4">
+          
+            <h5 class="mb-0 pl-2">組織團隊</h5>
 
-      <div class="col-4">
+            <!-- <div class="ml-auto">{{ users.length }}</div> -->
+
+          </div>
+          
+        </div>
+
+        <div class="border-light-theme border-bottom-0">
+
+            <div class="py-3 ml-3">
+              {{ users.length }} 名成員．{{ projects.length }} 個儲存庫
+            </div>
+          
+        </div>
+
+        <div class="border-light-theme">
+
+          <div class="py-3 ml-3">
+
+            <button class="btn btn-primary" @click="">建立團隊</button>
+            
+          </div>
+          
+        </div>
 
       </div>
 
@@ -110,6 +149,7 @@
         projectName: '',
         projects: [],
         defaultLabels: [],
+        users: '',
       }
     },
 
@@ -154,11 +194,35 @@
     mounted () {
       this.showProject ();
       this.showOrgName ();
+      this.showUser ();
 
     },
 
 
     methods: {
+
+      showUser () {
+        let $vmc = this;
+        const Account = Parse.Object.extend ('Account');
+        const query = new Parse.Query (Account);
+        let ary = [];
+
+        query.notEqualTo ('username', '');
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let obj = {};
+              let object = resp[i];
+              obj.username = object.get ('username');
+              obj.avatarHash = object.get ('avatarHash');
+              ary.push (obj);
+            }
+
+            $vmc.users = ary;
+          });
+        
+      },
+      
       showOrgName () {
         let $vmc = this;
         let id = $vmc.$route.params.orgId;
