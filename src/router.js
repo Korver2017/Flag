@@ -15,6 +15,9 @@ export default new Router ({
       path: '/dashboard', name: 'dashboard', component: () => import('./views/dashboard.vue'),
     },
     {
+      path: '/issues', name: 'my-issue', component: () => import('./views/my-issue.vue'),
+    },
+    {
       path: '/project/create', name: 'add-project', component: () => import('./views/add-project.vue'),
     },
     {

@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
 
       <div class="dropdown">

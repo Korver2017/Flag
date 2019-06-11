@@ -16,7 +16,7 @@
             Dashboard
           </router-link>
 
-          <router-link to="/issue" tag="a" class="mx-2 rounded nav-item nav-link">
+          <router-link to="/issues" tag="a" class="mx-2 rounded nav-item nav-link">
             Issues
           </router-link>
 
