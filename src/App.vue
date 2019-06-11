@@ -1,14 +1,14 @@
 <template>
-  <div id="app">
 
+  <div id="app">
     
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
 
-      <router-link class="navbar-brand nav-item nav-link" to="/dashboard">
+      <router-link v-if="user.authed === true" class="navbar-brand nav-item nav-link" to="/dashboard">
         <a>Flag</a>
       </router-link>
 
-      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div v-if="user.authed === true" class="collapse navbar-collapse" id="navbarNavAltMarkup">
         
         <div class="navbar-nav">
 
@@ -57,9 +57,6 @@
             </div>
           </div>
 
-
-
-
           <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
             設定檔和設置
           </router-link> -->
@@ -95,6 +92,10 @@
           
           <!-- <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a> -->
       </div>
+
+      <router-link v-if="user.authed === false" class="btn px-4 ml-auto mr-3 navbar-brand nav-item nav-link" to="/signin" active-class="active">
+        <a>登入</a>
+      </router-link>
 
     </nav>
 

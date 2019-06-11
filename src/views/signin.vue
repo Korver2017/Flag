@@ -12,7 +12,7 @@
 
         <form>
         
-          <div class="col-8 form-group mx-auto mt-5">
+          <div class="col-8 form-group mx-auto my-5">
 
             <div class="row d-flex align-items-center justify-content-end">
 
