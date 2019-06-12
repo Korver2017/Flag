@@ -41,25 +41,28 @@
 
     <hr class="m-0" />
 
-    <div id="wrap" class="row">
+    <div id="wrap" class="row my-3">
       
-      <div class="mt-3 col-3">
+      <div class="col-3">
 
         <ul class="list-group list-group-flush">
 
-          <button class="text-left my-1 list-group-item border-0">屬於該用戶儲存庫的</button>
-          <button class="text-left my-1 list-group-item border-0">指派給您的</button>
-          <button class="text-left my-1 list-group-item border-0">由您建立的</button>
+          <button class="d-flex justify-content-between text-left my-1 list-group-item border-0">屬於該用戶儲存庫的 <span>{{ openedCount }}</span></button>
+          <button class="d-flex justify-content-between text-left my-1 list-group-item border-0">指派給您的 <span>{{ assignToMe }}</span></button>
+          <button class="d-flex justify-content-between text-left my-1 list-group-item border-0">由您建立的 <span>{{ createByMe }}</span></button>
 
         </ul>
 
         <hr />
 
-        <ul class="list-group list-group-flush">
+        <ul v-for="openedIssue in openedIssueList" class="list-group list-group-flush">
 
-          <button class="text-left my-1 list-group-item border-0">屬於該用戶儲存庫的</button>
-          <button class="text-left my-1 list-group-item border-0">指派給您的</button>
-          <button class="text-left my-1 list-group-item border-0">由您建立的</button>
+          <h3>{{ openedIssue }}</h3>
+
+          <button class="d-flex justify-content-between text-left my-1 list-group-item border-0">
+            {{ openedIssue.orgName }}/{{ openedIssue.proName }}
+          </button>
+
 
         </ul>
         
@@ -72,103 +75,54 @@
 
           <div class="btn-group" role="group" aria-label="Basic example">
             <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-              {{  }} 個開啟中
+              {{ openedCount }} 個開啟中
             </button>
             <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-              {{  }} 個已關閉
+              {{ closedCount }} 個已關閉
             </button>
           </div>
 
         </div>
 
-        <!-- <h3>{{ issues }}</h3>
-        <h3 v-for="i in issues">{{ i.orgName }} | {{ i.proName }} | {{ i.issueName }}</h3> -->
-
-            <!-- Issue List -->
-
         <div class="mt-3 list-group list-group-flush " v-if="issues.length >= 1">
 
           <template v-for="issue in issues">
 
-            <!-- Opened Issue-List Start-->
+            <div v-if="issue.issueOpened === true && showOpened === true" class="text-left list-group-item">
 
-            <!-- <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="button" type="button"  class="text-left list-group-item"> -->
+              <div class="row my-3">
 
-              <div class="text-left list-group-item">
+                <span class="d-flex align-items-center rounded py-2 px-3 bg-light-theme mr-3">{{ issue.orgName }}/{{ issue.proName }}</span>
 
-                <div class="row my-3">
+                <router-link v-if="issues.length > 0" :to="{ name: 'issue', params: { issueId: issue.issueId, orgId: issue.orgId, proId: issue.proId }}" tag="button" type="button" class="btn">
 
-                  <span class="d-flex align-items-center rounded py-2 px-3 bg-light-theme mr-3">{{ issue.orgName }}/{{ issue.proName }}</span>
+                  <h4>{{ issue.issueName }}</h4>
 
-
-
-                  <router-link v-if="issues.length > 0" :to="{ name: 'issue', params: { issueId: issue.issueId, orgId: issue.orgId, proId: issue.proId }}" tag="button" type="button" class="btn">
-
-                    <h4>{{ issue.issueName }}</h4>
-
-                  </router-link>
-
-
-                  
-
-                  
-
-                  <!-- <h5 class="d-flex align-items-center mb-0">{{ issue.issueName }}</h5> -->
-
-                </div>
-
-                <div>由 Korver 建立</div>
+                </router-link>
 
               </div>
 
-              
+              <div>由 Korver 建立</div>
 
-              <!-- <div class="row">
-                
-                <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
+            </div>
 
-              </div> -->
-              
-              <!-- <div class="row d-flex align-items-center">
-                <div>由 Korver 建立</div>
+            <div v-if="issue.issueOpened === false && showOpened === false" class="text-left list-group-item">
 
-                <div class="ml-auto">
+              <div class="row my-3">
 
-                  <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
-                </div>
+                <span class="d-flex align-items-center rounded py-2 px-3 bg-light-theme mr-3">{{ issue.orgName }}/{{ issue.proName }}</span>
 
-              </div> -->
-            <!-- </router-link> -->
+                <router-link v-if="issues.length > 0" :to="{ name: 'issue', params: { issueId: issue.issueId, orgId: issue.orgId, proId: issue.proId }}" tag="button" type="button" class="btn">
 
-            <!-- Opened Issue-List End -->
+                  <h4>{{ issue.issueName }}</h4>
 
-            <!-- Closed Issue-List Start -->
-
-            <!-- <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="list-group-item" active-class="active">
-
-              <div class="row d-flex align-items-center">
-
-                <span class="px-3 py-2 badge badge-primary">#1</span>
-                <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
-                
-                <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
-
-                <span v-if="issue.mileTitle !== ''">
-                  <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
-                </span>
+                </router-link>
 
               </div>
 
-              <div class="row d-flex align-items-center">
-                <div>由 Korver 建立</div>
+              <div>由 Korver 建立</div>
 
-                <div class="ml-auto">
-                  <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
-                </div>
-
-              </div>
-              
-            </router-link> -->
+            </div>
 
           </template>
             
@@ -193,6 +147,11 @@
         orgs: '',
         issues: '',
         showOpened: true,
+        openedCount: 0,
+        closedCount: 0,
+        assignToMe: 0,
+        createByMe: 0,
+        openedIssueList: '',
       }
     },
 
@@ -209,9 +168,45 @@
 
     mounted () {
       this.showIssue ();
+      this.showAssignee ();
+      this.showCreator ();
     },
     
     methods: {
+      showCreator () {
+        let $vmc = this;
+
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+
+        query.equalTo ('creator', $vmc.user.username);
+        query.find ()
+          .then (resp => {
+            $vmc.createByMe = resp.length;
+          })
+      },
+
+      showAssignee () {
+        let $vmc = this;
+
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+
+        query.equalTo ('assigneeId', $vmc.user.userId);
+        query.find ()
+          .then (resp => {
+            for (let i = 0; i < resp.length; i ++) {
+              let object = resp[i];
+
+              if (object.get ('issueOpened') === true) {
+                $vmc.assignToMe += 1;
+              }
+              
+            }
+          })
+          
+      },
+      
       showIssue () {
 
         let $vmc = this;
@@ -244,6 +239,7 @@
               })
               .then (resp => {
                 let ary = [];
+                let arry = [];
                 let Issue = Parse.Object.extend ('Issue');
                 let query = new Parse.Query (Issue);
 
@@ -261,12 +257,36 @@
                       obj.orgName = object.get ('orgName');
                       obj.issueName = object.get ('name');
                       obj.issueOpened = object.get ('issueOpened');
+
+                      if (obj.issueOpened === true) {
+                        $vmc.openedCount += 1;
+                        arry.push (obj);
+                      } else {
+                        $vmc.closedCount += 1;
+                      }
+                      
                       // obj.labels = object.get ('')
                       ary.push (obj);
                     }
 
+                    // console.log (arry);
+
+                    let newArry = arry;
+                    
                     $vmc.issues = ary;
 
+                    return newArry;
+
+                  })
+
+                  .then (resp => {
+                    // console.log (resp);
+                    for (let i = 0; i < resp.length; i++) {
+                      let object = resp[i];
+                    
+                      console.log (object);
+                      
+                    }
                   })
                   
               })
@@ -304,6 +324,8 @@
     watch: {
       user () {
         this.showIssue ();
+        this.showAssignee ();
+        this.showCreator ();
       }
     }
   }

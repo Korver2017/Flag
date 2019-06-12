@@ -97,142 +97,88 @@
     <hr />
 
 
-      <div class="row">
-
-        <div class="col-9">
-
-          <div class="row">
-    
-            <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
-
-            <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded ml-3 col-11">
-              
-              <div class="form-group text-left">
-                <label @keyup.enter="submitIssue" for="title"></label>
-                <input v-model.trim="title" class="form-control" placeholder="標題" id="title">
-              </div>
-
-              <ul class="nav nav-tabs">
-                <li class="nav-item">
-                  <a class="nav-link active" href="#">Write</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Preview</a>
-                </li>
-              </ul>
-              
-              <div class="form-group text-left">
-                <label @keyup.enter="submitIssue" for="content"></label>
-                <textarea v-model="content" class="form-control" id="content" rows="10"></textarea>
-              </div>
-
-              <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
-              
-              <button @click.prevent="submitIssue" class="d-block ml-auto my-3 btn btn-success">建立問題</button>
-              <!-- <button @click.prevent="cancel" class="mx-3 btn btn-danger">Cancel</button> -->
-
-            </form>
-
-          
-         </div>
-
-        </div>
+    <!-- Input-Form Start -->
 
 
+    <div class="row">
 
-        <div class="col-3">
+      <div class="col-9">
 
+        <div class="row">
+  
+          <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
 
-          <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
-            <li class="list-group-item">
-              <input type="text" class="form-control" placeholder="未指定分支或標籤">
-            </li>
+          <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded ml-3 col-11">
+            
+            <div class="form-group text-left">
+              <label @keyup.enter="submitIssue" for="title"></label>
+              <input v-model.trim="title" class="form-control" placeholder="標題" id="title">
+            </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-              <li class="list-group-item">
-                <div class="dropdown">
-                  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    標籤
-                  </a>
-
-
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    
-                    <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
-                  </div>
-
-                  <template v-for="(label, index) in labels">
-                    <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
-
-                  </template>
-
-                  
-
-                  
-                  
-
-                  
-
-                  
-                
-
-                </div>
-
-                
-
+            <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Write</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Preview</a>
+              </li>
+            </ul>
+            
+            <div class="form-group text-left">
+              <label @keyup.enter="submitIssue" for="content"></label>
+              <textarea v-model="content" class="form-control" id="content" rows="10"></textarea>
+            </div>
 
+            <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
+            
+            <button @click.prevent="submitIssue" class="d-block ml-auto my-3 btn btn-success">建立問題</button>
 
+          </form>
 
-
-
-            <li class="pb-3 list-group-item">里程碑</li>
-            <li class="pb-3 list-group-item">指派成員</li>
-          </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          
         </div>
-
-
-        
 
       </div>
 
 
-
-
-
-
-
-
-
-
+      <!-- Input-Form End -->
       
+
+      <div class="col-3">
+
+        <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
+          <li class="list-group-item">
+            <input type="text" class="form-control" placeholder="未指定分支或標籤">
+          </li>
+
+          <li class="list-group-item">
+            <div class="dropdown">
+              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                標籤
+              </a>
+
+
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                
+                <a v-for="(label, index) in labels" @click="toggleLabel (label.added, label.labelId, index)" class="dropdown-item" href="#">{{ label.title }}</a>
+              </div>
+
+              <template v-for="(label, index) in labels">
+                <h5 v-if="labels[index].added === true"><span class="badge badge-secondary">{{ labels[index].title }}</span></h5>
+
+              </template>
+
+            </div>
+
+          </li>
+
+          <li class="pb-3 list-group-item">里程碑</li>
+          <li class="pb-3 list-group-item">指派成員</li>
+
+        </ul>
+        
+      </div>
+
+    </div>
 
   </div>
 
