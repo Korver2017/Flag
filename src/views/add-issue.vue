@@ -204,10 +204,8 @@
       return {
         proName: '',
         issues: [],
-        issueAdding: false,
         title: '',
         content: '',
-        username: this.$store.state.user.username,
         labels: [],
         checked: [],
         opened: [],
@@ -217,7 +215,6 @@
         users: [],
         orgName: '',
         orgId: '',
-        // proId: '',
         mileTitle: '',
         avatarHash: '',
       }
@@ -226,14 +223,12 @@
 
     computed: {
       proId () {
-        return  this.$route.params.proId;
+        return this.$route.params.proId;
       },
-
 
       userId () {
         return this.$store.state.user.input.userId;
       },
-
 
       checking () {
         let $vmc = this;
@@ -245,32 +240,12 @@
     created () {
       let $vmc = this;
       let Account = Parse.Object.extend ('Account');
-      let query = new Parse.Query(Account);
+      let query = new Parse.Query (Account);
       query.get ($vmc.userId)
         .then (resp => {
           $vmc.avatarHash = resp.get ('avatarHash')
-          // The object was retrieved successfully.
-        }, (error) => {
-          // The object was not retrieved successfully.
-          // error is a Parse.Error with an error code and message.
         });
 
-      
-      // Add Milestone
-
-      // let Milestone = Parse.Object.extend ("Milestone");
-      // let milestone = new Milestone ();
-
-      // milestone.set ('issues', []);
-
-      // milestone.save()
-      //   .then((milestone) => {
-      //     alert('New object created with objectId: ' + milestone.id);
-      //   }, (error) => {
-      //     // Execute any logic that should take place if the save fails.
-      //     // error is a Parse.Error with an error code and message.
-      //     alert('Failed to create new object, with error code: ' + error.message);
-      //   });
     },
 
 
@@ -293,8 +268,6 @@
         let query = new Parse.Query (Label);
         let ary = [];
 
-        console.log ($vmc.proId);
-
         query.equalTo ('proId', $vmc.proId);
         query.find ()
           .then (resp => {
@@ -310,9 +283,6 @@
 
               ary.push (obj);
             }
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
           });
 
         $vmc.labels = ary;
@@ -321,31 +291,8 @@
 
       toggleLabel (added, labelId, index) {
         let $vmc = this;
-
-        console.log (added, labelId, index);
         
         $vmc.labels[index].added = !$vmc.labels[index].added;
-
-        // if ($vmc.labels[index].added === true) {
-        //   let Label = Parse.Object.extend ("Label");
-        //   let query = new Parse.Query (Label);
-        
-        //   query.get (labelId)
-        //     .then (resp => {
-        //       resp.addUnique ('issueId', $vmc.issueId);
-        //       resp.save ();
-        //     });
-        // }
-        // else {
-        //   let Label = Parse.Object.extend ("Label");
-        //   let query = new Parse.Query (Label);
-        //   query.get (labelId)
-        //     .then (resp => {
-        //       resp.remove ("issueId", $vmc.issueId);
-        //       resp.save ();
-        //     });
-        // }
-          
       },
 
 
@@ -381,9 +328,6 @@
               });
 
               $vmc.users = ary;
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
           });
 
       },
@@ -451,14 +395,6 @@
         $vmc.closed = closed;
       },
 
-
-      
-      
-
-      addIssue () {
-        this.issueAdding = true;
-      },
-
       submitIssue () {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
@@ -494,19 +430,12 @@
                 console.log (issueId);
                 for (let i = 0; i < resp.length; i ++) {
                   let object = resp[0];
-                  // object.addUnique ('issueId')
-                  // console.log (object.get ('title'));
-
-                  // object.addUnique ('issueId', [issueId]);
-                  // object.save ();
-
                 }
               })
               .then (resp => {
                 $vmc.title = '';
                 $vmc.content = '';
                 $vmc.showIssue ();
-                $vmc.issueAdding = false;
                 $vmc.$router.push ({ name: 'project' });
               })
           }, (error) => {
@@ -514,51 +443,6 @@
             // error is a Parse.Error with an error code and message.
             alert ('Failed to create new object, with error code: ' + error.message);
           });
-      },
-
-      cancel () {
-        this.issueAdding = false;
-        this.title = '';
-        this.content = '';
-      },
-
-
-      closeIssue () {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        for (let i = 0; i < $vmc.checked.length; i ++) {
-          let query = new Parse.Query (Issue);
-          query.get ($vmc.checked[i])
-            .then (resp => {
-              resp.set ('issueOpened', false);
-              resp.save ()
-                .then (() => {
-                  $vmc.showIssue ();
-                })
-            }, (error) => {
-          });
-        }
-        $vmc.checked = [];
-      },
-
-
-      reopenIssue () {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        for (let i = 0; i < $vmc.checked.length; i ++) {
-          let query = new Parse.Query (Issue);
-          query.get ($vmc.checked[i])
-          .then (resp => {
-            resp.set ('issueOpened', true);
-            resp.save ()
-              .then (() => $vmc.showIssue ());
-            // The object was retrieved successfully.
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
-        }
-        $vmc.checked = [];
       },
 
 
@@ -582,132 +466,7 @@
         $vmc.milestones = ary;
       },
 
-
-      addLabelTo (labelId) {
-        let $vmc = this;
-
-        let Label = Parse.Object.extend ('Label');
-        let query = new Parse.Query (Label);
-
-        query.get (labelId)
-          .then (resp => {
-            for (let i = 0; i < $vmc.checked.length; i ++) {
-              let object = $vmc.checked[i];
-              
-              resp.addUnique ('issueId', object);
-              console.log (object);
-            }
-            
-            resp.save ()
-              .then (resp => {
-                $vmc.showIssue ();
-              });
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
-      },
-
-
-      addIssueTo (mileId, mileTitle) {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        let ary = [];
-
-        for (let i = 0; i < $vmc.checked.length; i ++) {
-          let query = new Parse.Query (Issue);
-          
-          query.get ($vmc.checked[i])
-            .then (resp => {
-              
-              resp.set ('milestone', mileId);
-              resp.set ('mileTitle', mileTitle);
-              resp.save ()
-                .then (resp => {
-                  $vmc.showIssue ();
-                  $vmc.checked = [];
-                });
-              
-              let Mile = Parse.Object.extend ('Milestone');
-              let query = new Parse.Query (Mile);
-              query.get (mileId)
-                .then (resp => {
-                  // The object was retrieved successfully.
-                  resp.set ('proId', $vmc.proId);
-                  return resp.save ();
-                }, (error) => {
-                  // The object was not retrieved successfully.
-                  // error is a Parse.Error with an error code and message.
-                });
-              
-            }, (error) => {
-              // The object was not retrieved successfully.
-              // error is a Parse.Error with an error code and message.
-            });
-        }
-      },
-
-
-      assignTo (assigneeId, avatarHash) {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        let ary = [];
-        let query = new Parse.Query (Issue);
-        query.containedIn ('objectId', $vmc.checked);
-        query.find ()
-          .then (resp => {
-            for (let i = 0; i < resp.length; i ++) {
-              let obj = {};
-              let object = resp[i];
-              let query = new Parse.Query (Issue);
-              query.get (object.id)
-                .then (resp => {
-                  resp.addUnique ('avatarHash', avatarHash);
-                  resp.addUnique ('assigneeId', assigneeId);
-                  // obj.assignee = userId;
-                  // obj.avatarHash = avatarHash;
-                  // resp.addUnique ('assignee', obj);
-                  resp.save ()
-                    .then (() => {
-                      $vmc.showIssue ();
-                      $vmc.checked = [];
-                    })
-                })
-
-            }
-          })
-
-      },
-
-
-      
-      // addMilestone () {
-      //   let $vmc = this;
-
-      //   const Mile = Parse.Object.extend ('Milestone');
-      //   const mile = new Mile ();
-
-      //   mile.set ('title', $vmc.mileTitle);
-      //   mile.set ('proId', $vmc.proId);
-      //   mile.set ('orgId', $vmc.orgId);
-      //   mile.set ('mileOpened', true);
-
-      //   mile.save ()
-      //     .then (resp => {
-      //       $vmc.mileTitle = '';
-      //       $vmc.showMilestone ();
-      //       // $vmc.showMile ();
-      //       // Execute any logic that should take place after the object is saved.
-      //     }, (error) => {
-      //       // Execute any logic that should take place if the save fails.
-      //       // error is a Parse.Error with an error code and message.
-      //       alert ('Failed to create new object, with error code: ' + error.message);
-      //     });
-      // },
     },
-
-    watch: {
-    }
   }
 </script>
 
