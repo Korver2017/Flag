@@ -83,8 +83,6 @@
         orgs: '',
         projectName: '',
         selected: '',
-        // orgNameList: [],
-        
       }
     },
 
@@ -128,7 +126,6 @@
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
-        // let orgNames = [];
 
         query.notEqualTo ('name', '')
         query.find ()
@@ -142,13 +139,13 @@
                 .then (resp => {
                   obj.orgId = object.id;
                   obj.orgName = resp.get ('name');
+
                   ary.push (obj);
                 })
                 .then (resp => {
                   $vmc.orgs = ary;
                 });
             }
-
           })
       },
     },

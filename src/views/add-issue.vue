@@ -323,7 +323,7 @@
           .then (resp => {
             $vmc.title = '';
             $vmc.content = '';
-            $vmc.$router.push (`/${$vmc.orgId}/${$vmc.proId}`);
+            $vmc.$router.push ({ name: 'project' });
           })
       },
 

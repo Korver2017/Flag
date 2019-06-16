@@ -203,17 +203,17 @@
           format: 'YYYY-MM-DD',
           inline: true,
         },
-        addingMile: false,
+        // addingMile: false,
         mileDesc: '',
-        milestones: [],
-        showOpened: true,
+        // milestones: [],
+        // showOpened: true,
         mileTitle: '',
-        mileOpened: 0,
-        mileClosed: 0,
+        // mileOpened: 0,
+        // mileClosed: 0,
         orgName: '',
         proName: '',
-        mileIssues: [],
-        editingMile: false,
+        // mileIssues: [],
+        // editingMile: false,
       }
     },
 
@@ -255,10 +255,12 @@
             resp.set ('title', $vmc.mileTitle);
             resp.set ('mileDesc', $vmc.mileDesc);
             resp.set ('dueDate', $vmc.date);
-            $vmc.$router.push ({ name: 'milestone' });
-            
-            return resp.save ();
-          })
+            resp.save ()
+              .then (resp => {
+                $vmc.$router.push ({ name: 'milestone' });
+              })
+          });
+
       },
 
       getMileData () {
