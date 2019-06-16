@@ -230,19 +230,29 @@
           </div>
 
 
-        <!-- Comment -->
+          <!-- Show Comments Area Start -->
 
 
           <div class="mt-5" v-for="(comment, index) in comments">
-            <div class="row mb-3">
-              <p class="text-left mb-0">
-                Commented by <span class="font-weight-bold">{{ comment.commentor }}</span>
-              </p>
-              <div v-if="comment.userId === userId" class="row ml-auto mr-5">
-                <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
-                <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
-              </div>
+
+
+
+
+
+
+          <div class="py-2 pl-3 d-flex align-items-center bg-light-theme  border-light-theme border-bottom-0">
+
+            <div class="font-weight-bold"><span class="font-weight-bold">{{ comment.commentor }}</span> 評論</div>
+
+            <div v-if="comment.userId === userId" class="row ml-auto mr-5">
+              <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
+              <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
             </div>
+
+            
+            
+          </div>
+
 
             <vue-markdown v-if="comment.commentEditing === false" class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
 
@@ -258,6 +268,10 @@
             </form>
 
           </div>
+
+
+          <!-- Show Comments Area End -->
+          
 
         </div>
 
@@ -310,7 +324,10 @@
       <!-- Input-Form End -->
 
 
-      <ul style="border: 1px solid rgba(34,36,38,.15);" class="text-left list-group list-group-flush">
+      <!-- Side Panel Start -->
+
+
+      <ul class="float-right text-left">
         <li class="list-group-item">
           <input type="text" class="form-control" placeholder="未指定分支或標籤">
         </li>
@@ -342,13 +359,20 @@
         <li class="pb-3 list-group-item">指派成員</li>
       </ul>
 
+
+      <!-- Side Panel End -->
+
         
     </div>
+
+
+    <!-- Add Comment Start -->
+
 
     <div class="row mx-auto">
     
       <div>
-    
+
         <img style="width: 50px; height: 50px;" v-if="avatarHash.length > 0" class="rounded" :src="'https://www.gravatar.com/avatar/' + avatarHash" alt="">
 
       </div>
@@ -358,13 +382,8 @@
         <div>
 
           <form style="border: 1px solid rgba(34,36,38,.15);" class="rounded col-12">
-            
-            <div class="form-group text-left">
-              <label @keyup.enter="submitIssue" for="title"></label>
-              <input v-model.trim="title" class="form-control" placeholder="標題" id="title">
-            </div>
 
-            <ul class="nav nav-tabs">
+            <ul class="pt-3 nav nav-tabs">
               <li class="nav-item">
                 <a class="nav-link active" href="#">Write</a>
               </li>
@@ -374,13 +393,13 @@
             </ul>
             
             <div class="form-group text-left">
-              <label @keyup.enter="submitIssue" for="content"></label>
-              <textarea v-model="content" class="form-control" id="content" rows="10"></textarea>
+              <label for="commentText"></label>
+              <textarea v-model="commentText" class="form-control" id="commentText" rows="10"></textarea>
             </div>
 
             <div class="py-5 d-flex justify-content-center border border-primary">拖放檔案或是點擊此處上傳</div>
             
-            <button @click.prevent="submitIssue" class="d-block ml-auto my-3 btn btn-success">建立問題</button>
+            <button @click.prevent="addComment" class="d-block ml-auto my-3 btn btn-success">評論</button>
 
           </form>
 
@@ -391,16 +410,10 @@
     </div>
 
 
-
-
+    <!-- Add Comment End -->
     
 
   </div>
-
-
-  <!-- Initial Comment End -->
-
-    
 
 </template>
 
