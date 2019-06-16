@@ -58,7 +58,7 @@
       </li>
 
       <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
-        <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
+        <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issueCount }}</span></a>
       </router-link>
 
       <li class="nav-item">
@@ -82,7 +82,7 @@
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <router-link :to="{ name: 'label-list', params: { proId: proId, issues: issues, } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'label-list', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           標籤
         </router-link>
 
@@ -202,19 +202,12 @@
 
     data () {
       return {
-        proName: '',
-        issues: [],
+        issueCount: '',
         title: '',
         content: '',
         labels: [],
-        // opened: [],
-        // closed: [],
-        // showOpened: true,
-        // milestones: [],
-        // users: [],
         orgName: '',
-        // mileTitle: '',
-        // avatarHash: '',
+        proName: '',
       }
     },
 
@@ -245,11 +238,9 @@
     mounted () {
       let $vmc = this;
       
-      // $vmc.showUser ();
       $vmc.showProName ();
-      $vmc.showIssue ();
+      $vmc.showIssueCount ();
       $vmc.showLabel ();
-      // $vmc.showMilestone ();
     },
 
 
@@ -289,43 +280,6 @@
       },
 
 
-      // showUser () {
-      //   let $vmc = this;
-      //   let Project = Parse.Object.extend ('Project');
-      //   let query = new Parse.Query (Project);
-      //   let ary = [];
-      //   query.get ($vmc.proId)
-      //     .then (resp => {
-      //       let orgId = resp.get ('orgId');
-      //       let Org = Parse.Object.extend ('Organization');
-      //       let query = new Parse.Query (Org);
-      //       $vmc.orgId = orgId;
-      //       query.get (orgId)
-      //         .then (resp => {
-      //           let results = resp.get ('memberId');
-      //           for (let i = 0; i < results.length; i ++) {
-      //             let obj = {};
-      //             let object = results[i];
-      //             let Account = Parse.Object.extend ('Account');
-      //             let query = new Parse.Query (Account);
-      //             query.get (object)
-      //               .then (resp => {
-      //                 obj.name = resp.get ('username');
-      //                 obj.assigneeId = object;
-      //                 obj.avatarHash = resp.get ('avatarHash');
-      //                 obj.email = resp.get ('email');
-
-      //                 ary.push (obj);
-      //               });
-      //           }
-      //         });
-
-      //         $vmc.users = ary;
-      //     });
-
-      // },
-
-
       showProName () {
         let $vmc = this;
         let id = $vmc.$route.params.proId;
@@ -339,53 +293,16 @@
           });
       },
 
-      showIssue () {
+      showIssueCount () {
         let $vmc = this;
         const Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
+
         query.equalTo ('proId', $vmc.proId);
-        let ary = [];
-        let opened = [];
-        let closed = [];
-        query.find ().then (resp => {
-          for (let i = 0; i < resp.length; i++) {
-            let obj = {};
-            let object = resp[i];
-
-            obj.name = object.get ('name');
-            obj.issueId = object.id;
-            obj.creator = object.get ('creator');
-            obj.issueOpened = object.get ('issueOpened');
-            obj.avatarHash = object.get ('avatarHash');
-            obj.assigneeId = object.get ('assigneeId');
-            obj.mileTitle = object.get ('mileTitle');
-
-            let arry = [];
-            let Label = Parse.Object.extend ('Label');
-            let query = new Parse.Query (Label);
-            query.equalTo ('issueId', object.id);
-            query.find ()
-              .then (resp => {
-                for (let i = 0; i < resp.length; i ++) {
-                  let object = resp[i];
-                  arry.push (object.get ('title'));
-                }
-              });
-
-            obj.labels = arry;
-            ary.push (obj);
-
-            if (obj.issueOpened === true) {
-              opened.push (obj);
-            } else if (obj.issueOpened === false) {
-              closed.push (obj);
-            }
-          }
-        });
-
-        $vmc.issues = ary;
-        $vmc.opened = opened;
-        $vmc.closed = closed;
+        query.find ()
+          .then (resp => {
+            $vmc.issueCount = resp.length;
+          });
       },
 
       submitIssue () {
@@ -397,67 +314,18 @@
         issue.set ('name', $vmc.title);
         issue.set ('content', $vmc.content);
         issue.set ('creator', $vmc.$store.state.user.username);
-        issue.set ('creatorId', $vmc.$store.state.user.input.userId);
         issue.set ('issueOpened', true);
-        issue.set ('milestone', '');
-        issue.set ('mileTitle', '');
-        issue.set ('avatarHash', []);
-        // issue.set ('userId', []);
-        // issue.set ('issueId', )
         issue.set ('orgId', $vmc.orgId);
         issue.set ('proId', $vmc.proId);
         issue.set ('orgName', $vmc.orgName);
         issue.set ('proName', $vmc.proName);
-
         issue.save ()
           .then (resp => {
-            let issueId = resp.id;
-            console.log (issueId);
-
-            let Label = Parse.Object.extend ("Label");
-            let query = new Parse.Query (Label);
-            console.log ($vmc.proId);
-            query.equalTo ('proId', $vmc.proId)
-            query.find ()
-              .then (resp => {
-                console.log (issueId);
-                for (let i = 0; i < resp.length; i ++) {
-                  let object = resp[0];
-                }
-              })
-              .then (resp => {
-                $vmc.title = '';
-                $vmc.content = '';
-                $vmc.showIssue ();
-                $vmc.$router.push ({ name: 'project' });
-              })
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert ('Failed to create new object, with error code: ' + error.message);
-          });
+            $vmc.title = '';
+            $vmc.content = '';
+            $vmc.$router.push (`/${$vmc.orgId}/${$vmc.proId}`);
+          })
       },
-
-
-      // showMilestone () {
-      //   let $vmc = this;
-      //   let Mile = Parse.Object.extend ('Milestone');
-      //   let query = new Parse.Query (Mile);
-      //   let ary = [];
-      //   query.equalTo ('proId', $vmc.proId);
-      //   query.find ()
-      //     .then (resp => {
-      //       for (let i = 0; i < resp.length; i++) {
-      //         let obj = {};
-      //         let object = resp[i];
-      //         obj.mileId = object.id;
-      //         obj.title = object.get ('title');
-      //         ary.push (obj)
-      //       }
-      //     });
-
-      //   $vmc.milestones = ary;
-      // },
 
     },
   }
