@@ -20,33 +20,30 @@
             Issues
           </router-link>
 
-          <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
+          <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
             Pull Requests
           </router-link>
 
           <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
             Explore
-          </router-link>
+          </router-link> -->
 
         </div>
 
         <div class="d-flex align-items-center navbar-nav ml-auto mr-3">
 
-
-          <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
-            訊息
-          </router-link>
-
           <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
-            建立
-          </!-->
+            訊息
+          </router-link> -->
 
           <div class="dropdown">
+
             <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               建立
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+
               <router-link class="dropdown-item" to="/project/create" tag="a" active-class="active">
                 <a>新增儲存庫</a>
               </router-link>
@@ -54,12 +51,10 @@
               <router-link class="dropdown-item" to="/org/create" tag="a" active-class="active">
                 <a>新增組織</a>
               </router-link>
-            </div>
-          </div>
 
-          <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">
-            設定檔和設置
-          </router-link> -->
+            </div>
+
+          </div>
 
           <div class="dropdown">
 
@@ -73,24 +68,21 @@
 
               <hr class="my-0" />
 
-              <a class="dropdown-item" href="#">個人訊息</a>
+              <!-- <a class="dropdown-item" href="#">個人訊息</a>
               <a class="dropdown-item" href="#">標記星號</a>
               <a class="dropdown-item" href="#">設定</a>
-              <a class="dropdown-item" href="#">說明</a>
+              <a class="dropdown-item" href="#">說明</a> -->
 
               <hr class="my-0" />
 
               <button @click="logOut" class="pt-2 dropdown-item">登出</button>
+
             </div>
 
           </div>
-
           
         </div>
-          
-          <!-- Log Out Function -->
-          
-          <!-- <a v-if="user.authed" @click.prevent="logOut" class="nav-item nav-link" href="#">Log out</a> -->
+
       </div>
 
       <router-link v-if="user.authed === false" class="btn px-4 ml-auto mr-3 navbar-brand nav-item nav-link" to="/signin" active-class="active">
@@ -108,13 +100,6 @@
 </template>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  text-align: center;
-}
 
 #wrap {
   width: 80%;
@@ -138,9 +123,9 @@
 </style>
 
 <script>
+
   import Parse from "parse";
   import router from '@/router'
-
 
   export default {
 
@@ -160,7 +145,6 @@
     data () {
       return {
         token: '',
-        username: '',
       }
     },
 
