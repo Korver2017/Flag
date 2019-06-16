@@ -375,7 +375,6 @@
                       obj.avatarHash = resp.get ('avatarHash');
                       obj.email = resp.get ('email');
 
-                      // obj.avatarHash = $vmc.$md5 (email);
                       ary.push (obj);
                     });
                 }

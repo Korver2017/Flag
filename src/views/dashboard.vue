@@ -334,43 +334,6 @@
 
 
     created () {
-      // let $vmc = this;
-
-      // $vmc.token = $vmc.$cookie.get ('token');
-
-      // let payload = $vmc.$j.jws.JWS.readSafeJSONString($vmc.$base64.decode ($vmc.token.split(".")[1]));
-
-      // $vmc.userId = payload.userId;
-
-      
-
-      // const Account = Parse.Object.extend ('Account');
-      // const query = new Parse.Query (Account);
-
-      // query.equalTo ('token', $vmc.token);
-      // query.find ()
-      //   .then (resp => {
-      //     let object = resp[0];
-      //     let obj = {};
-          
-      //     // $vmc.$store.state.user.authed = true;
-      //     // $vmc.$store.state.user.input.userId = object.id;
-
-      //     query.get (object.id)
-      //       .then (resp => {
-      //         obj.avatarHash = resp.get ('avatarHash');
-      //         obj.username = resp.get ('username');
-      //         obj.uerId = object.id;
-
-      //         $vmc.$store.state.user.userId = object.id;
-      //         $vmc.userData = obj;
-
-      //         $vmc.$emit ('updateData', $vmc.userData);
-              
-      //       })
-
-          
-      //   })
     },
 
 
@@ -431,22 +394,6 @@
        *
        */
       showUsername () {
-        // let $vmc = this;
-        // let ary = [];
-        // let Account = Parse.Object.extend ('Account');
-        // let query = new Parse.Query (Account);
-        // query.get ($vmc.userId)
-        //   .then (resp => {
-        //     $vmc.user.avatarHash = $vmc.$md5 (resp.get ('email'));
-        //     $vmc.username = resp.get ('username');
-        //     resp.set ('avatarHash', $vmc.user.avatarHash);
-        //     return resp.save ();
-        //   })
-          // .then (resp => {
-          //   let query = new Parse.Query (Account);
-          //   query.set ('avatarHash', $vmc.avatarHash);
-          // });
-
       },
 
 
