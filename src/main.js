@@ -10,7 +10,6 @@ import store from '@/store/index.js';
 import VueMarkdown from "vue-markdown";
 import jsrsasign from "jsrsasign";
 import jsCookie from "js-cookie";
-import { Base64 } from 'js-base64';
 import vmodal from 'vue-js-modal'
 
 
@@ -24,8 +23,6 @@ Vue.config.productionTip = false;
 
 Vue.prototype.$j = jsrsasign;
 Vue.prototype.$cookie = jsCookie;
-Vue.prototype.$base64 = Base64;
-
 
 Vue.use (VueMarkdown);
 Vue.use (vmodal);
