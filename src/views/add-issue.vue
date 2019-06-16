@@ -207,56 +207,49 @@
         title: '',
         content: '',
         labels: [],
-        checked: [],
-        opened: [],
-        closed: [],
-        showOpened: true,
-        milestones: [],
-        users: [],
+        // opened: [],
+        // closed: [],
+        // showOpened: true,
+        // milestones: [],
+        // users: [],
         orgName: '',
-        orgId: '',
-        mileTitle: '',
-        avatarHash: '',
+        // mileTitle: '',
+        // avatarHash: '',
       }
     },
 
 
     computed: {
+      avatarHash () {
+        return this.$store.state.user.avatarHash;
+      },
+
       proId () {
         return this.$route.params.proId;
+      },
+
+      orgId () {
+        return this.$route.params.orgId;
       },
 
       userId () {
         return this.$store.state.user.input.userId;
       },
-
-      checking () {
-        let $vmc = this;
-        if ($vmc.checked.length === 0) return false;
-      }
     },
 
 
     created () {
-      let $vmc = this;
-      let Account = Parse.Object.extend ('Account');
-      let query = new Parse.Query (Account);
-      query.get ($vmc.userId)
-        .then (resp => {
-          $vmc.avatarHash = resp.get ('avatarHash')
-        });
-
     },
 
 
     mounted () {
       let $vmc = this;
       
-      $vmc.showUser ();
+      // $vmc.showUser ();
       $vmc.showProName ();
       $vmc.showIssue ();
       $vmc.showLabel ();
-      $vmc.showMilestone ();
+      // $vmc.showMilestone ();
     },
 
 
@@ -296,41 +289,41 @@
       },
 
 
-      showUser () {
-        let $vmc = this;
-        let Project = Parse.Object.extend ('Project');
-        let query = new Parse.Query (Project);
-        let ary = [];
-        query.get ($vmc.proId)
-          .then (resp => {
-            let orgId = resp.get ('orgId');
-            let Org = Parse.Object.extend ('Organization');
-            let query = new Parse.Query (Org);
-            $vmc.orgId = orgId;
-            query.get (orgId)
-              .then (resp => {
-                let results = resp.get ('memberId');
-                for (let i = 0; i < results.length; i ++) {
-                  let obj = {};
-                  let object = results[i];
-                  let Account = Parse.Object.extend ('Account');
-                  let query = new Parse.Query (Account);
-                  query.get (object)
-                    .then (resp => {
-                      obj.name = resp.get ('username');
-                      obj.assigneeId = object;
-                      obj.avatarHash = resp.get ('avatarHash');
-                      obj.email = resp.get ('email');
+      // showUser () {
+      //   let $vmc = this;
+      //   let Project = Parse.Object.extend ('Project');
+      //   let query = new Parse.Query (Project);
+      //   let ary = [];
+      //   query.get ($vmc.proId)
+      //     .then (resp => {
+      //       let orgId = resp.get ('orgId');
+      //       let Org = Parse.Object.extend ('Organization');
+      //       let query = new Parse.Query (Org);
+      //       $vmc.orgId = orgId;
+      //       query.get (orgId)
+      //         .then (resp => {
+      //           let results = resp.get ('memberId');
+      //           for (let i = 0; i < results.length; i ++) {
+      //             let obj = {};
+      //             let object = results[i];
+      //             let Account = Parse.Object.extend ('Account');
+      //             let query = new Parse.Query (Account);
+      //             query.get (object)
+      //               .then (resp => {
+      //                 obj.name = resp.get ('username');
+      //                 obj.assigneeId = object;
+      //                 obj.avatarHash = resp.get ('avatarHash');
+      //                 obj.email = resp.get ('email');
 
-                      ary.push (obj);
-                    });
-                }
-              });
+      //                 ary.push (obj);
+      //               });
+      //           }
+      //         });
 
-              $vmc.users = ary;
-          });
+      //         $vmc.users = ary;
+      //     });
 
-      },
+      // },
 
 
       showProName () {
@@ -446,25 +439,25 @@
       },
 
 
-      showMilestone () {
-        let $vmc = this;
-        let Mile = Parse.Object.extend ('Milestone');
-        let query = new Parse.Query (Mile);
-        let ary = [];
-        query.equalTo ('proId', $vmc.proId);
-        query.find ()
-          .then (resp => {
-            for (let i = 0; i < resp.length; i++) {
-              let obj = {};
-              let object = resp[i];
-              obj.mileId = object.id;
-              obj.title = object.get ('title');
-              ary.push (obj)
-            }
-          });
+      // showMilestone () {
+      //   let $vmc = this;
+      //   let Mile = Parse.Object.extend ('Milestone');
+      //   let query = new Parse.Query (Mile);
+      //   let ary = [];
+      //   query.equalTo ('proId', $vmc.proId);
+      //   query.find ()
+      //     .then (resp => {
+      //       for (let i = 0; i < resp.length; i++) {
+      //         let obj = {};
+      //         let object = resp[i];
+      //         obj.mileId = object.id;
+      //         obj.title = object.get ('title');
+      //         ary.push (obj)
+      //       }
+      //     });
 
-        $vmc.milestones = ary;
-      },
+      //   $vmc.milestones = ary;
+      // },
 
     },
   }
