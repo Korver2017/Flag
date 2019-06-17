@@ -92,27 +92,6 @@
             
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           <div v-if="addingLabel === false">
             <button class="btn btn-success h-100" @click="addingLabel = true">建立標籤</button>
           </div>

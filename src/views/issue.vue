@@ -235,24 +235,16 @@
 
           <div class="mt-5" v-for="(comment, index) in comments">
 
+            <div class="py-2 pl-3 d-flex align-items-center bg-light-theme  border-light-theme border-bottom-0">
 
+              <div class="font-weight-bold"><span class="font-weight-bold">{{ comment.commentor }}</span> 評論</div>
 
-
-
-
-          <div class="py-2 pl-3 d-flex align-items-center bg-light-theme  border-light-theme border-bottom-0">
-
-            <div class="font-weight-bold"><span class="font-weight-bold">{{ comment.commentor }}</span> 評論</div>
-
-            <div v-if="comment.userId === userId" class="row ml-auto mr-5">
-              <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
-              <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
+              <div v-if="comment.userId === userId" class="row ml-auto mr-5">
+                <button class="btn mr-3 btn-warning" @click="editComment (comment.commentId, index)">Edit</button>
+                <button class="btn btn-danger" @click="deleteComment (comment.commentId, index)">Delete</button>
+              </div>
+              
             </div>
-
-            
-            
-          </div>
-
 
             <vue-markdown v-if="comment.commentEditing === false" class="p-4 border border-success text-left" :source="comment.content"></vue-markdown>
 
@@ -276,9 +268,6 @@
         </div>
 
       </div>
-
-
-
 
       <!-- Input-Form Start -->
 
@@ -467,9 +456,8 @@
         return this.$store.state.user.avatarHash;
       },
 
-
       userId () {
-        return this.$store.state.user.input.userId;
+        return this.$store.state.user.userId;
       },
 
       orgId () {
@@ -505,25 +493,16 @@
 
         let $vmc = this;
         let ary = [];
-        let orgData = {};
         let proData = {};
-
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
+
         query.get ($vmc.issueId)
           .then (resp => {
             $vmc.title = resp.get ('name');
             $vmc.creatorId = resp.get ('creatorId');
             $vmc.creator = resp.get ('creator');
             $vmc.content = resp.get ('content');
-
-            orgData.orgId = resp.get ('orgId');
-            orgData.orgName = resp.get ('orgName');
-            $vmc.orgData = orgData;
-            proData.proId = resp.get ('proId');
-            proData.proName = resp.get ('proName');
-            $vmc.proData = proData;
-
             $vmc.orgName = resp.get ('orgName');
             $vmc.proName = resp.get ('proName');
             $vmc.issueOpened = resp.get ('issueOpened');
@@ -540,7 +519,6 @@
         comment.set ('content', $vmc.commentText);
         comment.set ('issueId', $vmc.issueId);
         comment.set ('commentor', $vmc.$store.state.user.username);
-        comment.set ('userId', $vmc.$store.state.user.input.userId);
 
         comment.save ()
           .then (resp => {
@@ -559,16 +537,17 @@
         let Label = Parse.Object.extend ('Label');
         let query = new Parse.Query (Label);
         let ary = [];
+
         query.equalTo ('proId', $vmc.proId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i++) {
               let obj = {};
               let object = resp[i];
+
               obj.labelId = object.id;
               obj.title = object.get ('title');
               obj.added = false;
-              obj.editMode = false;
               ary.push (obj);
 
               let arry = [];
@@ -601,23 +580,26 @@
         let ary = [];
         let Comment = Parse.Object.extend ('Comment');
         let query = new Parse.Query (Comment);
+
         query.equalTo ('issueId', $vmc.issueId);
         query.find ()
           .then (resp => {
             for (let i = 0; i < resp.length; i ++) {
               let obj = {};
               let object = resp[i];
+
               obj.commentId = object.id;
               obj.content = object.get ('content');
               obj.userId = object.get ('userId');
               obj.commentor = object.get ('commentor');
               obj.commentEditing = false;
               obj.stashComment = '';
+              
               ary.push (obj);
             }
           });
-          $vmc.comments = ary;
 
+          $vmc.comments = ary;
       },
 
 
