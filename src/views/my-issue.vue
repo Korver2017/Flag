@@ -96,7 +96,7 @@
 
               </div>
 
-              <div>由 Korver 建立</div>
+              <div>由 {{ issue.creator }} 建立</div>
 
             </div>
 
@@ -114,7 +114,7 @@
 
               </div>
 
-              <div>由 Korver 建立</div>
+              <div>由 {{ issue.creator }} 建立</div>
 
             </div>
 
@@ -163,11 +163,11 @@
     mounted () {
       this.showIssue ();
       this.showAssignee ();
-      this.showCreator ();
+      this.showCreatedByMe ();
     },
     
     methods: {
-      showCreator () {
+      showCreatedByMe () {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
@@ -251,6 +251,7 @@
                       obj.orgName = object.get ('orgName');
                       obj.issueName = object.get ('name');
                       obj.issueOpened = object.get ('issueOpened');
+                      obj.creator = object.get ('creator');
 
                       if (obj.issueOpened === true) {
                         $vmc.openedCount += 1;
