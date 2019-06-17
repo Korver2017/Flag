@@ -102,10 +102,11 @@
       </div>
 
       <div>
-        <!-- <button class="btn btn-success h-100" @click="issueAdding = true">建立問題</button> -->
+
         <router-link class="btn btn-success" :to="{ name: 'add-issue' }" tag="button" active-class="active">
           建立問題
         </router-link>
+
       </div>
 
     </div>
@@ -115,12 +116,14 @@
     <div class="row">
 
       <div class="btn-group" role="group" aria-label="Basic example">
+
         <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
           {{ opened.length }} 個開啟中
         </button>
         <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
           {{ closed.length }} 個已關閉
         </button>
+
       </div>
 
       <div v-if="checked.length === 0" class="row ml-auto">
@@ -314,7 +317,6 @@
 
 <script>
   import Parse from "parse";
-  import AddIssue from "@/views/add-issue.vue";
 
   export default {
     
@@ -323,18 +325,14 @@
 
 
     components: {
-      AddIssue,
     },
 
 
     data () {
       return {
         proName: '',
+        orgName: '',
         issues: [],
-        issueAdding: false,
-        title: '',
-        content: '',
-        username: this.$store.state.user.username,
         labels: [],
         checked: [],
         opened: [],
@@ -342,10 +340,6 @@
         showOpened: true,
         milestones: [],
         users: [],
-        orgName: '',
-        // orgId: '',
-        // proId: '',
-        mileTitle: '',
       }
     },
 
@@ -365,6 +359,11 @@
         return this.$store.state.user.input.userId;
       },
 
+      
+      username () {
+        return this.$store.state.user.username
+      },
+
 
       checking () {
         let $vmc = this;
@@ -374,21 +373,6 @@
 
 
     created () {
-      // Add Milestone
-
-      // let Milestone = Parse.Object.extend ("Milestone");
-      // let milestone = new Milestone ();
-
-      // milestone.set ('issues', []);
-
-      // milestone.save()
-      //   .then((milestone) => {
-      //     alert('New object created with objectId: ' + milestone.id);
-      //   }, (error) => {
-      //     // Execute any logic that should take place if the save fails.
-      //     // error is a Parse.Error with an error code and message.
-      //     alert('Failed to create new object, with error code: ' + error.message);
-      //   });
     },
 
 
@@ -416,8 +400,8 @@
             let orgId = resp.get ('orgId');
             let Org = Parse.Object.extend ('Organization');
             let query = new Parse.Query (Org);
-            $vmc.orgId = orgId;
-            query.get (orgId)
+            // $vmc.orgId = orgId;
+            query.get ($vmc.orgId)
               .then (resp => {
                 let results = resp.get ('memberId');
                 for (let i = 0; i < results.length; i ++) {
@@ -431,6 +415,7 @@
                       obj.assigneeId = object;
                       obj.avatarHash = resp.get ('avatarHash');
                       obj.email = resp.get ('email');
+
                       ary.push (obj);
                     });
                 }
@@ -448,9 +433,9 @@
       showProName () {
         let $vmc = this;
         let id = $vmc.$route.params.proId;
-
         const Pro = Parse.Object.extend ('Project');
         let query = new Parse.Query (Pro);
+
         query.get (id)
           .then (resp => {
             $vmc.proName = resp.get ('name');
@@ -462,6 +447,7 @@
         let $vmc = this;
         const Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
+
         query.equalTo ('proId', $vmc.proId);
         let ary = [];
         let opened = [];
@@ -525,6 +511,7 @@
               obj.title = object.get ('title');
               obj.labelDesc = object.get ('labelDesc');
               obj.issueId = object.get ('issueId');
+
               ary.push (obj);
             }
           }, (error) => {
@@ -534,58 +521,15 @@
 
         $vmc.labels = ary;
       },
-      
-
-      addIssue () {
-        this.issueAdding = true;
-      },
-
-      submitIssue () {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        let issue = new Issue ();
-        let query = new Parse.Query (Issue);
-
-        issue.set ('name', $vmc.title);
-        issue.set ('content', $vmc.content);
-        issue.set ('creator', $vmc.$store.state.user.username);
-        issue.set ('creatorId', $vmc.$store.state.user.input.userId);
-        issue.set ('issueOpened', true);
-        issue.set ('milestone', '');
-        issue.set ('mileTitle', '');
-        issue.set ('avatarHash', []);
-        // issue.set ('userId', []);
-        // issue.set ('issueId', )
-        issue.set ('orgId', $vmc.orgId);
-        issue.set ('proId', $vmc.proId);
-        issue.set ('orgName', $vmc.orgName);
-        issue.set ('proName', $vmc.proName);
-
-        issue.save ()
-          .then (resp => {
-            $vmc.title = '';
-            $vmc.content = '';
-            $vmc.showIssue ();
-            $vmc.issueAdding = false;
-          }, (error) => {
-            // Execute any logic that should take place if the save fails.
-            // error is a Parse.Error with an error code and message.
-            alert ('Failed to create new object, with error code: ' + error.message);
-          });
-      },
-
-      cancel () {
-        this.issueAdding = false;
-        this.title = '';
-        this.content = '';
-      },
 
 
       closeIssue () {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
+
         for (let i = 0; i < $vmc.checked.length; i ++) {
           let query = new Parse.Query (Issue);
+
           query.get ($vmc.checked[i])
             .then (resp => {
               resp.set ('issueOpened', false);
@@ -594,26 +538,6 @@
                   $vmc.showIssue ();
                 })
             }, (error) => {
-          });
-        }
-        $vmc.checked = [];
-      },
-
-
-      reopenIssue () {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        for (let i = 0; i < $vmc.checked.length; i ++) {
-          let query = new Parse.Query (Issue);
-          query.get ($vmc.checked[i])
-          .then (resp => {
-            resp.set ('issueOpened', true);
-            resp.save ()
-              .then (() => $vmc.showIssue ());
-            // The object was retrieved successfully.
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
           });
         }
         $vmc.checked = [];
@@ -643,7 +567,6 @@
 
       addLabelTo (labelId) {
         let $vmc = this;
-
         let Label = Parse.Object.extend ('Label');
         let query = new Parse.Query (Label);
 
@@ -667,8 +590,6 @@
 
 
       addIssueTo (mileId, mileTitle) {
-        console.log (mileId, mileTitle);
-        
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
@@ -678,9 +599,9 @@
           
           query.get ($vmc.checked[i])
             .then (resp => {
-              
               resp.set ('milestone', mileId);
               resp.set ('mileTitle', mileTitle);
+
               resp.save ()
                 .then (resp => {
                   $vmc.showIssue ();
@@ -691,7 +612,6 @@
               let query = new Parse.Query (Mile);
               query.get (mileId)
                 .then (resp => {
-                  // The object was retrieved successfully.
                   resp.set ('proId', $vmc.proId);
                   return resp.save ();
                 }, (error) => {
@@ -712,6 +632,7 @@
         let Issue = Parse.Object.extend ('Issue');
         let ary = [];
         let query = new Parse.Query (Issue);
+        
         query.containedIn ('objectId', $vmc.checked);
         query.find ()
           .then (resp => {
@@ -738,31 +659,6 @@
 
       },
 
-
-      
-      // addMilestone () {
-      //   let $vmc = this;
-
-      //   const Mile = Parse.Object.extend ('Milestone');
-      //   const mile = new Mile ();
-
-      //   mile.set ('title', $vmc.mileTitle);
-      //   mile.set ('proId', $vmc.proId);
-      //   mile.set ('orgId', $vmc.orgId);
-      //   mile.set ('mileOpened', true);
-
-      //   mile.save ()
-      //     .then (resp => {
-      //       $vmc.mileTitle = '';
-      //       $vmc.showMilestone ();
-      //       // $vmc.showMile ();
-      //       // Execute any logic that should take place after the object is saved.
-      //     }, (error) => {
-      //       // Execute any logic that should take place if the save fails.
-      //       // error is a Parse.Error with an error code and message.
-      //       alert ('Failed to create new object, with error code: ' + error.message);
-      //     });
-      // },
     },
 
     watch: {
