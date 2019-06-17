@@ -8,13 +8,11 @@
         
           <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 
-
             <img class="rounded" style="width: 30px; height: 30px" :src="'https://www.gravatar.com/avatar/' + user.avatarHash" alt="">
 
             <span class="mx-2">{{ user.username }}</span>
 
           </a>
-
 
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           
@@ -32,8 +30,6 @@
           </router-link>
 
         </div>
-
-        
         
       </div>
       
@@ -63,13 +59,11 @@
             {{ openedIssue.orgName }}/{{ openedIssue.proName }}
           </button>
 
-
         </ul>
         
       </div>
 
       <div class="col-9">
-
 
         <div class="row">
 
@@ -175,7 +169,6 @@
     methods: {
       showCreator () {
         let $vmc = this;
-
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
 
@@ -183,12 +176,11 @@
         query.find ()
           .then (resp => {
             $vmc.createByMe = resp.length;
-          })
+          });
       },
 
       showAssignee () {
         let $vmc = this;
-
         let Issue = Parse.Object.extend ('Issue');
         let query = new Parse.Query (Issue);
 
@@ -200,17 +192,16 @@
 
               if (object.get ('issueOpened') === true) {
                 $vmc.assignToMe += 1;
-              }
+              };
               
-            }
-          })
+            };
+          });
           
       },
       
       showIssue () {
 
         let $vmc = this;
-
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
@@ -221,6 +212,7 @@
               let object = resp[i];
               ary.push (object.id);
             }
+
             return ary;
           })
           .then (resp => {
@@ -228,6 +220,7 @@
             let orgId = resp;
             let Project = Parse.Object.extend ('Project');
             let query = new Parse.Query (Project);
+
             query.containedIn ('orgId', resp);
             query.find ()
               .then (resp => {
@@ -235,6 +228,7 @@
                   let object = resp[i];
                   ary.push (object.id)
                 }
+
                 return ary;
               })
               .then (resp => {
@@ -265,26 +259,18 @@
                         $vmc.closedCount += 1;
                       }
                       
-                      // obj.labels = object.get ('')
                       ary.push (obj);
                     }
-
-                    // console.log (arry);
 
                     let newArry = arry;
                     
                     $vmc.issues = ary;
-
                     return newArry;
 
                   })
-
                   .then (resp => {
-                    // console.log (resp);
                     for (let i = 0; i < resp.length; i++) {
                       let object = resp[i];
-                    
-                      console.log (object);
                       
                     }
                   })
@@ -292,33 +278,8 @@
               })
 
           })
-        
       },
 
-      showOrg () {
-        let $vmc = this;
-        let Org = Parse.Object.extend ('Organization');
-        let query = new Parse.Query (Org);
-        let ary = [];
-        // console.log ($vmc.user.userId);
-        query.equalTo ('memberId', $vmc.user.userId);
-        query.find ()
-          .then (resp => {
-            for (let i = 0; i < resp.length; i ++) {
-              let obj = {};
-              let object = resp[i];
-              let query = new Parse.Query (Org);
-              obj.orgId = object.id;
-              query.get (object.id)
-                .then (resp => {
-                  obj.name = resp.get ('name');
-                  ary.push (obj);
-                });
-            }
-
-            $vmc.orgs = ary;
-          });
-      },
     },
 
     watch: {
