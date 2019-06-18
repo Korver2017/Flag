@@ -29,10 +29,10 @@
 
         </div>
 
-        <div class="my-5">
+        <div class="my-4 text-center">
 
           <button class="mx-2 btn btn-success" @click="addOrganization">建立組織</button>
-          <button class="mx-2 btn btn-secondary" @click="">取消</button>
+          <button class="mx-2 btn btn-secondary" @click="cancelAdding">取消</button>
           
         </div>
         
@@ -74,7 +74,7 @@
         let Org = Parse.Object.extend ('Organization');
         let query = new Parse.Query (Org);
         let ary = [];
-        // console.log ($vmc.user.userId);
+
         query.equalTo ('memberId', $vmc.user.userId);
         query.find ()
           .then (resp => {
@@ -91,13 +91,18 @@
             }
 
             $vmc.orgs = ary;
-            console.log (ary);
           })
           .then (resp => {
-            console.log ($vmc.orgs);
-            // $vmc.$router.push ({ name: 'dashboard', params: { orgs: $vmc.orgs } })
-            $vmc.$router.push ({ name: 'dashboard' })
+            $vmc.$router.push ({ name: 'dashboard' });
           })
+      },
+
+
+      cancelAdding () {
+        let $vmc = this;
+
+        $vmc.orgName = '';
+        $vmc.$router.push ({ name: 'dashboard' });
       },
 
 
@@ -113,8 +118,7 @@
           , org = new Org ();
 
         org.set ('name', $vmc.orgName);
-        org.set ('memberId', [$vmc.user.userId]);
-
+        org.addUnique ('memberId', $vmc.user.userId);
         org.save ()
           .then (resp => {
             $vmc.getNewOrg ();
