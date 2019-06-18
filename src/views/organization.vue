@@ -192,24 +192,31 @@
 
       showUser () {
         let $vmc = this;
-        const Account = Parse.Object.extend ('Account');
-        const query = new Parse.Query (Account);
         let ary = [];
+        let Org = Parse.Object.extend ('Organization');
+        let query = new Parse.Query (Org);
+        let Account = Parse.Object.extend ('Account');
 
-        query.notEqualTo ('username', '');
-        query.find ()
+        query.get ($vmc.orgId)
           .then (resp => {
-            for (let i = 0; i < resp.length; i ++) {
+            let members = resp.get ('memberId');
+
+            for (let i = 0; i < members.length; i ++) {
+              let id = members[i];
               let obj = {};
-              let object = resp[i];
-              obj.username = object.get ('username');
-              obj.avatarHash = object.get ('avatarHash');
-              ary.push (obj);
+              let query = new Parse.Query (Account);
+              
+              query.get (id)
+                .then (resp => {
+                  obj.username = resp.get ('username');
+                  obj.avatarHash = resp.get ('avatarHash');
+
+                  ary.push (obj);
+                })
             }
 
             $vmc.users = ary;
-          });
-        
+        });
       },
       
       showOrgName () {
