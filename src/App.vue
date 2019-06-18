@@ -13,11 +13,11 @@
         <div class="navbar-nav">
 
           <router-link to="/dashboard" tag="a" class="mx-2 rounded nav-item nav-link" active-class="active" exact>
-            Dashboard
+            控制面板
           </router-link>
 
-          <router-link to="/issues" tag="a" class="mx-2 rounded nav-item nav-link">
-            Issues
+          <router-link to="/issues" tag="a" class="mx-2 rounded nav-item nav-link" active-class="active">
+            問題
           </router-link>
 
           <!-- <router-link to="/" tag="a" class="mx-2 rounded nav-item nav-link">

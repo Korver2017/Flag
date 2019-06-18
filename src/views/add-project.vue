@@ -57,10 +57,10 @@
 
       </div>
 
-      <div class="my-5">
+      <div class="my-5 text-center">
 
         <button class="mx-2 btn btn-success" @click.prevent="addProject">建立儲存庫</button>
-        <button class="mx-2 btn btn-secondary" @click.prevent="">取消</button>
+        <button class="mx-2 btn btn-secondary" @click.prevent="cancelAdding">取消</button>
         
       </div>
         
@@ -103,6 +103,14 @@
     },
 
     methods: {
+      cancelAdding () {
+        let $vmc = this;
+
+        $vmc.projectName = '';
+        $vmc.selected = '';
+        $vmc.$router.push ('/dashboard');
+      },
+
 
       addProject () {
         let $vmc = this;
@@ -116,6 +124,7 @@
         pro.save ()
           .then (resp => {
             $vmc.projectName = '';
+            $vmc.selected = '';
             $vmc.$router.push ('/dashboard');
           });
 
