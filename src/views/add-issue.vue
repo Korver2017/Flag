@@ -319,6 +319,8 @@
         issue.set ('proId', $vmc.proId);
         issue.set ('orgName', $vmc.orgName);
         issue.set ('proName', $vmc.proName);
+        issue.set ('mileTitle', '');
+        issue.set ('milestone', '');
         issue.save ()
           .then (resp => {
             $vmc.title = '';

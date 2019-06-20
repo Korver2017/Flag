@@ -242,14 +242,14 @@
             
             <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
 
-            <span v-if="issue.mileTitle !== ''">
+            <span v-if="issue.mileTitle !== '' || undefined">
               <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
             </span>
 
           </div>
 
           <div class="row d-flex align-items-center">
-            <div>由 Korver 建立</div>
+            <div>由 {{ issue.creator }} 建立</div>
 
             <div class="ml-auto">
               <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
@@ -274,14 +274,14 @@
             
             <span v-for="label in issue.labels" class="px-3 py-2 ml-3 badge badge-primary">{{ label }}</span>
 
-            <span v-if="issue.mileTitle !== ''">
+            <span v-if="issue.mileTitle !== '' || undefined">
               <i class="ml-3 fa fa-map-signs" aria-hidden="true"></i> {{ issue.mileTitle }}
             </span>
 
           </div>
 
           <div class="row d-flex align-items-center">
-            <div>由 Korver 建立</div>
+            <div>由 {{ issue.creator }} 建立</div>
 
             <div class="ml-auto">
               <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
