@@ -56,11 +56,8 @@
             <a class="nav-link" href="#">程式碼</a>
           </li>
           <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
-            <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
+            <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issueCount }}</span></a>
           </router-link>
-          <!-- <li class="nav-item">
-            <a class="nav-link active" href="#">問題<span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
-          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
           </li>
@@ -162,74 +159,6 @@
 
   </div>
 
-
-
-  <!-- <div class="my-5 container">
-
-    <h3 class="my-5 text-left">
-
-      <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
-        <a>{{ orgName }}</a>
-      </router-link> / 
-      
-      <router-link :to="{ name: 'project'}" tag="a" active-class="active">
-        <a>{{ proName }}</a>
-      </router-link>
-
-    </h3>
-
-    <div v-if="addingLabel === false" class="text-right mr-5">
-      <button class="btn btn-success" @click="addingLabel = true">Add Label</button>
-    </div>
-
-    <div v-if="addingLabel === true" class="d-flex justify-content-center row form-group text-left">
-      <div class="col-3">
-        <label for="labelName">Label Name</label>
-        <input v-model="labelName" type="text" class="form-control" aria-describedby="button-addon2" id="labelName">
-      </div>
-      <div class="col-5">
-        <label for="labelDesc">Description</label>
-        <input v-model="labelDesc" type="text" class="form-control" aria-describedby="button-addon2" id="labelDesc">
-      </div>
-      <div class="d-flex align-items-end">
-        <button class="mr-3 btn btn-success" @click="newLabel">Create Label</button>
-        <button class="mr-3 btn btn-danger" @click="cancelAddLabel">Cancel</button>
-      </div>
-    </div>
-
-
-    <ul class="my-3 list-group list-group-flush text-left">
-      <li v-for="(label, index) in labels" class="py-3 list-group-item">
-
-        <div class="row" v-if="labels[index].editingLabel === false">
-          <div class="col-4">{{ label.title }}</div>
-          <div class="col-4">{{ label.labelDesc }}</div>
-          <button class="ml-auto mr-3 btn btn-warning" @click="editingLabel (index)">Edit</button>
-          
-          <button v-if="labels[index].editingLabel === false" class="mr-3 btn btn-danger" @click="deleteLabel (index)">Delete</button>
-        </div>
-
-        <div v-if="labels[index].editingLabel === true" class="d-flex justify-content-center form-group text-left">
-
-          <div class="col-3">
-            <label for="labelName">Label Name</label>
-            <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelName">
-          </div>
-          <div class="col-5">
-            <label for="labelDesc">Description</label>
-            <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-describedby="button-addon2" id="newLabelDesc">
-          </div>
-          <div class="d-flex align-items-end">
-            <button class="mr-3 btn btn-success" @click="updateLabel (index)">Save Changes</button>
-            <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">Cancel</button>
-          </div>
-
-        </div>
-          
-      </li>
-    </ul>
-
-  </div> -->
 </template>
 
 <script>
@@ -250,6 +179,7 @@
         labelDesc:'',
         newLabelName: '',
         newLabelDesc: '',
+        issueCount: '',
       }
     },
     computed: {
@@ -260,11 +190,6 @@
       issueId () {
         return this.$route.params.issueId;
       },
-
-      issues () {
-        // return this.$route.params.issues;
-        return 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-      },
     },
 
     mounted () {
@@ -272,11 +197,26 @@
       
       $vmc.showRouteName ();
       $vmc.showLabel ();
+      $vmc.showIssueCount ();
     },
     methods: {
+      showIssueCount () {
+        let $vmc = this;
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+
+        query.equalTo ('proId', $vmc.proId);
+        query.find ()
+          .then (resp => {
+            $vmc.issueCount = resp.length;
+          });
+
+      },
+      
       show (index) {
         this.$modal.show ('modal' + index);
       },
+
       hide (index) {
         this.$modal.hide ('modal' + index);
       },

@@ -57,7 +57,7 @@
           <a class="nav-link" href="#">程式碼</a>
         </li>
         <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
-          <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
+          <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issueCount }}</span></a>
         </router-link>
         <li class="nav-item">
           <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
@@ -243,6 +243,7 @@
         orgName: '',
         proName: '',
         mileIssues: [],
+        issueCount: '',
       }
     },
 
@@ -269,10 +270,24 @@
 
       $vmc.showMile ();
       $vmc.showRouteName ();      
+      $vmc.showIssueCount ();
     },
 
 
     methods: {
+      showIssueCount () {
+        let $vmc = this;
+        let Issue = Parse.Object.extend ('Issue');
+        let query = new Parse.Query (Issue);
+
+        query.equalTo ('proId', $vmc.proId);
+        query.find ()
+          .then (resp => {
+            $vmc.issueCount = resp.length;
+          });
+
+      },
+
       showRouteName () {
         let $vmc = this;
         let Project = Parse.Object.extend ('Project');
