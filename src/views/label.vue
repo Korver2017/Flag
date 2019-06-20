@@ -285,15 +285,6 @@
         $vmc.addingLabel = false;
       },
 
-
-
-
-
-
-
-
-
-
       editingLabel (index) {
         let $vmc = this;
         let label = $vmc.labels[index];
@@ -301,17 +292,6 @@
         $vmc.labels[index].newLabelName = $vmc.labels[index].title;
         $vmc.show (index);
       },
-
-
-
-
-
-
-
-
-
-
-
       
       updateLabel (index) {
         let $vmc = this;
@@ -331,6 +311,7 @@
             // error is a Parse.Error with an error code and message.
           });
       },
+      
       cancelUpdateLabel (index) {
         let $vmc = this;
 
@@ -339,11 +320,10 @@
         $vmc.labels[index].editingLabel = false;
         $vmc.hide (index);
       },
+
       deleteLabel (index) {
         let $vmc = this;
-
         let labelId = $vmc.labels[index].labelId;
-
         let Label = Parse.Object.extend ('Label');
         let query = new Parse.Query (Label);
         query.get (labelId)
