@@ -326,9 +326,7 @@
     },
 
     mounted () {
-      // this.showIssue ();
       this.showMyIssue ();
-      // this.showAssignee ();
       this.showCreatedByMe ();
       this.showAssigneToMe ();
     },
@@ -340,7 +338,6 @@
         let query = new Parse.Query (Issue);
         let ary = [];
 
-        // $vmc.switchTo = 'createdByMe';
         query.equalTo ('creator', $vmc.user.username);
         query.find ()
           .then (resp => {
@@ -379,7 +376,6 @@
         let query = new Parse.Query (Issue);
         let ary = [];
 
-        // $vmc.switchTo = 'assignToMe';
         query.equalTo ('assigneeId', $vmc.user.userId);
         query.find ()
           .then (resp => {
@@ -438,7 +434,6 @@
         let query = new Parse.Query (Issue);
         let ary = [];
 
-        // $vmc.switchTo = 'myIssue';
         query.notEqualTo ('objectId', '');
         query.find ()
           .then (resp => {
@@ -470,89 +465,11 @@
 
           })
       },
-      
-      // showIssue () {
-      //   let $vmc = this;
-      //   let Org = Parse.Object.extend ('Organization');
-      //   let query = new Parse.Query (Org);
-      //   let ary = [];
-      //   query.equalTo ('memberId', $vmc.user.userId);
-      //   query.find ()
-      //     .then (resp => {
-      //       for (let i = 0; i < resp.length; i ++) {
-      //         let object = resp[i];
-      //         ary.push (object.id);
-      //       }
-
-      //       return ary;
-      //     })
-      //     .then (resp => {
-      //       let ary = [];
-      //       let orgId = resp;
-      //       let Project = Parse.Object.extend ('Project');
-      //       let query = new Parse.Query (Project);
-
-      //       query.containedIn ('orgId', resp);
-      //       query.find ()
-      //         .then (resp => {
-      //           for (let i = 0; i < resp.length; i ++) {
-      //             let object = resp[i];
-
-      //             ary.push (object.id)
-      //           }
-
-      //           return ary;
-      //         })
-      //         .then (resp => {
-      //           let ary = [];
-      //           let arry = [];
-      //           let Issue = Parse.Object.extend ('Issue');
-      //           let query = new Parse.Query (Issue);
-
-      //           query.containedIn ('proId', resp);
-      //           query.find ()
-      //             .then (resp => {
-                    
-      //               for (let i = 0; i < resp.length; i ++) {
-      //                 let obj = {};
-      //                 let object = resp[i];
-      //                 obj.issueId = object.id;
-      //                 obj.orgId = object.get ('orgId');
-      //                 obj.proId = object.get ('proId');
-      //                 obj.proName = object.get ('proName');
-      //                 obj.orgName = object.get ('orgName');
-      //                 obj.issueName = object.get ('name');
-      //                 obj.issueOpened = object.get ('issueOpened');
-      //                 obj.creator = object.get ('creator');
-
-      //                 if (obj.issueOpened === true) {
-      //                   $vmc.openedCount += 1;
-      //                   arry.push (obj);
-      //                 } else {
-      //                   $vmc.closedCount += 1;
-      //                 }
-                      
-      //                 ary.push (obj);
-      //               }
-
-      //               let newArry = arry;
-                    
-      //               $vmc.issues = ary;
-      //               return newArry;
-
-      //             })
-                  
-      //         })
-
-      //     })
-      // },
 
     },
 
     watch: {
       user () {
-        // this.showIssue ();
-        // this.showAssignee ();
       }
     }
   }
