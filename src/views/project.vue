@@ -114,7 +114,7 @@
 
     <div class="row">
 
-      <stateCounter @changeState="updateState" :openedCount="openedCount" :closedCount="closedCount" :showOpened="showOpened" />
+      <state-counter @changeState="updateState" :openedCount="openedCount" :closedCount="closedCount" :showOpened="showOpened" />
 
       <!-- <div class="btn-group" role="group" aria-label="Basic example">
 

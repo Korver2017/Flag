@@ -100,18 +100,7 @@
 
       <hr />
 
-      <div class="row">
-
-        <div class="btn-group" role="group" aria-label="Basic example">
-          <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-            {{ mileOpened }} 個開啟中
-          </button>
-          <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-            {{ mileClosed }} 個已關閉
-          </button>
-        </div>
-
-      </div>
+      <state-counter @changeState="updateState" :openedCount="mileOpened" :closedCount="mileClosed" :showOpened="showOpened" />
 
       <div class="container my-4">
         
@@ -223,6 +212,7 @@
 <script>
   
   import Parse from "parse";
+  import stateCounter from "@/components/state-counter.vue";
 
   export default {
 
@@ -231,6 +221,7 @@
 
 
     components: {
+      stateCounter,
     },
 
 
@@ -275,6 +266,10 @@
 
 
     methods: {
+      updateState (newState) {
+        this.showOpened = newState;
+      },
+      
       showIssueCount () {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
