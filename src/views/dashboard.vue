@@ -34,6 +34,8 @@
       
     </nav> -->
 
+    <submenu :user="user" :orgs="orgs" />
+
     <hr class="m-0" />
     
     <div id="wrap">
@@ -205,6 +207,7 @@
 
   // Import
   import Parse from "parse";
+  import submenu from "@/components/submenu.vue";
 
 
   export default {
@@ -219,6 +222,7 @@
      *
      */
     components: {
+      submenu,
     },
 
 

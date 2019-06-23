@@ -41,6 +41,8 @@
 <script>
   export default {
     
+    props: ['user', 'orgs'],
+    
   }
 </script>
 
