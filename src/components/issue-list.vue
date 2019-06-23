@@ -10,7 +10,7 @@
 
         <div class="row d-flex align-items-center">
 
-          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checking">
           <span class="px-3 py-2 badge badge-primary">#1</span>
           <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
           
@@ -41,7 +41,7 @@
 
         <div class="row d-flex align-items-center">
 
-          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
+          <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checking">
 
           <span class="px-3 py-2 badge badge-primary">#1</span>
           <a style="font-size: 20px;" class="ml-3 text-decoration-none">{{ issue.name }}</a>
@@ -74,18 +74,24 @@
 <script>
   export default {
 
-    props: ['issues', 'showOpened'],
+    props: ['issues', 'showOpened', 'checked'],
 
     data () {
       return {
-        checked: [],
+        checking: this.checked,
       }
     },
 
+    computed: {
+    },
+
     watch: {
+      checking () {
+        this.$emit ('checking', this.checking);
+      },
+      
       checked () {
-        console.log (this.checked);
-        this.$emit ('checking', this.checked);
+        this.checking = this.checked;
       }
     }
   }

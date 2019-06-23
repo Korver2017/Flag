@@ -226,7 +226,8 @@
 
     <!-- Issue List Start -->
 
-    <issue-list @checking="updateChecked" :issues="issues" :showOpened="showOpened" />
+    <!-- <issue-list @checking="updateChecked" :issues="issues" :showOpened="showOpened" /> -->
+    <issue-list @checking="updateChecked" :checked="checked" :issues="issues" :showOpened="showOpened" />
 
     <!-- <div class="mt-3 list-group list-group-flush" v-if="issues.length >= 1"> -->
 
@@ -529,10 +530,11 @@
 
 
       closeIssue () {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
+        let $vmc = this
+          , Issue = Parse.Object.extend ('Issue')
+          , len = $vmc.checked.length;
 
-        for (let i = 0; i < $vmc.checked.length; i ++) {
+        for (let i = 0; i < len; i ++) {
           let query = new Parse.Query (Issue);
 
           query.get ($vmc.checked[i])
@@ -545,24 +547,30 @@
             }, (error) => {
           });
         }
+
         $vmc.checked = [];
       },
 
 
       showMilestone () {
-        let $vmc = this;
-        let Mile = Parse.Object.extend ('Milestone');
-        let query = new Parse.Query (Mile);
-        let ary = [];
+        let $vmc = this
+          , Mile = Parse.Object.extend ('Milestone')
+          , query = new Parse.Query (Mile)
+          , ary = [];
+
         query.equalTo ('proId', $vmc.proId);
         query.find ()
           .then (resp => {
-            for (let i = 0; i < resp.length; i++) {
-              let obj = {};
-              let object = resp[i];
+            let len = resp.length;
+
+            for (let i = 0; i < len; i++) {
+              let obj = {}
+                , object = resp[i];
+
               obj.mileId = object.id;
               obj.title = object.get ('title');
-              ary.push (obj)
+
+              ary.push (obj);
             }
           });
 
@@ -571,13 +579,15 @@
 
 
       addLabelTo (labelId) {
-        let $vmc = this;
-        let Label = Parse.Object.extend ('Label');
-        let query = new Parse.Query (Label);
+        let $vmc = this
+          , Label = Parse.Object.extend ('Label')
+          , query = new Parse.Query (Label);
 
         query.get (labelId)
           .then (resp => {
-            for (let i = 0; i < $vmc.checked.length; i ++) {
+            let len = $vmc.checked.length;
+
+            for (let i = 0; i < len; i ++) {
               let object = $vmc.checked[i];
               
               resp.addUnique ('issueId', object);
@@ -595,11 +605,12 @@
 
 
       addIssueTo (mileId, mileTitle) {
-        let $vmc = this;
-        let Issue = Parse.Object.extend ('Issue');
-        let ary = [];
+        let $vmc = this
+          , Issue = Parse.Object.extend ('Issue')
+          , ary = []
+          , len = $vmc.checked.length;
 
-        for (let i = 0; i < $vmc.checked.length; i ++) {
+        for (let i = 0; i < len; i ++) {
           let query = new Parse.Query (Issue);
           
           query.get ($vmc.checked[i])
