@@ -104,18 +104,6 @@
 
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="mt-3 list-group list-group-flush " v-if="issues.length >= 1 && switchTo === 'myIssue'">
 
           <template v-for="issue in issues">
@@ -159,13 +147,6 @@
           </template>
             
         </div>
-
-
-
-
-
-
-
 
         <div class="mt-3 list-group list-group-flush " v-if="switchTo === 'assignToMe'">
 
@@ -211,15 +192,6 @@
             
         </div>
 
-
-
-
-
-
-
-
-
-
         <div class="mt-3 list-group list-group-flush " v-if="switchTo === 'createdByMe'">
 
           <template v-for="issue in createdByMeIssues">
@@ -263,14 +235,6 @@
           </template>
             
         </div>
-
-
-
-
-
-
-
-        
 
       </div>
 
@@ -340,9 +304,9 @@
             let len = resp.length;
             
             for (let i = 0; i < len; i ++) {
-              let obj = {};
-              let object = resp[i];
-              let query = new Parse.Query (Org);
+              let obj = {}
+              , object = resp[i]
+              , query = new Parse.Query (Org);
 
               obj.orgId = object.id;
               query.get (object.id)
