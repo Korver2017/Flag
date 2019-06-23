@@ -1,6 +1,5 @@
 <template>
   <div id="wrap" class="my-3">
-    QWER
 
     <div class="row my-4">
 
