@@ -67,40 +67,19 @@
 
         <div v-if="switchTo === 'myIssue'" class="row">
 
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-              {{ issueOpenedCount }} 個開啟中
-            </button>
-            <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-              {{ issueClosedCount }} 個已關閉
-            </button>
-          </div>
+          <state-counter @changeState="updateState" :openedCount="issueOpenedCount" :closedCount="issueClosedCount" :showOpened="showOpened" />
 
         </div>
 
         <div v-else-if="switchTo === 'assignToMe'" class="row">
 
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-              {{ assignToMeOpened }} 個開啟中
-            </button>
-            <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-              {{ assignToMeClosed }} 個已關閉
-            </button>
-          </div>
+          <state-counter @changeState="updateState" :openedCount="assignToMeOpened" :closedCount="assignToMeClosed" :showOpened="showOpened" />
 
         </div>
 
         <div v-else-if="switchTo === 'createdByMe'" class="row">
 
-          <div class="btn-group" role="group" aria-label="Basic example">
-            <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
-              {{ createdByMeOpened }} 個開啟中
-            </button>
-            <button @click="showOpened = false" type="button" class="btn btn-outline-secondary">
-              {{ createdByMeClosed }} 個已關閉
-            </button>
-          </div>
+          <state-counter @changeState="updateState" :openedCount="createdByMeOpened" :closedCount="createdByMeClosed" :showOpened="showOpened" />
 
         </div>
 
@@ -246,6 +225,7 @@
 <script>
   import Parse from "parse";
   import subHeader from "@/components/sub-header.vue";
+  import stateCounter from "@/components/state-counter.vue";
 
   export default {
 
@@ -253,6 +233,7 @@
 
     components: {
       subHeader,
+      stateCounter,
     },
 
     data () {
@@ -292,6 +273,11 @@
     },
     
     methods: {
+
+      updateState (newState) {
+        this.showOpened = newState;
+      },
+      
       showOrg () {
         let $vmc = this
         , Org = Parse.Object.extend ('Organization')
