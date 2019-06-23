@@ -2,7 +2,7 @@
 
   <div>
     
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-white">
 
       <div class="dropdown">
         
@@ -32,7 +32,7 @@
         
       </div>
       
-    </nav>
+    </nav> -->
 
     <hr class="m-0" />
     
