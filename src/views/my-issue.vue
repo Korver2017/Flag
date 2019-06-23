@@ -2,7 +2,7 @@
 
   <div>
   
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-white">
 
       <div class="dropdown">
         
@@ -33,7 +33,9 @@
         
       </div>
       
-    </nav>
+    </nav> -->
+
+    <sub-navbar :user="user" :orgs="orgs" />
 
     <hr class="m-0" />
 
@@ -62,18 +64,6 @@
       </div>
 
       <div class="col-9">
-
-
-
-
-
-
-
-
-
-
-
-
 
         <div v-if="switchTo === 'myIssue'" class="row">
 
@@ -291,10 +281,15 @@
 
 <script>
   import Parse from "parse";
+  import subNavbar from "@/components/sub-navbar.vue";
 
   export default {
 
     name: 'my-issue',
+
+    components: {
+      subNavbar,
+    },
 
     data () {
       return {
@@ -326,12 +321,41 @@
     },
 
     mounted () {
+      this.showOrg ();
       this.showMyIssue ();
       this.showCreatedByMe ();
       this.showAssigneToMe ();
     },
     
     methods: {
+      showOrg () {
+        let $vmc = this
+        , Org = Parse.Object.extend ('Organization')
+        , query = new Parse.Query (Org)
+        , ary = [];
+
+        query.equalTo ('memberId', $vmc.user.userId);
+        query.find ()
+          .then (resp => {
+            let len = resp.length;
+            
+            for (let i = 0; i < len; i ++) {
+              let obj = {};
+              let object = resp[i];
+              let query = new Parse.Query (Org);
+
+              obj.orgId = object.id;
+              query.get (object.id)
+                .then (resp => {
+                  obj.name = resp.get ('name');
+                  ary.push (obj);
+                });
+            }
+
+            $vmc.orgs = ary;
+          });
+      },
+
       showCreatedByMe () {
         let $vmc = this;
         let Issue = Parse.Object.extend ('Issue');
