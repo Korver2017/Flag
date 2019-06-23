@@ -57,7 +57,7 @@
 
         <ul class="list-group list-group-flush">
 
-          <router-link v-for="project in projects" class="text-left pb-5 list-group-item" :to="{ name: 'project', params: { orgId: orgId, proId: project.proId} }" tag="li">
+          <router-link v-for="project in projects" class="text-left pb-5 list-group-item" :to="{ name: 'project', params: { orgId: orgId, proId: project.proId, orgName: orgName, proName: project.name } }" tag="li">
 
             <h3>
               <a class="text-decoration-none">{{ project.name }}</a>
@@ -157,28 +157,29 @@
     
 
     created () {
-      let $vmc = this;
-      let ary = [];
+      // let $vmc = this;
+      // let ary = [];
 
-      const Label = Parse.Object.extend ('Label');
-      const query = new Parse.Query (Label);
-      query.equalTo ('proId', 'default');
-      query.find ()
-        .then (resp => {
-          for (let i = 0; i < resp.length; i++) {
-            let obj = {};
-            let object = resp[i];
-            obj.title = object.get ('title');
-            obj.labelDesc = object.get ('labelDesc');
-            ary.push (obj);
-          }
-        })
+      // const Label = Parse.Object.extend ('Label');
+      // const query = new Parse.Query (Label);
+      // query.equalTo ('proId', 'default');
+      // query.find ()
+      //   .then (resp => {
+      //     for (let i = 0; i < resp.length; i++) {
+      //       let obj = {};
+      //       let object = resp[i];
+      //       obj.title = object.get ('title');
+      //       obj.labelDesc = object.get ('labelDesc');
+      //       ary.push (obj);
+      //     }
+      //   })
 
-      $vmc.defaultLabels = ary;
+      // $vmc.defaultLabels = ary;
     },
 
 
     mounted () {
+      console.log (this.$route.params);
       this.showProject ();
       this.showOrgName ();
       this.showUser ();

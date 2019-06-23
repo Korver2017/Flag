@@ -7,11 +7,10 @@
       <div class="mb-0 d-flex align-items-center">
 
         <h4 class="text-left">
-
-          <router-link :to="{ name: 'organization' }" tag="a" active-class="active">
+          <router-link :to="{ name: 'organization', params: { orgId: orgId, orgName: orgName } }" tag="a" active-class="active">
             <a>{{ orgName }}</a>
           </router-link>
-          / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
+          / <router-link :to="{ name: 'project' }" tag="a" active-class="active">
             <a>{{ proName }}</a>
           </router-link>
 
@@ -267,8 +266,8 @@
 
     data () {
       return {
-        proName: '',
-        orgName: '',
+        // proName: '',
+        // orgName: '',
         issues: [],
         labels: [],
         checked: [],
@@ -291,6 +290,13 @@
         return this.$route.params.proId;
       },
 
+      orgName () {
+        return this.$route.params.orgName;
+      },
+
+      proName () {
+        return this.$route.params.proName;
+      },
 
       userId () {
         return this.$store.state.user.input.userId;
@@ -298,7 +304,7 @@
 
       
       username () {
-        return this.$store.state.user.username
+        return this.$store.state.user.username;
       },
 
 
@@ -310,10 +316,11 @@
 
 
     mounted () {
+      console.log (this.$route.params);
       let $vmc = this;
       
       $vmc.showUser ();
-      $vmc.showProName ();
+      // $vmc.showProName ();
       $vmc.showIssue ();
       $vmc.showLabel ();
       $vmc.showMilestone ();
@@ -337,10 +344,9 @@
         let ary = [];
         query.get ($vmc.proId)
           .then (resp => {
-            let orgId = resp.get ('orgId');
+            // let orgId = resp.get ('orgId');
             let Org = Parse.Object.extend ('Organization');
             let query = new Parse.Query (Org);
-            // $vmc.orgId = orgId;
             query.get ($vmc.orgId)
               .then (resp => {
                 let results = resp.get ('memberId');
@@ -370,18 +376,18 @@
       },
 
 
-      showProName () {
-        let $vmc = this;
-        let id = $vmc.$route.params.proId;
-        const Pro = Parse.Object.extend ('Project');
-        let query = new Parse.Query (Pro);
+      // showProName () {
+      //   let $vmc = this;
+      //   let id = $vmc.$route.params.proId;
+      //   const Pro = Parse.Object.extend ('Project');
+      //   let query = new Parse.Query (Pro);
 
-        query.get (id)
-          .then (resp => {
-            $vmc.proName = resp.get ('name');
-            $vmc.orgName = resp.get ('orgName');
-          });
-      },
+      //   query.get (id)
+      //     .then (resp => {
+      //       $vmc.proName = resp.get ('name');
+      //       $vmc.orgName = resp.get ('orgName');
+      //     });
+      // },
 
       showIssue () {
         let $vmc = this
