@@ -115,6 +115,8 @@
 
     <div class="row">
 
+      <stateCounter @changeState="updateState" :openedCount="openedCount" :closedCount="closedCount" :showOpened="showOpened" />
+
       <!-- <div class="btn-group" role="group" aria-label="Basic example">
 
         <button @click="showOpened = true" type="button" class="btn btn-outline-secondary">
@@ -249,6 +251,7 @@
 <script>
   import Parse from "parse";
   import issueList from "@/components/issue-list.vue";
+  import stateCounter from "@/components/state-counter.vue";
 
   export default {
     
@@ -258,6 +261,7 @@
 
     components: {
       issueList,
+      stateCounter,
     },
 
 
@@ -268,8 +272,8 @@
         issues: [],
         labels: [],
         checked: [],
-        opened: [],
-        closed: [],
+        openedCount: '',
+        closedCount: '',
         showOpened: true,
         milestones: [],
         users: [],
@@ -317,6 +321,10 @@
 
 
     methods: {
+      updateState (newState) {
+        this.showOpened = newState;
+      },
+
       updateChecked (value) {
         this.checked = value;
       },
@@ -376,53 +384,59 @@
       },
 
       showIssue () {
-        let $vmc = this;
-        const Issue = Parse.Object.extend ('Issue');
-        let query = new Parse.Query (Issue);
+        let $vmc = this
+          , ary = []
+          , openedCount = 0
+          , closedCount = 0
+          , Issue = Parse.Object.extend ('Issue')
+          , query = new Parse.Query (Issue);
 
         query.equalTo ('proId', $vmc.proId);
-        let ary = [];
-        let opened = [];
-        let closed = [];
-        query.find ().then (resp => {
-          for (let i = 0; i < resp.length; i++) {
-            let obj = {};
-            let object = resp[i];
+        // let opened = [];
+        // let closed = [];
+        query.find ()
+          .then (resp => {
+            let len = resp.length;
 
-            obj.name = object.get ('name');
-            obj.issueId = object.id;
-            obj.creator = object.get ('creator');
-            obj.issueOpened = object.get ('issueOpened');
-            obj.avatarHash = object.get ('avatarHash');
-            obj.assigneeId = object.get ('assigneeId');
-            obj.mileTitle = object.get ('mileTitle');
+            for (let i = 0; i < len; i ++) {
+              let obj = {}
+                , object = resp[i];
 
-            let arry = [];
-            let Label = Parse.Object.extend ('Label');
-            let query = new Parse.Query (Label);
-            query.equalTo ('issueId', object.id);
-            query.find ()
-              .then (resp => {
-                for (let i = 0; i < resp.length; i ++) {
-                  let object = resp[i];
-                  arry.push (object.get ('title'));
-                }
-              });
+              obj.name = object.get ('name');
+              obj.issueId = object.id;
+              obj.creator = object.get ('creator');
+              obj.avatarHash = object.get ('avatarHash');
+              obj.assigneeId = object.get ('assigneeId');
+              obj.mileTitle = object.get ('mileTitle');
+              obj.issueOpened = object.get ('issueOpened');
 
-            obj.labels = arry;
-            ary.push (obj);
+              if (obj.issueOpened === true) openedCount += 1;
+              else closedCount += 1;
 
-            if (obj.issueOpened === true) {
-              opened.push (obj);
-            } else if (obj.issueOpened === false) {
-              closed.push (obj);
+              let arry = []
+                , Label = Parse.Object.extend ('Label')
+                , query = new Parse.Query (Label);
+
+              query.equalTo ('issueId', object.id);
+              query.find ()
+                .then (resp => {
+                  let len = resp.length;
+
+                  for (let i = 0; i < len; i ++) {
+                    let object = resp[i];
+                    arry.push (object.get ('title'));
+                  }
+                });
+
+              obj.labels = arry;
+              ary.push (obj);
             }
-          }
-        });
+            
+            $vmc.openedCount = openedCount;
+            $vmc.closedCount = closedCount;
+            $vmc.issues = ary;
+          });
 
-        $vmc.issues = ary;
-        $vmc.opened = opened;
-        $vmc.closed = closed;
       },
 
 
