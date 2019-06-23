@@ -74,6 +74,8 @@
 <script>
   export default {
 
+    name: 'issue-list',
+
     props: ['issues', 'showOpened', 'checked'],
 
     data () {

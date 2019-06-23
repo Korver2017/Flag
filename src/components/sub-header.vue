@@ -40,6 +40,8 @@
 
 <script>
   export default {
+
+    name: 'sub-header',
     
     props: ['user', 'orgs'],
     

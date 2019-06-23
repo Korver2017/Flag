@@ -35,7 +35,7 @@
       
     </nav> -->
 
-    <sub-navbar :user="user" :orgs="orgs" />
+    <sub-header :user="user" :orgs="orgs" />
 
     <hr class="m-0" />
 
@@ -245,14 +245,14 @@
 
 <script>
   import Parse from "parse";
-  import subNavbar from "@/components/sub-navbar.vue";
+  import subHeader from "@/components/sub-header.vue";
 
   export default {
 
     name: 'my-issue',
 
     components: {
-      subNavbar,
+      subHeader,
     },
 
     data () {
