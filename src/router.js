@@ -24,7 +24,7 @@ export default new Router ({
       path: '/org/create', name: 'add-organization', component: () => import('./views/add-organization.vue'),
     },
     {
-      path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
+      path: '/:orgName', name: 'organization', component: () => import ('./views/organization.vue'),
     },
     {
       path: '/:orgId/:proId', name: 'project', component: () => import ('./views/project.vue'),

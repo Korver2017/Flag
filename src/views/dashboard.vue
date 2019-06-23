@@ -153,7 +153,7 @@
 
               </li>
 
-              <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'organization', params: { orgId: org.orgId } }" tag="button">
+              <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'organization', params: { orgName: org.name, orgId: org.orgId } }" tag="button">
                 {{ org.name }}
               </router-link>
 
@@ -196,7 +196,7 @@
 
     data () {
       return {
-        orgName: '',
+        // orgName: '',
         orgs: [],
         projects: [],
         issues: [],

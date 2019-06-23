@@ -149,11 +149,9 @@
 
     computed: {
 
-
       orgId () {
         return this.$route.params.orgId;
       },
-
 
     },
     
