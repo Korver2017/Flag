@@ -224,17 +224,19 @@
 
     </div>
 
-    <!-- Issue List -->
+    <!-- Issue List Start -->
 
-    <div class="mt-3 list-group list-group-flush" v-if="issues.length >= 1">
+    <issue-list @checking="updateChecked" :issues="issues" :showOpened="showOpened" />
 
-      <template v-for="issue in issues">
+    <!-- <div class="mt-3 list-group list-group-flush" v-if="issues.length >= 1"> -->
+
+      <!-- <template v-for="issue in issues"> -->
 
         <!-- Opened Issue-List Start-->
 
-        <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active">
+        <!-- <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active"> -->
 
-          <div class="row d-flex align-items-center">
+          <!-- <div class="row d-flex align-items-center">
 
             <input class="mr-3" type="checkbox" :value='issue.issueId' v-model="checked">
             <span class="px-3 py-2 badge badge-primary">#1</span>
@@ -255,15 +257,15 @@
               <img v-if="issue.avatarHash.length > 0" v-for="hash in issue.avatarHash" :src="'https://www.gravatar.com/avatar/' + hash" style="width: 30px" class="mr-3 rounded" alt="">
             </div>
 
-          </div>
+          </div> -->
           
-        </router-link>
+        <!-- </router-link> -->
 
         <!-- Opened Issue-List End -->
 
         <!-- Closed Issue-List Start -->
 
-        <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="list-group-item" active-class="active">
+        <!-- <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="list-group-item" active-class="active">
 
           <div class="row d-flex align-items-center">
 
@@ -293,7 +295,9 @@
 
       </template>
         
-    </div>
+    </div> -->
+    
+    <!-- Issue List End -->
 
     <nav class="my-3 d-flex justify-content-center">
       <ul class="pagination">
@@ -317,6 +321,7 @@
 
 <script>
   import Parse from "parse";
+  import issueList from "@/components/issue-list.vue";
 
   export default {
     
@@ -325,6 +330,7 @@
 
 
     components: {
+      issueList,
     },
 
 
@@ -365,10 +371,6 @@
       },
 
 
-      checking () {
-        let $vmc = this;
-        if ($vmc.checked.length === 0) return false;
-      }
     },
 
 
@@ -388,6 +390,9 @@
 
 
     methods: {
+      updateChecked (value) {
+        this.checked = value;
+      },
 
 
       showUser () {
@@ -667,13 +672,4 @@
 </script>
 
 <style scoped>
-input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-}
-
-.list-group-item {
-  border: 0;
-  border-bottom: 3px dotted rgba(0, 0, 0, .125);
-}
 </style>
