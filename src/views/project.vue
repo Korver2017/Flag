@@ -344,7 +344,7 @@
     mounted () {
       console.log (this.$route.params);
 
-      this.getBreadcrumb ();
+      // this.getBreadcrumb ();
       this.showUser ();
       this.showIssue ();
       this.showLabel ();

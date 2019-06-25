@@ -85,14 +85,41 @@
 </template>
 
 <script>
+  import Parse from "parse";
+
   export default {
     
     name: 'sub-navbar',
 
-    props: ['orgId', 'proId', 'orgName', 'proName', 'issueCount'],
+    props: ['orgId', 'proId', 'issueCount'],
+
+    data () {
+      return {
+        orgName: '',
+        proName: '',
+      }
+    },
 
     mounted () {
-      console.log (this.$route.params);
+      this.getBreadcrumb ();
+    },
+
+    methods: {
+
+      getBreadcrumb () {
+        let $vmc = this
+          , Project = Parse.Object.extend ('Project')
+          , query = new Parse.Query (Project);
+
+        query.get ($vmc.proId)
+          .then(resp => {
+            $vmc.proName = resp.get ('name');
+            $vmc.orgName = resp.get ('orgName');
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
     },
     
   }
