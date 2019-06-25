@@ -63,6 +63,19 @@
         
       </div>
 
+
+
+
+
+
+
+      <issue-list :issues="issues" />
+
+
+
+
+      
+
       <div class="col-9">
 
         <div v-if="switchTo === 'myIssue'" class="row">
@@ -226,6 +239,7 @@
   import Parse from "parse";
   import subHeader from "@/components/sub-header.vue";
   import stateCounter from "@/components/state-counter.vue";
+  import issueList from "@/components/issue-list.vue";
 
   export default {
 
@@ -234,6 +248,7 @@
     components: {
       subHeader,
       stateCounter,
+      issueList,
     },
 
     data () {

@@ -108,7 +108,7 @@
 
               </li>
 
-              <router-link v-if="projects" v-for="project in projects" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgName: project.orgName, proName: project.name, orgId: project.orgId, proId: project.proId }}" tag="button">
+              <router-link v-if="projects" v-for="project in projects" class="d-flex align-items-center list-group-item" :to="{ name: 'project', params: { orgId: project.orgId, proId: project.proId }}" tag="button">
                 <i style="font-size: 25px;" class="mr-3 fa fa-lock" aria-hidden="true"></i>
 
                 {{ project.orgName }} / {{ project.name }}
@@ -153,7 +153,7 @@
 
               </li>
 
-              <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'organization', params: { orgName: org.name, orgId: org.orgId } }" tag="button">
+              <router-link v-if="orgs" v-for="(org, index) in orgs" class="d-flex align-items-center list-group-item" :to="{ name: 'organization', params: { orgId: org.orgId } }" tag="button">
                 {{ org.name }}
               </router-link>
 

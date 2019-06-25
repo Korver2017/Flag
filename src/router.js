@@ -24,31 +24,31 @@ export default new Router ({
       path: '/org/create', name: 'add-organization', component: () => import('./views/add-organization.vue'),
     },
     {
-      path: '/:orgName', name: 'organization', component: () => import ('./views/organization.vue'),
+      path: '/:orgId', name: 'organization', component: () => import ('./views/organization.vue'),
     },
     {
-      path: '/:orgName/:proName', name: 'project', component: () => import ('./views/project.vue'),
+      path: '/:orgId/:proId', name: 'project', component: () => import ('./views/project.vue'),
     },
     {
-      path: '/:orgName/:proName/issues/new', name: 'add-issue', component: () => import ('./views/add-issue.vue'),
+      path: '/:orgId/:proId/issues/new', name: 'add-issue', component: () => import ('./views/add-issue.vue'),
     },
     {
-      path: '/:orgName/:proName/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
+      path: '/:orgId/:proId/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
     },
     {
-      path: '/:orgName/:proName/milestone', name: 'milestone', component: () => import('./views/milestone.vue'),
+      path: '/:orgId/:proId/milestone', name: 'milestone', component: () => import('./views/milestone.vue'),
     },
     {
-      path: '/:orgName/:proName/milestone/:mileId', name: 'milestone-detail', component: () => import('./views/milestone-detail.vue'),
+      path: '/:orgId/:proId/milestone/:mileId', name: 'milestone-detail', component: () => import('./views/milestone-detail.vue'),
     },
     {
-      path: '/:orgName/:proName/milestone/new', name: 'new-milestone', component: () => import('./views/new-milestone.vue'),
+      path: '/:orgId/:proId/milestone/new', name: 'new-milestone', component: () => import('./views/new-milestone.vue'),
     },
     {
-      path: '/:orgName/:proName/milestone/:mileId/edit', name: 'edit-milestone', component: () => import('./views/edit-milestone.vue'),
+      path: '/:orgId/:proId/milestone/:mileId/edit', name: 'edit-milestone', component: () => import('./views/edit-milestone.vue'),
     },
     {
-      path: '/:orgName/:proName/label-list', name: 'label-list', component: () => import('./views/label.vue'),
+      path: '/:orgId/:proId/label-list', name: 'label-list', component: () => import('./views/label.vue'),
     },
   ]
 });
