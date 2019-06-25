@@ -2,17 +2,17 @@
 
   <div id="wrap" class="my-3">
 
-    <sub-navbar :issueCount="issueCount" :orgName="orgName" :orgId="orgId" :proId="proId" :proName="proName" />
+    <sub-navbar :issueCount="issueCount" :orgId="orgId" :proId="proId" :proName="proName" :orgName="orgName" />
     
     <div class="row my-4 d-flex justify-content-between">
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <router-link :to="{ name: 'label-list', params: { proId: proId, orgId: orgId, proName: proName, orgName: orgName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'label-list', params: { proId: proId, orgId: orgId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           標籤
         </router-link>
 
-        <router-link :to="{ name: 'milestone', params: { proId: proId, orgId: orgId, proName: proName, orgName: orgName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'milestone', params: { proId: proId, orgId: orgId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
           里程碑
         </router-link>
         
@@ -302,8 +302,8 @@
 
     data () {
       return {
-        // proName: '',
-        // orgName: '',
+        proName: '',
+        orgName: '',
         issues: [],
         issueCount: '',
         labels: [],
@@ -327,24 +327,13 @@
         return this.$route.params.proId;
       },
 
-      orgName () {
-        return this.$route.params.orgName;
-      },
-
-      proName () {
-        return this.$route.params.proName;
-      },
-
       userId () {
         return this.$store.state.user.input.userId;
       },
-
       
       username () {
         return this.$store.state.user.username;
       },
-
-
     },
 
 
@@ -355,17 +344,45 @@
     mounted () {
       console.log (this.$route.params);
 
-      let $vmc = this;
-      
-      $vmc.showUser ();
-      // $vmc.showProName ();
-      $vmc.showIssue ();
-      $vmc.showLabel ();
-      $vmc.showMilestone ();
+      this.getBreadcrumb ();
+      this.showUser ();
+      this.showIssue ();
+      this.showLabel ();
+      this.showMilestone ();
     },
 
 
     methods: {
+
+      // getOrgName () {
+      //   let $vmc = this
+      //     , Org = Parse.Object.extend ('Organization')
+      //     , query = new Parse.Query (Org);
+
+      //   query.get ($vmc.orgId)
+      //     .then(resp => {
+      //       $vmc.orgName = resp.get ('name');
+      //     }, (error) => {
+      //       // The object was not retrieved successfully.
+      //       // error is a Parse.Error with an error code and message.
+      //     });
+      // },
+
+      getBreadcrumb () {
+        let $vmc = this
+          , Project = Parse.Object.extend ('Project')
+          , query = new Parse.Query (Project);
+
+        query.get ($vmc.proId)
+          .then(resp => {
+            $vmc.proName = resp.get ('name');
+            $vmc.orgName = resp.get ('orgName');
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
+      
       updateState (newState) {
         this.showOpened = newState;
       },

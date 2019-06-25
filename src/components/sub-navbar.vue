@@ -8,10 +8,10 @@
 
         <h4 class="text-left">
 
-          <router-link :to="{ name: 'organization', params: { orgId: orgId, orgName: orgName, proId: proId, proName: proName } }" tag="a" active-class="active">
+          <router-link :to="{ name: 'organization', params: { orgId: orgId, proId: proId} }" tag="a" active-class="active">
             <a>{{ orgName }}</a>
           </router-link>
-          / <router-link :to="{ name: 'project', params: { orgId: orgId, orgName: orgName, proId: proId, proName: proName } }" tag="a" active-class="active">
+          / <router-link :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="a" active-class="active">
             <a>{{ proName }}</a>
           </router-link>
 
@@ -58,7 +58,7 @@
         <a class="nav-link" href="#">程式碼</a>
       </li>
 
-      <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="li" active-class="active">
+      <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
         <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issueCount }}</span></a>
       </router-link>
 
