@@ -2,17 +2,17 @@
 
   <div id="wrap" class="my-3">
 
-    <sub-navbar :issueCount="issueCount" :orgId="orgId" :proId="proId" :proName="proName" :orgName="orgName" />
+    <sub-navbar :issueCount="issueCount" />
     
     <div class="row my-4 d-flex justify-content-between">
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <router-link :to="{ name: 'label-list', params: { proId: proId, orgId: orgId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'label-list' }" tag="button" class="btn btn-outline-secondary" active-class="active">
           標籤
         </router-link>
 
-        <router-link :to="{ name: 'milestone', params: { proId: proId, orgId: orgId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'milestone' }" tag="button" class="btn btn-outline-secondary" active-class="active">
           里程碑
         </router-link>
         
@@ -302,6 +302,8 @@
 
     data () {
       return {
+        orgId: '',
+        proId: '',
         proName: '',
         orgName: '',
         issues: [],
@@ -319,13 +321,13 @@
 
     computed: {
 
-      orgId () {
-        return this.$route.params.orgId;
-      },
+      // orgId () {
+      //   return this.$route.params.orgId;
+      // },
       
-      proId () {
-        return this.$route.params.proId;
-      },
+      // proId () {
+      //   return this.$route.params.proId;
+      // },
 
       userId () {
         return this.$store.state.user.input.userId;
@@ -338,11 +340,16 @@
 
 
     created () {
+      
+      console.log (this.$route.path.split('/'));
+      console.log (this.$route.path.split('/')[1]);
+
+      this.orgId = this.$route.path.split('/')[1];
+      this.proId = this.$route.path.split('/')[2];
     },
 
 
     mounted () {
-      console.log (this.$route.params);
 
       // this.getBreadcrumb ();
       this.showUser ();
@@ -453,8 +460,6 @@
           , query = new Parse.Query (Issue);
 
         query.equalTo ('proId', $vmc.proId);
-        // let opened = [];
-        // let closed = [];
         query.find ()
           .then (resp => {
             let len = resp.length;

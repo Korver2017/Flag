@@ -139,6 +139,7 @@
         defaultLabels: [],
         users: '',
         orgName: '',
+        orgId: '',
       }
     },
 
@@ -149,19 +150,24 @@
 
     computed: {
 
-      orgId () {
-        return this.$route.params.orgId;
-      },
+      // orgId () {
+      //   return this.$route.params.orgId;
+      // },
 
     },
     
 
     created () {
+      
+      console.log (this.$route.path.split('/'));
+      console.log (this.$route.path.split('/')[1]);
+
+      this.orgId = this.$route.path.split('/')[1];
     },
 
 
     mounted () {
-      console.log (this.$route.params);
+
       this.showProject ();
       this.showUser ();
       this.getOrgName ();

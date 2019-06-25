@@ -33,7 +33,7 @@ export default new Router ({
       path: '/:orgId/:proId/issues/new', name: 'add-issue', component: () => import ('./views/add-issue.vue'),
     },
     {
-      path: '/:orgId/:proId/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
+      path: '/:orgId/:proId/issues/:issueId', name: 'issue', component: () => import ('./views/issue.vue'),
     },
     {
       path: '/:orgId/:proId/milestone', name: 'milestone', component: () => import('./views/milestone.vue'),

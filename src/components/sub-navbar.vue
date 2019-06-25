@@ -91,13 +91,27 @@
     
     name: 'sub-navbar',
 
-    props: ['orgId', 'proId', 'issueCount'],
+    props: ['issueCount'],
+    // props: ['orgId', 'proId', 'issueCount'],
 
     data () {
       return {
         orgName: '',
         proName: '',
+        orgId: '',
+        proId: '',
       }
+    },
+
+    created () {
+      console.log (this.$route.path);
+      console.log (window.location.pathname);
+      console.log (this.$route.path.split('/'));
+
+      this.orgId = this.$route.path.split('/')[1];
+      this.proId = this.$route.path.split('/')[2];
+
+      console.log (this.orgId, this.proId);
     },
 
     mounted () {
