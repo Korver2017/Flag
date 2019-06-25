@@ -39,111 +39,6 @@
 
     </div>
 
-
-    <!-- <div class="mb-0 d-flex align-items-center">
-
-      <h4 class="text-left">
-        <router-link :to="{ name: 'organization', params: { orgId: orgId, orgName: orgName } }" tag="a" active-class="active">
-          <a>{{ orgName }}</a>
-        </router-link>
-        / <router-link :to="{ name: 'project' }" tag="a" active-class="active">
-          <a>{{ proName }}</a>
-        </router-link>
-
-      </h4>
-
-    </div>
-
-    <div class="ml-auto">
-
-      <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="border border-dark btn">
-          <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
-        </label>
-        <label class="border border-dark btn">
-          <input type="radio" name="options" id="option2" autocomplete="off"> 8
-        </label>
-      </div>
-
-      <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="border border-dark btn">
-          <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
-        </label>
-        <label class="border border-dark btn">
-          <input type="radio" name="options" id="option2" autocomplete="off"> 0
-        </label>
-      </div>
-
-      <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="border border-dark btn">
-          <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
-        </label>
-        <label class="border border-dark btn">
-          <input type="radio" name="options" id="option2" autocomplete="off"> 0
-        </label>
-      </div>
-
-    </div> -->
-
-    <!-- <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" href="#">程式碼</a>
-      </li>
-      <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
-        <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issues.length }}</span></a>
-      </router-link>
-      <li class="nav-item">
-        <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Wiki</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">活動</a>
-      </li>
-      <li class="ml-auto nav-item">
-        <a class="nav-link" href="#">儲存庫設定</a>
-      </li>
-    </ul>
-
-    <div class="row my-4 d-flex justify-content-between">
-
-      <div class="btn-group" role="group" aria-label="Basic example">
-
-        <router-link :to="{ name: 'label-list', params: { proId: proId, issues: issues } }" tag="button" class="btn btn-outline-secondary" active-class="active">
-          標籤
-        </router-link>
-
-        <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
-          里程碑
-        </router-link>
-        
-      </div>
-
-      <div>
-
-        <div class="input-group">
-          <input type="text" class="form-control p-2" placeholder="搜尋..." aria-label="搜尋..." aria-describedby="button-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button" id="button-addon2">搜尋</button>
-          </div>
-        </div>
-
-      </div>
-
-      <div>
-
-        <router-link class="btn btn-success" :to="{ name: 'add-issue' }" tag="button" active-class="active">
-          建立問題
-        </router-link>
-
-      </div>
-
-    </div> -->
-
     <hr />
 
     <div class="row">
@@ -321,14 +216,6 @@
 
     computed: {
 
-      // orgId () {
-      //   return this.$route.params.orgId;
-      // },
-      
-      // proId () {
-      //   return this.$route.params.proId;
-      // },
-
       userId () {
         return this.$store.state.user.input.userId;
       },
@@ -340,18 +227,14 @@
 
 
     created () {
+      let ids = this.$route.path.split('/');
       
-      console.log (this.$route.path.split('/'));
-      console.log (this.$route.path.split('/')[1]);
-
-      this.orgId = this.$route.path.split('/')[1];
-      this.proId = this.$route.path.split('/')[2];
+      this.orgId = ids[1];
+      this.proId = ids[2]
     },
 
 
     mounted () {
-
-      // this.getBreadcrumb ();
       this.showUser ();
       this.showIssue ();
       this.showLabel ();
@@ -360,20 +243,6 @@
 
 
     methods: {
-
-      // getOrgName () {
-      //   let $vmc = this
-      //     , Org = Parse.Object.extend ('Organization')
-      //     , query = new Parse.Query (Org);
-
-      //   query.get ($vmc.orgId)
-      //     .then(resp => {
-      //       $vmc.orgName = resp.get ('name');
-      //     }, (error) => {
-      //       // The object was not retrieved successfully.
-      //       // error is a Parse.Error with an error code and message.
-      //     });
-      // },
 
       getBreadcrumb () {
         let $vmc = this
@@ -406,7 +275,6 @@
         let ary = [];
         query.get ($vmc.proId)
           .then (resp => {
-            // let orgId = resp.get ('orgId');
             let Org = Parse.Object.extend ('Organization');
             let query = new Parse.Query (Org);
             query.get ($vmc.orgId)
@@ -436,20 +304,6 @@
           });
 
       },
-
-
-      // showProName () {
-      //   let $vmc = this;
-      //   let id = $vmc.$route.params.proId;
-      //   const Pro = Parse.Object.extend ('Project');
-      //   let query = new Parse.Query (Pro);
-
-      //   query.get (id)
-      //     .then (resp => {
-      //       $vmc.proName = resp.get ('name');
-      //       $vmc.orgName = resp.get ('orgName');
-      //     });
-      // },
 
       showIssue () {
         let $vmc = this

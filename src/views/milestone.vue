@@ -156,7 +156,6 @@
 
     data () {
       return {
-        orgId: '',
         proId: '',
         milestones: [],
         showOpened: true,
@@ -169,27 +168,11 @@
 
 
     computed: {
-      
-      // orgId () {
-      //   return this.$route.params.orgId;
-      // },
-
-      // proId () {
-      //   return this.$route.params.proId; 
-      // },
-
     },
 
 
     created () {
-      console.log (this.$route.path);
-      console.log (window.location.pathname);
-      console.log (this.$route.path.split('/'));
-
-      this.orgId = this.$route.path.split('/')[1];
       this.proId = this.$route.path.split('/')[2];
-
-      console.log (this.orgId, this.proId);
     },
 
 

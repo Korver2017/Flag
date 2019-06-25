@@ -8,10 +8,10 @@
 
         <h4 class="text-left">
 
-          <router-link :to="{ name: 'organization', params: { orgId: orgId, proId: proId} }" tag="a" active-class="active">
+          <router-link :to="{ name: 'organization' }" tag="a" active-class="active">
             <a>{{ orgName }}</a>
           </router-link>
-          / <router-link :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="a" active-class="active">
+          / <router-link :to="{ name: 'project' }" tag="a" active-class="active">
             <a>{{ proName }}</a>
           </router-link>
 
@@ -58,7 +58,7 @@
         <a class="nav-link" href="#">程式碼</a>
       </li>
 
-      <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
+      <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
         <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issueCount }}</span></a>
       </router-link>
 
@@ -92,26 +92,17 @@
     name: 'sub-navbar',
 
     props: ['issueCount'],
-    // props: ['orgId', 'proId', 'issueCount'],
 
     data () {
       return {
         orgName: '',
         proName: '',
-        orgId: '',
         proId: '',
       }
     },
 
     created () {
-      console.log (this.$route.path);
-      console.log (window.location.pathname);
-      console.log (this.$route.path.split('/'));
-
-      this.orgId = this.$route.path.split('/')[1];
       this.proId = this.$route.path.split('/')[2];
-
-      console.log (this.orgId, this.proId);
     },
 
     mounted () {

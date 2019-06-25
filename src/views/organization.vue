@@ -57,7 +57,7 @@
 
         <ul class="list-group list-group-flush">
 
-          <router-link v-for="project in projects" class="text-left pb-5 list-group-item" :to="{ name: 'project', params: { orgId: orgId, proId: project.proId } }" tag="li">
+          <router-link v-for="project in projects" class="text-left pb-5 list-group-item" :to="{ name: 'project', params: { proId: project.proId } }" tag="li">
 
             <h3>
               <a class="text-decoration-none">{{ project.name }}</a>
@@ -149,19 +149,10 @@
 
 
     computed: {
-
-      // orgId () {
-      //   return this.$route.params.orgId;
-      // },
-
     },
     
 
     created () {
-      
-      console.log (this.$route.path.split('/'));
-      console.log (this.$route.path.split('/')[1]);
-
       this.orgId = this.$route.path.split('/')[1];
     },
 

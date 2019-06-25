@@ -2,17 +2,17 @@
 
   <div id="wrap" class="my-3">
 
-    <sub-navbar :issueCount="issueCount" :orgId="orgId" :proId="proId" :orgName="orgName" :proName="proName" />
+    <sub-navbar :issueCount="issueCount" />
 
     <div class="row my-4 d-flex justify-content-between">
 
       <div class="btn-group" role="group" aria-label="Basic example">
 
-        <router-link :to="{ name: 'label-list', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'label-list' }" tag="button" class="btn btn-outline-secondary" active-class="active">
           標籤
         </router-link>
 
-        <router-link :to="{ name: 'milestone', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+        <router-link :to="{ name: 'milestone' }" tag="button" class="btn btn-outline-secondary" active-class="active">
           里程碑
         </router-link>
         
@@ -105,8 +105,8 @@
     
     data () {
       return {
-        // orgName: '',
-        // proName: '',
+        orgId: '',
+        proId: '',
         labels: [],
         addingLabel: false,
         labelName: '',
@@ -116,33 +116,23 @@
         issueCount: '',
       }
     },
+
+    created () {
+      let ids = this.$route.path.split('/');
+      
+      this.orgId = ids[1];
+      this.proId = ids[2]
+    },
+
     computed: {
-      orgId () {
-        return this.$route.params.orgId;
-      },
-
-      proId () {
-        return this.$route.params.proId; 
-      },
-
-      orgName () {
-        return this.$route.params.orgName;
-      },
-
-      proName () {
-        return this.$route.params.proName;
-      },
-
       issueId () {
         return this.$route.params.issueId;
       },
     },
 
     mounted () {
-      console.log (this.$route.params);
       let $vmc = this;
       
-      // $vmc.showRouteName ();
       $vmc.showLabel ();
       $vmc.showIssueCount ();
     },
@@ -168,22 +158,6 @@
       hide (index) {
         this.$modal.hide ('modal' + index);
       },
-
-      // showRouteName () {
-      //   let $vmc = this;
-
-      //   let Project = Parse.Object.extend ('Project');
-      //   let query = new Parse.Query (Project);
-
-      //   query.get ($vmc.proId)
-      //     .then (resp => {
-      //       $vmc.orgName = resp.get ('orgName');
-      //       $vmc.proName = resp.get ('name');
-      //     }, (error) => {
-      //       // The object was not retrieved successfully.
-      //       // error is a Parse.Error with an error code and message.
-      //     });
-      // },
 
       showLabel () {
         let $vmc = this;
