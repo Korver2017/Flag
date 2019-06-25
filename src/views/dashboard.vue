@@ -230,6 +230,7 @@
 
 
     mounted () {
+      console.log (this.$route.params);
       
       this.showOrg ();
       this.showProject ();

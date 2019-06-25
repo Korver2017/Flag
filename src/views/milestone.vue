@@ -2,7 +2,9 @@
 
     <div id="wrap" class="my-3">
 
-      <div class="row my-4">
+      <sub-navbar :issueCount="issueCount" :orgId="orgId" :orgName="orgName" :proId="proId" :proName="proName" />
+
+      <!-- <div class="row my-4">
 
         <div class="mb-0 d-flex align-items-center">
 
@@ -74,17 +76,17 @@
         <li class="ml-auto nav-item">
           <a class="nav-link" href="#">儲存庫設定</a>
         </li>
-      </ul>
+      </ul> -->
 
       <div class="row my-4 d-flex justify-content-between">
 
         <div class="btn-group" role="group" aria-label="Basic example">
 
-          <router-link :to="{ name: 'label-list', params: { proId: proId }}" tag="button" class="btn btn-outline-secondary" active-class="active">
+          <router-link :to="{ name: 'label-list', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName }}" tag="button" class="btn btn-outline-secondary" active-class="active">
             標籤
           </router-link>
 
-          <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+          <router-link :to="{ name: 'milestone', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
             里程碑
           </router-link>
           
@@ -156,7 +158,7 @@
 
           <li v-if="mile.mileOpened === false && showOpened === false" class="py-5 text-left list-group-item">
 
-                        <div class="row">
+              <div class="row">
                 
                 <div class="col-6">
 
@@ -213,6 +215,7 @@
   
   import Parse from "parse";
   import stateCounter from "@/components/state-counter.vue";
+  import subNavbar from "@/components/sub-navbar.vue";
 
   export default {
 
@@ -222,6 +225,7 @@
 
     components: {
       stateCounter,
+      subNavbar,
     },
 
 
@@ -231,8 +235,8 @@
         showOpened: true,
         mileOpened: 0,
         mileClosed: 0,
-        orgName: '',
-        proName: '',
+        // orgName: '',
+        // proName: '',
         mileIssues: [],
         issueCount: '',
       }
@@ -240,14 +244,21 @@
 
 
     computed: {
+      orgId () {
+        return this.$route.params.orgId;
+      },
 
       proId () {
         return this.$route.params.proId; 
       },
 
-      orgId () {
-        return this.$route.params.orgId;
-      }
+      orgName () {
+        return this.$route.params.orgName;
+      },
+
+      proName () {
+        return this.$route.params.proName;
+      },
 
     },
 
@@ -257,10 +268,11 @@
 
 
     mounted () {
+      console.log (this.$route.params);
       let $vmc = this;
 
       $vmc.showMile ();
-      $vmc.showRouteName ();      
+      // $vmc.showRouteName ();      
       $vmc.showIssueCount ();
     },
 
@@ -283,20 +295,20 @@
 
       },
 
-      showRouteName () {
-        let $vmc = this;
-        let Project = Parse.Object.extend ('Project');
-        let query = new Parse.Query (Project);
+      // showRouteName () {
+      //   let $vmc = this;
+      //   let Project = Parse.Object.extend ('Project');
+      //   let query = new Parse.Query (Project);
 
-        query.get ($vmc.proId)
-          .then (resp => {
-            $vmc.orgName = resp.get ('orgName');
-            $vmc.proName = resp.get ('name');
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
-      },
+      //   query.get ($vmc.proId)
+      //     .then (resp => {
+      //       $vmc.orgName = resp.get ('orgName');
+      //       $vmc.proName = resp.get ('name');
+      //     }, (error) => {
+      //       // The object was not retrieved successfully.
+      //       // error is a Parse.Error with an error code and message.
+      //     });
+      // },
       
       showMile () {
         let $vmc = this;

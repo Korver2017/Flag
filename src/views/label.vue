@@ -1,161 +1,90 @@
 <template>
+
   <div id="wrap" class="my-3">
 
-        <div class="row my-4">
+    <sub-navbar :issueCount="issueCount" :orgId="orgId" :proId="proId" :orgName="orgName" :proName="proName" />
 
-          <div class="mb-0 d-flex align-items-center">
+    <div class="row my-4 d-flex justify-content-between">
 
-            <h4 class="text-left">
+      <div class="btn-group" role="group" aria-label="Basic example">
 
-              <router-link :to="{ name: 'organization'}" tag="a" active-class="active">
-                <a>{{ orgName }}</a>
-              </router-link>
-              / <router-link :to="{ name: 'project'}" tag="a" active-class="active">
-                <a>{{ proName }}</a>
-              </router-link>
+        <router-link :to="{ name: 'label-list', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+          標籤
+        </router-link>
 
-            </h4>
+        <router-link :to="{ name: 'milestone', params: { orgId: orgId, proId: proId, orgName: orgName, proName: proName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+          里程碑
+        </router-link>
+        
+      </div>
 
-          </div>
+      <div v-if="addingLabel === false">
+        <button class="btn btn-success h-100" @click="addingLabel = true">建立標籤</button>
+      </div>
+        
+      <div v-else class="rounded my-3 p-3 input-group border-light-theme">
 
-          <div class="ml-auto">
+        <input v-model="labelName" type="text" class="col-3 mr-5 form-control p-2" placeholder="標籤名稱" aria-label="example">
+        <input v-model="labelDesc" type="text" class="col-4 form-control p-2" placeholder="描述" aria-label="example">
 
-            <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="border border-dark btn">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
-              </label>
-              <label class="border border-dark btn">
-                <input type="radio" name="options" id="option2" autocomplete="off"> 8
-              </label>
-            </div>
+        <button class="ml-auto btn btn-outline-primary mr-3" @click="cancelAddLabel">取消</button>
+        <button class="btn btn-success" @click="newLabel">建立標籤</button>
+      </div>
 
-            <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="border border-dark btn">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
-              </label>
-              <label class="border border-dark btn">
-                <input type="radio" name="options" id="option2" autocomplete="off"> 0
-              </label>
-            </div>
+    </div>
 
-            <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="border border-dark btn">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
-              </label>
-              <label class="border border-dark btn">
-                <input type="radio" name="options" id="option2" autocomplete="off"> 0
-              </label>
-            </div>
+    <ul class="list-group list-group-flush">
 
-          </div>
-
+      <li class="list-group-item">
+        <div class="row d-flex align-items-center">
+          <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ labels.length }}個標籤</span></h4>
+          <div class="ml-auto mr-4">排序</div>
         </div>
+      </li>
 
-        <ul class="nav nav-tabs">
-          <li class="nav-item">
-            <a class="nav-link" href="#">程式碼</a>
-          </li>
-          <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
-            <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">{{ issueCount }}</span></a>
-          </router-link>
-          <li class="nav-item">
-            <a class="nav-link" href="#">合併請求<span class="ml-2 badge badge-secondary">0</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">版本發佈<span class="ml-2 badge badge-secondary">0</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Wiki</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">活動</a>
-          </li>
-          <li class="ml-auto nav-item">
-            <a class="nav-link" href="#">儲存庫設定</a>
-          </li>
-        </ul>
+      <li v-for="(label, index) in labels" class="list-group-item">
+        <div class="row d-flex align-items-center">
+          <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ label.title }}</span></h4>
+          <div class="ml-5">
+            {{ label.labelDesc }}
+          </div>
+          <div class="ml-auto mr-5">0 個開啟的問題</div>
+          <div>
 
-        <div class="row my-4 d-flex justify-content-between">
+            <button class="mr-3 btn btn-success" @click="editingLabel (index)">編輯</button>
 
-          <div class="btn-group" role="group" aria-label="Basic example">
+            <modal width="800" height="auto" :name="'modal' + index">
 
-            <router-link :to="{ name: 'label-list', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
-              標籤
-            </router-link>
+              <h5 class="p-3 font-weight-bold">編輯標籤</h5>
 
-            <router-link :to="{ name: 'milestone', params: { proId: proId } }" tag="button" class="btn btn-outline-secondary" active-class="active">
-              里程碑
-            </router-link>
+              <hr />
+
+              <div class="ml-3 row">
+
+                <div class="col-3 input-group">
+                  <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-label="example">
+                </div>
+
+                <div class="col-6 input-group">
+                  <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-label="example" placeholder="描述">
+                </div>
+
+              </div>
+
+              <hr />
+
+              <div class="mb-3 text-right">
+                <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">取消操作</button>
+                <button class="mr-3 btn btn-success" @click="updateLabel (index)">更新</button>
+              </div>
+
+            </modal>
             
+            <button class="mr-3 btn btn-danger" @click="deleteLabel (index)">刪除</button>
           </div>
-
-          <div v-if="addingLabel === false">
-            <button class="btn btn-success h-100" @click="addingLabel = true">建立標籤</button>
-          </div>
-            
-          <div v-else class="rounded my-3 p-3 input-group border-light-theme">
-
-            <input v-model="labelName" type="text" class="col-3 mr-5 form-control p-2" placeholder="標籤名稱" aria-label="example">
-            <input v-model="labelDesc" type="text" class="col-4 form-control p-2" placeholder="描述" aria-label="example">
-
-            <button class="ml-auto btn btn-outline-primary mr-3" @click="cancelAddLabel">取消</button>
-            <button class="btn btn-success" @click="newLabel">建立標籤</button>
-          </div>
-
         </div>
-
-        <ul class="list-group list-group-flush">
-
-          <li class="list-group-item">
-            <div class="row d-flex align-items-center">
-              <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ labels.length }}個標籤</span></h4>
-              <div class="ml-auto mr-4">排序</div>
-            </div>
-          </li>
-
-          <li v-for="(label, index) in labels" class="list-group-item">
-            <div class="row d-flex align-items-center">
-              <h4 class="col-2 text-left mb-0"><span class="p-2 badge badge-dark">{{ label.title }}</span></h4>
-              <div class="ml-5">
-                {{ label.labelDesc }}
-              </div>
-              <div class="ml-auto mr-5">0 個開啟的問題</div>
-              <div>
-
-                <button class="mr-3 btn btn-success" @click="editingLabel (index)">編輯</button>
-
-                <modal width="800" height="auto" :name="'modal' + index">
-
-                  <h5 class="p-3 font-weight-bold">編輯標籤</h5>
-
-                  <hr />
-
-                  <div class="ml-3 row">
-
-                    <div class="col-3 input-group">
-                      <input v-model="labels[index].newLabelName" type="text" class="form-control" aria-label="example">
-                    </div>
-
-                    <div class="col-6 input-group">
-                      <input v-model="labels[index].newLabelDesc" type="text" class="form-control" aria-label="example" placeholder="描述">
-                    </div>
-
-                  </div>
-
-                  <hr />
-
-                  <div class="mb-3 text-right">
-                    <button class="mr-3 btn btn-danger" @click="cancelUpdateLabel (index)">取消操作</button>
-                    <button class="mr-3 btn btn-success" @click="updateLabel (index)">更新</button>
-                  </div>
-
-                </modal>
-                
-                <button class="mr-3 btn btn-danger" @click="deleteLabel (index)">刪除</button>
-              </div>
-            </div>
-          </li>
-        </ul>
+      </li>
+    </ul>
 
   </div>
 
@@ -163,16 +92,21 @@
 
 <script>
   import Parse from 'parse';
+  import subNavbar from "@/components/sub-navbar.vue";
 
   export default {
 
 
     name: 'label-list',
+
+    components: {
+      subNavbar,
+    },
     
-    data() {
+    data () {
       return {
-        orgName: '',
-        proName: '',
+        // orgName: '',
+        // proName: '',
         labels: [],
         addingLabel: false,
         labelName: '',
@@ -183,8 +117,20 @@
       }
     },
     computed: {
+      orgId () {
+        return this.$route.params.orgId;
+      },
+
       proId () {
         return this.$route.params.proId; 
+      },
+
+      orgName () {
+        return this.$route.params.orgName;
+      },
+
+      proName () {
+        return this.$route.params.proName;
       },
 
       issueId () {
@@ -193,12 +139,14 @@
     },
 
     mounted () {
+      console.log (this.$route.params);
       let $vmc = this;
       
-      $vmc.showRouteName ();
+      // $vmc.showRouteName ();
       $vmc.showLabel ();
       $vmc.showIssueCount ();
     },
+
     methods: {
       showIssueCount () {
         let $vmc = this;
@@ -221,21 +169,22 @@
         this.$modal.hide ('modal' + index);
       },
 
-      showRouteName () {
-        let $vmc = this;
+      // showRouteName () {
+      //   let $vmc = this;
 
-        let Project = Parse.Object.extend ('Project');
-        let query = new Parse.Query (Project);
+      //   let Project = Parse.Object.extend ('Project');
+      //   let query = new Parse.Query (Project);
 
-        query.get ($vmc.proId)
-          .then (resp => {
-            $vmc.orgName = resp.get ('orgName');
-            $vmc.proName = resp.get ('name');
-          }, (error) => {
-            // The object was not retrieved successfully.
-            // error is a Parse.Error with an error code and message.
-          });
-      },
+      //   query.get ($vmc.proId)
+      //     .then (resp => {
+      //       $vmc.orgName = resp.get ('orgName');
+      //       $vmc.proName = resp.get ('name');
+      //     }, (error) => {
+      //       // The object was not retrieved successfully.
+      //       // error is a Parse.Error with an error code and message.
+      //     });
+      // },
+
       showLabel () {
         let $vmc = this;
         const Label = Parse.Object.extend ('Label');

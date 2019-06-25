@@ -135,7 +135,6 @@
 
     data () {
       return {
-        orgName: '',
         projects: [],
         defaultLabels: [],
         users: '',
@@ -153,35 +152,29 @@
         return this.$route.params.orgId;
       },
 
+      proId () {
+        return this.$route.params.proId;
+      },
+
+      orgName () {
+        return this.$route.params.orgName;
+      },
+
+      proName () {
+        return this.$route.params.proName;
+      }
+
+
     },
     
 
     created () {
-      // let $vmc = this;
-      // let ary = [];
-
-      // const Label = Parse.Object.extend ('Label');
-      // const query = new Parse.Query (Label);
-      // query.equalTo ('proId', 'default');
-      // query.find ()
-      //   .then (resp => {
-      //     for (let i = 0; i < resp.length; i++) {
-      //       let obj = {};
-      //       let object = resp[i];
-      //       obj.title = object.get ('title');
-      //       obj.labelDesc = object.get ('labelDesc');
-      //       ary.push (obj);
-      //     }
-      //   })
-
-      // $vmc.defaultLabels = ary;
     },
 
 
     mounted () {
       console.log (this.$route.params);
       this.showProject ();
-      this.showOrgName ();
       this.showUser ();
 
     },
@@ -216,19 +209,6 @@
 
             $vmc.users = ary;
         });
-      },
-      
-      showOrgName () {
-        let $vmc = this;
-        let id = $vmc.$route.params.orgId;
-
-        let Org = Parse.Object.extend ('Organization');
-        let query = new Parse.Query (Org);
-        query.get (id)
-          .then (resp => {
-            let name = resp.get ('name');
-            $vmc.orgName = name;
-          })
       },
 
 

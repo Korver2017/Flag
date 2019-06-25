@@ -2,56 +2,90 @@
 
   <div id="wrap" class="my-3">
 
-    <div class="row my-4">
+    <sub-navbar :issueCount="issueCount" :orgName="orgName" :orgId="orgId" :proId="proId" :proName="proName" />
+    
+    <div class="row my-4 d-flex justify-content-between">
 
-      <div class="mb-0 d-flex align-items-center">
+      <div class="btn-group" role="group" aria-label="Basic example">
 
-        <h4 class="text-left">
-          <router-link :to="{ name: 'organization', params: { orgId: orgId, orgName: orgName } }" tag="a" active-class="active">
-            <a>{{ orgName }}</a>
-          </router-link>
-          / <router-link :to="{ name: 'project' }" tag="a" active-class="active">
-            <a>{{ proName }}</a>
-          </router-link>
+        <router-link :to="{ name: 'label-list', params: { proId: proId, orgId: orgId, proName: proName, orgName: orgName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+          標籤
+        </router-link>
 
-        </h4>
+        <router-link :to="{ name: 'milestone', params: { proId: proId, orgId: orgId, proName: proName, orgName: orgName } }" tag="button" class="btn btn-outline-secondary" active-class="active">
+          里程碑
+        </router-link>
+        
+      </div>
+
+      <div>
+
+        <div class="input-group">
+          <input type="text" class="form-control p-2" placeholder="搜尋..." aria-label="搜尋..." aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" id="button-addon2">搜尋</button>
+          </div>
+        </div>
 
       </div>
 
-      <div class="ml-auto">
+      <div>
 
-        <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="border border-dark btn">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
-          </label>
-          <label class="border border-dark btn">
-            <input type="radio" name="options" id="option2" autocomplete="off"> 8
-          </label>
-        </div>
-
-        <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="border border-dark btn">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
-          </label>
-          <label class="border border-dark btn">
-            <input type="radio" name="options" id="option2" autocomplete="off"> 0
-          </label>
-        </div>
-
-        <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="border border-dark btn">
-            <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
-          </label>
-          <label class="border border-dark btn">
-            <input type="radio" name="options" id="option2" autocomplete="off"> 0
-          </label>
-        </div>
+        <router-link class="btn btn-success" :to="{ name: 'add-issue' }" tag="button" active-class="active">
+          建立問題
+        </router-link>
 
       </div>
 
     </div>
 
-    <ul class="nav nav-tabs">
+
+    <!-- <div class="mb-0 d-flex align-items-center">
+
+      <h4 class="text-left">
+        <router-link :to="{ name: 'organization', params: { orgId: orgId, orgName: orgName } }" tag="a" active-class="active">
+          <a>{{ orgName }}</a>
+        </router-link>
+        / <router-link :to="{ name: 'project' }" tag="a" active-class="active">
+          <a>{{ proName }}</a>
+        </router-link>
+
+      </h4>
+
+    </div>
+
+    <div class="ml-auto">
+
+      <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="border border-dark btn">
+          <input type="radio" name="options" id="option1" autocomplete="off" checked> 取消關注
+        </label>
+        <label class="border border-dark btn">
+          <input type="radio" name="options" id="option2" autocomplete="off"> 8
+        </label>
+      </div>
+
+      <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="border border-dark btn">
+          <input type="radio" name="options" id="option1" autocomplete="off" checked> 收藏
+        </label>
+        <label class="border border-dark btn">
+          <input type="radio" name="options" id="option2" autocomplete="off"> 0
+        </label>
+      </div>
+
+      <div class="pr-3 btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="border border-dark btn">
+          <input type="radio" name="options" id="option1" autocomplete="off" checked> 複製
+        </label>
+        <label class="border border-dark btn">
+          <input type="radio" name="options" id="option2" autocomplete="off"> 0
+        </label>
+      </div>
+
+    </div> -->
+
+    <!-- <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link" href="#">程式碼</a>
       </li>
@@ -108,7 +142,7 @@
 
       </div>
 
-    </div>
+    </div> -->
 
     <hr />
 
@@ -251,6 +285,7 @@
   import Parse from "parse";
   import issueList from "@/components/issue-list.vue";
   import stateCounter from "@/components/state-counter.vue";
+  import subNavbar from "@/components/sub-navbar.vue";
 
   export default {
     
@@ -261,6 +296,7 @@
     components: {
       issueList,
       stateCounter,
+      subNavbar,
     },
 
 
@@ -269,6 +305,7 @@
         // proName: '',
         // orgName: '',
         issues: [],
+        issueCount: '',
         labels: [],
         checked: [],
         openedCount: '',
@@ -317,6 +354,7 @@
 
     mounted () {
       console.log (this.$route.params);
+
       let $vmc = this;
       
       $vmc.showUser ();
@@ -440,6 +478,7 @@
             
             $vmc.openedCount = openedCount;
             $vmc.closedCount = closedCount;
+            $vmc.issueCount = ary.length;
             $vmc.issues = ary;
           });
 
