@@ -138,6 +138,7 @@
         projects: [],
         defaultLabels: [],
         users: '',
+        orgName: '',
       }
     },
 
@@ -152,19 +153,6 @@
         return this.$route.params.orgId;
       },
 
-      proId () {
-        return this.$route.params.proId;
-      },
-
-      orgName () {
-        return this.$route.params.orgName;
-      },
-
-      proName () {
-        return this.$route.params.proName;
-      }
-
-
     },
     
 
@@ -176,11 +164,25 @@
       console.log (this.$route.params);
       this.showProject ();
       this.showUser ();
-
+      this.getOrgName ();
     },
 
 
     methods: {
+
+      getOrgName () {
+        let $vmc = this
+          , Org = Parse.Object.extend ('Organization')
+          , query = new Parse.Query (Org);
+
+        query.get ($vmc.orgId)
+          .then(resp => {
+            $vmc.orgName = resp.get ('name')
+          }, (error) => {
+            // The object was not retrieved successfully.
+            // error is a Parse.Error with an error code and message.
+          });
+      },
 
       showUser () {
         let $vmc = this;
