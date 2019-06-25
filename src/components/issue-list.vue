@@ -1,14 +1,10 @@
 <template>
 
-  <div class="mt-3 list-group list-group-flush" v-if="issues.length >= 1">
-
-    <h1>qq</h1>
+  <div class="mt-3 list-group list-group-flush">
 
     <template v-for="issue in issues">
 
-      <!-- Opened Issue-List Start-->
-
-      <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li"  class="list-group-item" active-class="active">
+      <router-link v-if="issue.issueOpened === true && showOpened === true" :to="{ name: 'issue', params: { issueId: issue.issueId } }" tag="li" type="li"  class="list-group-item" active-class="active">
 
         <div class="row d-flex align-items-center">
 
@@ -35,11 +31,7 @@
         
       </router-link>
 
-      <!-- Opened Issue-List End -->
-
-      <!-- Closed Issue-List Start -->
-
-      <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId }}" tag="li" type="li" class="list-group-item" active-class="active">
+      <router-link v-else-if="issue.issueOpened === false && showOpened === false" :to="{ name: 'issue', params: { issueId: issue.issueId } }" tag="li" type="li" class="list-group-item" active-class="active">
 
         <div class="row d-flex align-items-center">
 
@@ -68,7 +60,7 @@
       </router-link>
 
     </template>
-      
+
   </div>
     
 </template>
@@ -78,7 +70,17 @@
 
     name: 'issue-list',
 
-    props: ['issues', 'showOpened', 'checked'],
+    props: {
+      issues: {
+      },
+      showOpened: {
+      },
+      checked: {
+      },
+      switchTo: {
+        default: '',
+      },
+    },
 
     data () {
       return {
@@ -89,6 +91,9 @@
     computed: {
     },
 
+    mounted () {
+    },
+
     watch: {
       checking () {
         this.$emit ('checking', this.checking);
@@ -96,7 +101,10 @@
       
       checked () {
         this.checking = this.checked;
-      }
+      },
+
+      switchTo () {
+      },
     }
   }
 </script>

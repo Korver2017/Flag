@@ -61,20 +61,7 @@
 
         </ul>
         
-      </div>
-
-
-
-
-
-
-
-      <issue-list :issues="issues" />
-
-
-
-
-      
+      </div> 
 
       <div class="col-9">
 
@@ -95,6 +82,8 @@
           <state-counter @changeState="updateState" :openedCount="createdByMeOpened" :closedCount="createdByMeClosed" :showOpened="showOpened" />
 
         </div>
+
+        <!-- <issue-list :switchTo="switchTo" :issues="issues" :showOpened="showOpened" /> -->
 
         <div class="mt-3 list-group list-group-flush " v-if="issues.length >= 1 && switchTo === 'myIssue'">
 
@@ -239,7 +228,7 @@
   import Parse from "parse";
   import subHeader from "@/components/sub-header.vue";
   import stateCounter from "@/components/state-counter.vue";
-  import issueList from "@/components/issue-list.vue";
+  // import issueList from "@/components/issue-list.vue";
 
   export default {
 
@@ -248,7 +237,7 @@
     components: {
       subHeader,
       stateCounter,
-      issueList,
+      // issueList,
     },
 
     data () {
@@ -465,5 +454,4 @@
 </script>
 
 <style scoped>
-  
 </style>

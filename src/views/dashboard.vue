@@ -196,7 +196,6 @@
 
     data () {
       return {
-        // orgName: '',
         orgs: [],
         projects: [],
         issues: [],
@@ -230,8 +229,6 @@
 
 
     mounted () {
-      console.log (this.$route.params);
-      
       this.showOrg ();
       this.showProject ();
       this.showIssue ();

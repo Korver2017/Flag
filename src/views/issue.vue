@@ -59,7 +59,7 @@
       <li class="nav-item">
         <a class="nav-link" href="#">程式碼</a>
       </li>
-      <router-link class="nav-item" :to="{ name: 'project', params: { orgId: orgId, proId: proId } }" tag="li" active-class="active">
+      <router-link class="nav-item" :to="{ name: 'project' }" tag="li" active-class="active">
         <a class="nav-link active">問題 <span class="ml-2 badge badge-secondary">123</span></a>
       </router-link>
       <li class="nav-item">
@@ -377,6 +377,8 @@
 
     data () {
       return {
+        orgId: '',
+        proId: '',
         content: '',
         title: '',
         editTitle: false,
@@ -401,6 +403,11 @@
 
 
     created () {
+      let ids = this.$route.path.split ('/');
+
+      this.orgId = ids[1];
+      this.proId = ids[2];
+
     },
 
 
@@ -412,15 +419,6 @@
       userId () {
         return this.$store.state.user.userId;
       },
-
-      orgId () {
-        return this.$route.params.orgId;
-      },
-
-      proId () {
-        return this.$route.params.proId;
-      },
-
       
       issueId () {
         return this.$route.params.issueId; 
